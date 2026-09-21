@@ -29,7 +29,7 @@ export function tripPhase(r: Reservation, now: number): TripPhase {
 function TripMap({ route, p, place }: { route: LatLng[]; p: number; place: LatLng }) {
   return (
     <MapView
-      className="h-64 shadow-none!"
+      className="h-64"
       lines={[{ points: route, color: BRAND }]}
       pins={[
         { pos: HOME, kind: "home" },

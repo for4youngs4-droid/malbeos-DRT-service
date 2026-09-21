@@ -8,7 +8,7 @@ type Props = ButtonHTMLAttributes<HTMLButtonElement> & {
   size?: "md" | "sm";
   full?: boolean;
   gradient?: boolean; // 브랜드 그라데이션 효과 (홈 화면에서만 켠다)
-  flat?: boolean; // 그림자·볼록 효과 없이 평평하게
+  flat?: boolean; // 볼록한 효과 없이 단색 + 떨어지는 그림자만
 };
 
 const COLOR = {
@@ -18,10 +18,10 @@ const COLOR = {
   outline: "raised text-navy ring-1 ring-brand/30",
 };
 const FLAT = {
-  primary: "bg-brand text-white",
-  gradient: "bg-brand text-white",
-  secondary: "bg-brand-soft text-navy",
-  outline: "bg-white text-navy ring-1 ring-brand/40",
+  primary: "bg-brand text-white shadow-[0_4px_10px_rgba(32,127,186,0.25)]",
+  gradient: "bg-brand text-white shadow-[0_4px_10px_rgba(32,127,186,0.25)]",
+  secondary: "bg-brand-soft text-navy shadow-[0_3px_8px_rgba(32,127,186,0.12)]",
+  outline: "bg-white text-navy ring-1 ring-brand/30 shadow-[0_3px_8px_rgba(32,127,186,0.12)]",
 };
 const SIZE = { md: "min-h-14 px-6 text-xl", sm: "min-h-11 px-5 text-lg" };
 
