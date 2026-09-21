@@ -2,7 +2,6 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Bus } from "lucide-react";
 import { Button, Illustration, PhoneFrame } from "@/components/ui";
 import { speak, stopSpeaking } from "@/lib/speech";
 
@@ -67,12 +66,6 @@ export default function OnboardingPage() {
           >
             {SLIDES.map((s, i) => (
               <section key={i} className="w-full shrink-0 px-6 pt-10">
-                {i === 0 && (
-                  <p className="mb-6 flex items-center gap-2 text-2xl font-semibold text-brand">
-                    <Bus size={26} />
-                    온다
-                  </p>
-                )}
                 <Illustration name={`onboarding-${i + 1}`} className="h-64 w-full" />
                 <h1 className="mt-8 whitespace-pre-line text-[22px] font-semibold leading-snug tracking-tight">{s.title}</h1>
                 <p className="mt-4 text-lg text-sub">{s.desc}</p>
