@@ -81,7 +81,7 @@ export default function RoutineAlertPage() {
             {weekdayName(alert.date)}요일 {koTime(routine.time)}
           </li>
           <li className="flex items-center gap-2.5">
-            <span className="h-2.5 w-2.5 rounded-full bg-mint" />
+            <span className="h-2.5 w-2.5 rounded-full bg-tint" />
             {place.name} ({place.kind})
           </li>
         </ul>

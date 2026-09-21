@@ -46,7 +46,7 @@ export default function RiderHome() {
             className="relative flex h-12 w-12 items-center justify-center rounded-full text-ink"
           >
             <Bell size={26} />
-            {unread.length > 0 && <span className="absolute right-2.5 top-2.5 h-3.5 w-3.5 rounded-full bg-brand" />}
+            {unread.length > 0 && <span className="absolute right-2.5 top-2.5 h-3.5 w-3.5 rounded-full bg-alert ring-2 ring-white" />}
           </Link>
         </header>
 

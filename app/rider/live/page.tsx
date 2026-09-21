@@ -225,7 +225,7 @@ export default function LivePage() {
                     type="button"
                     aria-label="말로 부르기"
                     onClick={listenPickup}
-                    className="flex h-14 w-14 items-center justify-center rounded-full bg-brand-gradient-strong text-white shadow-card"
+                    className="flex h-14 w-14 items-center justify-center rounded-full bg-rec-gradient text-white shadow-card"
                   >
                     <Mic size={26} />
                   </button>

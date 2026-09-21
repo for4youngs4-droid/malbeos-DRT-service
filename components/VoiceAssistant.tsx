@@ -54,7 +54,7 @@ function Waves({ listening, side }: { listening: boolean; side: string }) {
       {heights.map((h, i) => (
         <span
           key={i}
-          className={`w-1 rounded-full bg-brand/40 ${listening ? "wave-bar" : ""}`}
+          className={`w-1 rounded-full bg-[#56b5c5]/70 ${listening ? "wave-bar" : ""}`}
           style={{ height: h, animationDelay: `${i * 0.15}s` }}
         />
       ))}
@@ -242,15 +242,15 @@ export default function VoiceAssistant({ intro = true }: { intro?: boolean }) {
     <div className="space-y-4">
       <div className="flex flex-col items-center text-center">
         <div className="relative flex h-72 w-72 items-center justify-center">
-          <span className={`absolute inset-0 rounded-full bg-mint/15 ${status === "listening" ? "breathe" : ""}`} />
-          <span className={`absolute inset-9 rounded-full bg-mint/25 ${status === "listening" ? "breathe" : ""}`} />
+          <span className={`absolute inset-0 rounded-full bg-rec-gradient opacity-15 ${status === "listening" ? "breathe" : ""}`} />
+          <span className={`absolute inset-9 rounded-full bg-rec-gradient opacity-25 ${status === "listening" ? "breathe" : ""}`} />
           <Waves listening={status === "listening"} side="left-2" />
           <Waves listening={status === "listening"} side="right-2" />
           <button
             type="button"
             onClick={onMic}
             aria-label="말하기"
-            className={`relative flex h-40 w-40 items-center justify-center rounded-full bg-brand-gradient-strong text-white shadow-[0_12px_32px_rgba(32,127,186,0.35)] ${
+            className={`relative flex h-40 w-40 items-center justify-center rounded-full bg-rec-gradient text-white shadow-[0_12px_32px_rgba(86,181,197,0.45)] ${
               status === "listening" ? "breathe" : ""
             }`}
           >

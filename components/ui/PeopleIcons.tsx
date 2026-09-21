@@ -5,7 +5,7 @@ export default function PeopleIcons({ count }: { count: number }) {
   return (
     <div className="flex gap-2" aria-label={`${count}명`}>
       {Array.from({ length: count }, (_, i) => (
-        <span key={i} className="flex h-9 w-9 items-center justify-center rounded-full bg-brand-soft text-brand">
+        <span key={i} className="flex h-9 w-9 items-center justify-center rounded-full bg-brand text-white">
           <User size={20} />
         </span>
       ))}

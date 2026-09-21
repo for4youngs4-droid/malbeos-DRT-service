@@ -1,15 +1,20 @@
 @import "tailwindcss";
 
-/* 디자인 토큰: 브랜드 그라데이션(민트 #8decd0 -> 블루 #207fba)에서 뽑은 색 */
+/* 디자인 토큰: 파랑 한 가지 색조(#207fba)의 밝기 차이로만 구성한 모노톤 */
 @theme inline {
   --color-brand: #207fba; /* 주 파랑: 아이콘, 링크, 강조 */
   --color-navy: #1a6c9f; /* 진한 파랑: 버튼, 켜진 토글, 선택 */
-  --color-mint: #8decd0; /* 민트: 장식, 은은한 배경 */
-  --color-brand-soft: #e3f5f1; /* 민트빛 연한 배경: 아이콘 원, 보조 버튼, 알림 */
-  --color-sky: #f2f9fb; /* 아주 연한 면 */
-  --color-line: #e3eef2; /* 테두리 */
-  --color-ink: #0f2b3c; /* 글씨 */
-  --color-sub: #587083; /* 보조 글씨 */
+  --color-tint: #9cc9e8; /* 연한 파랑: 장식, 은은한 배경 */
+  --color-brand-soft: #e6f1f9; /* 연한 파랑 배경: 아이콘 원, 보조 버튼, 알림 */
+  --color-sky: #f3f8fc; /* 아주 연한 면 */
+  --color-line: #e2eaf3; /* 테두리 */
+  /* 예외 색 (모노톤 밖에서 따로 쓰는 색) */
+  --color-alert: #e5484d; /* 알림 배지(빨강) */
+  --color-warn: #b45f06; /* 준비 중 배지 글씨(주황) */
+  --color-warn-soft: #fff0d9; /* 준비 중 배지 바탕(연한 주황) */
+
+  --color-ink: #0f2540; /* 글씨 */
+  --color-sub: #5a6b80; /* 보조 글씨 */
 
   /* 글자 크기 단계 */
   --text-lg: 15px; /* 보조 설명 */
@@ -22,18 +27,16 @@
   --radius-card: 1.5rem;
   --radius-pill: 9999px;
   --shadow-card: 0 2px 4px rgba(32, 127, 186, 0.04), 0 12px 32px rgba(32, 127, 186, 0.08);
-  --shadow-frame: 0 24px 60px rgba(15, 43, 60, 0.18);
+  --shadow-frame: 0 24px 60px rgba(15, 37, 64, 0.18);
 
   --font-sans: "Pretendard Variable", Pretendard, -apple-system, "Malgun Gothic", sans-serif;
 }
 
-/* 브랜드 그라데이션 (민트 -> 블루). 흰 글씨·아이콘이 올라가는 곳은 strong 사용 */
-.bg-brand-gradient {
+/* 녹음(마이크) 전용 브랜드 그라데이션: 민트 -> 블루 */
+.bg-rec-gradient {
   background: linear-gradient(135deg, #8decd0 0%, #56b5c5 50%, #207fba 100%);
 }
-.bg-brand-gradient-strong {
-  background: linear-gradient(135deg, #3fb2bc 0%, #207fba 100%);
-}
+
 /* 버튼: 흰 글씨가 잘 읽히도록 파랑 안에서만 살짝 그라데이션 */
 .bg-brand-button {
   background: linear-gradient(135deg, #2287bb 0%, #1a6c9f 100%);
@@ -48,7 +51,7 @@
 }
 /* 그림이 없을 때 자리 표시 */
 .bg-brand-wash {
-  background: linear-gradient(135deg, #e6f9f3 0%, #dcecf6 100%);
+  background: linear-gradient(135deg, #eaf3fa 0%, #dcebf7 100%);
 }
 
 /* 듣는 중인 마이크: 천천히 커졌다 작아짐 */
@@ -64,7 +67,7 @@ body {
   min-height: 100vh;
   color: var(--color-ink);
   font-family: var(--font-sans);
-  background: linear-gradient(180deg, #ffffff 0%, #eef8f9 100%) fixed;
+  background: linear-gradient(180deg, #ffffff 0%, #eff5fb 100%) fixed;
   -webkit-font-smoothing: antialiased;
   letter-spacing: -0.01em;
 }

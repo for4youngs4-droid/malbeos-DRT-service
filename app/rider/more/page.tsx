@@ -59,7 +59,7 @@ export default function MorePage() {
         <SectionTitle>기타</SectionTitle>
         <ListGroup>
           {SOON.map(({ icon, title }) => (
-            <ListRow key={title} icon={icon} title={title} right={<Badge>준비 중</Badge>} />
+            <ListRow key={title} icon={icon} title={title} right={<Badge tone="warn">준비 중</Badge>} />
           ))}
         </ListGroup>
       </div>
