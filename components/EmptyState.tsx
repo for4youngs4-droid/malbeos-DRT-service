@@ -17,7 +17,7 @@ export default function EmptyState({
 }) {
   return (
     <div className="flex min-h-[28rem] flex-col items-center justify-center px-5 pb-8 text-center">
-      <Illustration name="empty-state" className="h-40 w-56" />
+      <Illustration name="empty-state" className="h-44 w-64" />
       <h2 className="mt-5 text-[22px] font-semibold leading-snug tracking-tight">{title}</h2>
       <p className="mt-1 text-lg text-sub">{desc}</p>
       <div className="mt-6 w-full">
