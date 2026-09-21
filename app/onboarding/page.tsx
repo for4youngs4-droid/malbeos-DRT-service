@@ -2,23 +2,24 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
+import { Bus } from "lucide-react";
 import { Button, Illustration, PhoneFrame } from "@/components/ui";
 import { speak, stopSpeaking } from "@/lib/speech";
 
 const SLIDES = [
   {
-    title: "말로 부르면 오는\n수요응답형 버스, DRT",
-    desc: "AI가 당신의 이동을 먼저 생각하고 가장 편한 방법으로 알려드려요.",
+    title: "당신의 이동을\n먼저 생각하는 DRT",
+    desc: "말로 부르면 오는 버스, 온다가 가장 편한 방법으로 알려드려요.",
     button: "시작하기",
   },
   {
-    title: "말로 예약하고,\n편하게 이동하세요",
-    desc: "복잡한 조작 없이 음성으로 간편하게 이용할 수 있어요.",
+    title: "말로 부르면,\n바로 오는 버스",
+    desc: "복잡한 조작 없이, 음성으로 간편하게 예약할 수 있어요.",
     button: "다음",
   },
   {
-    title: "가는 길도, 오는 길도\n한 번에",
-    desc: "왕복·연계 이동을 고려해 하루의 이동 과정을 함께 계획해드려요.",
+    title: "당신의 이동 패턴을\n먼저 예측해요",
+    desc: "반복되는 이동을 학습하고 필요할 때 먼저 알려드려요.",
     button: "다음",
   },
   {
@@ -66,6 +67,12 @@ export default function OnboardingPage() {
           >
             {SLIDES.map((s, i) => (
               <section key={i} className="w-full shrink-0 px-6 pt-10">
+                {i === 0 && (
+                  <p className="mb-6 flex items-center gap-2 text-2xl font-semibold text-brand">
+                    <Bus size={26} />
+                    온다
+                  </p>
+                )}
                 <Illustration name={`onboarding-${i + 1}`} className="h-64 w-full" />
                 <h1 className="mt-8 whitespace-pre-line text-[22px] font-semibold leading-snug tracking-tight">{s.title}</h1>
                 <p className="mt-4 text-lg text-sub">{s.desc}</p>
@@ -86,7 +93,9 @@ export default function OnboardingPage() {
               />
             ))}
           </div>
-          <Button onClick={next}>{SLIDES[index].button}</Button>
+          <Button variant={index === 0 || index === SLIDES.length - 1 ? "primary" : "secondary"} onClick={next}>
+            {SLIDES[index].button}
+          </Button>
         </div>
       </div>
     </PhoneFrame>

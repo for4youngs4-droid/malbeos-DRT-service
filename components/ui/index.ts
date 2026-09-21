@@ -10,3 +10,5 @@ export { default as Timeline } from "./Timeline";
 export { default as PeopleIcons } from "./PeopleIcons";
 export { default as Illustration } from "./Illustration";
 export { default as PhoneFrame } from "./PhoneFrame";
+export { default as SectionTitle } from "./SectionTitle";
+export { ListGroup, ListRow } from "./ListGroup";

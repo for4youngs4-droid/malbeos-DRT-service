@@ -4,7 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Bus, Users } from "lucide-react";
 import MapView from "@/components/map/MapView";
-import { Button, Card, Illustration, InfoRow, PeopleIcons, PhoneFrame, Tabs, TopBar } from "@/components/ui";
+import { Button, Card, Illustration, InfoRow, ListGroup, ListRow, PeopleIcons, PhoneFrame, SectionTitle, Tabs, TopBar } from "@/components/ui";
 import { HERO, placeById } from "@/lib/data";
 import { pointAt, routeBetween, type LatLng } from "@/lib/geo";
 import { groupOfMine, myPickup, myRequests, neighborRequests, poolRequests } from "@/lib/pooling";
@@ -86,7 +86,31 @@ export default function TogetherPage() {
           </Card>
         )}
 
-        <h2 className="pt-2 text-xl font-semibold">운행 현황</h2>
+        {g && (
+          <>
+            <SectionTitle>탑승 순서</SectionTitle>
+            <ListGroup>
+              {g.members.map((m, i) => (
+                <ListRow
+                  key={m.id}
+                  lead={
+                    <span
+                      className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-[15px] font-semibold ${
+                        m.mine ? "bg-brand text-white" : "bg-brand-soft text-brand"
+                      }`}
+                    >
+                      {i + 1}
+                    </span>
+                  }
+                  title={m.mine ? "나 (집 앞)" : "같은 방향 승객"}
+                  desc={koTime(g.pickups[i])}
+                />
+              ))}
+            </ListGroup>
+          </>
+        )}
+
+        <SectionTitle>운행 현황</SectionTitle>
         <Tabs items={["오늘", "내일"]} value={activeTab} onChange={setTab} />
 
         {shown.length === 0 && <p className="text-lg text-sub">이 날은 함께 이동 소식이 없어요.</p>}

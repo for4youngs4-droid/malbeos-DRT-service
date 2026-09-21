@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "말벗 DRT",
-  description: "음성으로 예약하는 수요응답형 버스",
+  title: "온다 DRT",
+  description: "당신의 이동을 먼저 생각하는 DRT",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

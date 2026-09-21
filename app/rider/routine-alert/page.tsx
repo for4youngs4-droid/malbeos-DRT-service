@@ -2,8 +2,9 @@
 
 import { useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
-import { Button, Card, Illustration, PhoneFrame, TopBar } from "@/components/ui";
-import { placeById } from "@/lib/data";
+import { Check, CalendarClock, Package, ShoppingBasket, Stethoscope } from "lucide-react";
+import { Button, Card, InfoRow, ListGroup, ListRow, PhoneFrame, SectionTitle, TopBar } from "@/components/ui";
+import { PAST_TRIPS, placeById } from "@/lib/data";
 import { isNo, isYes } from "@/lib/intent";
 import { listen, speak, stopListening, stopSpeaking } from "@/lib/speech";
 import { useStore } from "@/lib/store";
@@ -66,39 +67,67 @@ export default function RoutineAlertPage() {
     );
   }
 
+  // 최근 이동 기록 3건 (최신순)
+  const recent = [...PAST_TRIPS].sort((x, y) => y.date.localeCompare(x.date)).slice(0, 3);
+  const dayWord = alert.title.split(" ")[0]; // "내일", "오늘", "화요일"
+
   return (
     <PhoneFrame>
-      <TopBar left="close" title={alert.title} />
-      <div className="space-y-6 px-5 pt-4">
-        <p className="text-lg text-sub">DRT를 예약하시겠어요?</p>
-        <Card className="flex flex-col items-center gap-3 text-center">
-          <Illustration name="routine-calendar" className="h-32 w-32" />
-          <p className="text-xl font-semibold">
+      <TopBar left="close" title={`${dayWord}의 이동이 있어요`} />
+      <div className="space-y-5 px-5 pt-3">
+        <ul className="space-y-1.5 text-lg text-sub">
+          <li className="flex items-center gap-2.5">
+            <span className="h-2.5 w-2.5 rounded-full bg-brand" />
             {weekdayName(alert.date)}요일 {koTime(routine.time)}
-          </p>
-          <p className="text-xl">
+          </li>
+          <li className="flex items-center gap-2.5">
+            <span className="h-2.5 w-2.5 rounded-full bg-mint" />
             {place.name} ({place.kind})
-          </p>
+          </li>
+        </ul>
+
+        <Card className="space-y-4">
+          <InfoRow
+            icon={CalendarClock}
+            title={`${weekdayName(alert.date)}요일 ${place.kind === "병원" ? "병원 방문" : `${place.name} 방문`} 예정입니다.`}
+            desc="DRT를 예약하시겠어요?"
+          />
+          <div className="flex gap-3">
+            <Button
+              onClick={() => {
+                answered.current = true;
+                book();
+              }}
+            >
+              예약하기
+            </Button>
+            <Button
+              variant="secondary"
+              onClick={() => {
+                answered.current = true;
+                later();
+              }}
+            >
+              나중에
+            </Button>
+          </div>
         </Card>
-        <div className="space-y-3">
-          <Button
-            onClick={() => {
-              answered.current = true;
-              book();
-            }}
-          >
-            예약하기
-          </Button>
-          <Button
-            variant="secondary"
-            onClick={() => {
-              answered.current = true;
-              later();
-            }}
-          >
-            나중에
-          </Button>
-        </div>
+
+        <SectionTitle>최근 이동 기록</SectionTitle>
+        <ListGroup>
+          {recent.map((t) => {
+            const p = placeById(t.placeId)!;
+            return (
+              <ListRow
+                key={t.date}
+                icon={p.kind === "병원" ? Stethoscope : p.kind === "장보기" ? ShoppingBasket : Package}
+                title={p.name}
+                desc={`${weekdayName(t.date)}요일 ${t.departTime}`}
+                right={<Check size={20} className="text-brand" />}
+              />
+            );
+          })}
+        </ListGroup>
       </div>
     </PhoneFrame>
   );

@@ -3,9 +3,9 @@
 import { useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Bell, CalendarClock, ChevronRight, Users } from "lucide-react";
+import { Bell, Bus, CalendarClock, ChevronRight, Users } from "lucide-react";
 import VoiceAssistant from "@/components/VoiceAssistant";
-import { Button, Card, InfoRow, PhoneFrame } from "@/components/ui";
+import { Button, Card, InfoRow, PhoneFrame, SectionTitle } from "@/components/ui";
 import { placeById, HERO } from "@/lib/data";
 import { speak, stopSpeaking } from "@/lib/speech";
 import { useStore } from "@/lib/store";
@@ -52,7 +52,7 @@ export default function RiderHome() {
 
         {unread.map((n) => (
           <Link key={n.id} href="/rider/routine-alert" className="block">
-            <Card className="border-2 border-brand">
+            <Card className="ring-2 ring-brand/60">
               <InfoRow icon={Bell} title="새 알림" desc={n.title} right={<ChevronRight size={28} className="text-sub" />} />
             </Card>
           </Link>
@@ -60,30 +60,36 @@ export default function RiderHome() {
 
         <VoiceAssistant intro={false} />
 
-        <Card className="space-y-4">
-          <InfoRow
-            icon={CalendarClock}
-            title={moving ? "지금 이동 중이에요" : "다음 이동 예정"}
-            desc={next ? `${koDate(next.date)} ${koTime(next.goTime)}` : "예정된 이동이 없어요"}
-          />
-          {next && nextPlace ? (
-            <>
-              <p className="text-xl font-semibold">
-                {nextPlace.name} ({nextPlace.kind})
-              </p>
-              {others > 0 && (
-                <Link href="/rider/together" className="flex min-h-14 items-center gap-3 rounded-pill bg-brand-soft px-4 text-xl font-medium text-navy">
-                  <Users size={26} />
-                  다른 분 {others}명과 함께 타세요
-                </Link>
-              )}
-              <Button variant="secondary" onClick={() => router.push("/rider/chain")}>
-                일정 보기 &rarr;
+        <SectionTitle>{moving ? "지금 이동 중이에요" : "예정된 이동"}</SectionTitle>
+        {next && nextPlace ? (
+          <Card className="space-y-4">
+            <InfoRow
+              icon={moving ? Bus : CalendarClock}
+              title={`${nextPlace.name} (${nextPlace.kind})`}
+              desc={moving ? `${nextPlace.name} 가는 중 · ${koTime(next.goTime)} 출발` : `${koDate(next.date)} ${koTime(next.goTime)}`}
+              right={!moving && <ChevronRight size={22} className="text-sub" />}
+            />
+            {others > 0 && (
+              <Link href="/rider/together" className="flex min-h-11 items-center gap-2 rounded-pill bg-brand-soft px-4 text-lg font-medium text-navy">
+                <Users size={20} />
+                다른 분 {others}명과 함께 타세요
+              </Link>
+            )}
+            {moving ? (
+              <Button size="sm" onClick={() => router.push("/rider/live")}>
+                실시간 위치 보기
               </Button>
-              {moving && <Button onClick={() => router.push("/rider/live")}>이동 보기</Button>}
-            </>
-          ) : null}
-        </Card>
+            ) : (
+              <Button size="sm" onClick={() => router.push("/rider/chain")}>
+                예약 확인하기 &rarr;
+              </Button>
+            )}
+          </Card>
+        ) : (
+          <Card>
+            <InfoRow icon={CalendarClock} title="예정된 이동이 없어요" desc="위의 마이크로 말씀해 보세요" />
+          </Card>
+        )}
 
         {/* 임시: 블록 6의 시연 조작판이 생기면 지운다 */}
         <button

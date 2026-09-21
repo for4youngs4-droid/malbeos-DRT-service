@@ -2,13 +2,13 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { CalendarCheck, Home, Menu, Repeat } from "lucide-react";
+import { CalendarCheck, Home, Repeat, Settings } from "lucide-react";
 
 const tabs = [
   { href: "/rider", label: "홈", icon: Home },
   { href: "/rider/chain", label: "이동계획", icon: CalendarCheck },
   { href: "/rider/routines", label: "내 루틴", icon: Repeat },
-  { href: "/rider/more", label: "더보기", icon: Menu },
+  { href: "/rider/more", label: "설정", icon: Settings },
 ];
 
 export default function BottomNav() {

@@ -1,7 +1,7 @@
 "use client";
 
 import { Check, CircleHelp, History, Phone, Volume2 } from "lucide-react";
-import { Badge, Card, InfoRow, PhoneFrame, Toggle, TopBar } from "@/components/ui";
+import { Badge, ListGroup, ListRow, PhoneFrame, SectionTitle, Toggle, TopBar } from "@/components/ui";
 import { speak, useKoVoices } from "@/lib/speech";
 import { useStore } from "@/lib/store";
 
@@ -29,44 +29,39 @@ export default function MorePage() {
 
   return (
     <PhoneFrame tabs>
-      <TopBar title="더보기" />
-      <div className="space-y-4 px-5 pt-4">
-        <Card>
-          <InfoRow
+      <TopBar title="설정" />
+      <div className="space-y-3 px-5 pt-3">
+        <SectionTitle>알림 방식</SectionTitle>
+        <ListGroup>
+          <ListRow
             icon={Volume2}
             title="음성 안내"
             desc={voiceOn ? "켜져 있어요" : "꺼져 있어요"}
             right={<Toggle checked={voiceOn} onChange={setVoiceOn} label="음성 안내" />}
           />
-        </Card>
-        <Card className="space-y-3">
-          <InfoRow icon={Volume2} title="목소리 고르기" desc="누르면 바로 들어볼 수 있어요" />
-          {voices.length === 0 && <p className="text-lg text-sub">이 브라우저에는 한국어 목소리가 없어요.</p>}
+        </ListGroup>
+
+        <SectionTitle>목소리</SectionTitle>
+        <ListGroup>
+          {voices.length === 0 && <ListRow title="한국어 목소리가 없어요" desc="다른 브라우저에서 열어 보세요" />}
           {voices.map((v, i) => (
-            <button
-              key={v.name}
-              type="button"
-              onClick={() => pick(v.name)}
-              className={`flex min-h-14 w-full items-center justify-between gap-2 rounded-pill px-5 text-left text-lg font-medium ${
-                v.name === current ? "bg-navy text-white" : "bg-sky text-ink"
-              }`}
-            >
-              <span>
-                {short(v.name)}
-                {i === 0 && voices.length > 1 ? " (추천)" : ""}
-              </span>
-              {v.name === current && <Check size={22} />}
+            <button key={v.name} type="button" onClick={() => pick(v.name)} className="block w-full text-left">
+              <ListRow
+                title={short(v.name)}
+                desc={i === 0 && voices.length > 1 ? "추천 · 누르면 들어볼 수 있어요" : "누르면 들어볼 수 있어요"}
+                right={v.name === current ? <Check size={22} className="text-brand" /> : undefined}
+              />
             </button>
           ))}
-          {voices.length === 1 && (
-            <p className="text-lg text-sub">더 자연스러운 목소리는 Edge 브라우저에서 볼 수 있어요.</p>
-          )}
-        </Card>
-        {SOON.map(({ icon, title }) => (
-          <Card key={title}>
-            <InfoRow icon={icon} title={title} right={<Badge>준비 중</Badge>} />
-          </Card>
-        ))}
+        </ListGroup>
+        {voices.length === 1 && <p className="px-1 text-lg text-sub">더 자연스러운 목소리는 Edge 브라우저에서 볼 수 있어요.</p>}
+
+        <SectionTitle>기타</SectionTitle>
+        <ListGroup>
+          {SOON.map(({ icon, title }) => (
+            <ListRow key={title} icon={icon} title={title} right={<Badge>준비 중</Badge>} />
+          ))}
+        </ListGroup>
       </div>
     </PhoneFrame>
   );

@@ -50,6 +50,7 @@ type State = {
   setTime: (ts: number) => void;
   addReservation: (r: Reservation) => void;
   updateReservation: (id: string, patch: Partial<Reservation>) => void;
+  removeReservation: (id: string) => void;
   setRoutineAlert: (id: string, on: boolean) => void;
   markRead: (id: string) => void;
   setVoiceOn: (v: boolean) => void;
@@ -81,6 +82,8 @@ export const useStore = create<State>((set) => ({
         return n.date === r.date && routine?.placeId === r.placeId ? { ...n, read: true } : n;
       }),
     })),
+
+  removeReservation: (id) => set((s) => ({ reservations: s.reservations.filter((r) => r.id !== id) })),
 
   updateReservation: (id, patch) =>
     set((s) => ({ reservations: s.reservations.map((r) => (r.id === id ? { ...r, ...patch } : r)) })),

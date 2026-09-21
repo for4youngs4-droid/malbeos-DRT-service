@@ -46,6 +46,22 @@ function spokenDay(date: string, now: number) {
   return `${weekdayName(date)}요일`;
 }
 
+// 마이크 양옆 음파 막대 (듣는 중에 움직인다)
+function Waves({ listening, side }: { listening: boolean; side: string }) {
+  const heights = [22, 40, 28];
+  return (
+    <span className={`absolute ${side} flex items-center gap-1.5`} aria-hidden>
+      {heights.map((h, i) => (
+        <span
+          key={i}
+          className={`w-1 rounded-full bg-brand/40 ${listening ? "wave-bar" : ""}`}
+          style={{ height: h, animationDelay: `${i * 0.15}s` }}
+        />
+      ))}
+    </span>
+  );
+}
+
 // 음성 예약 대화 전체 (홈 화면과 /rider/voice 에서 같이 쓴다)
 export default function VoiceAssistant({ intro = true }: { intro?: boolean }) {
   const router = useRouter();
@@ -145,7 +161,7 @@ export default function VoiceAssistant({ intro = true }: { intro?: boolean }) {
   // 앱이 말하고(reply), 이어서 사용자의 말을 듣는다
   async function converse(g: number, reply: string | null) {
     if (reply) {
-      setPrompt(reply);
+      setPrompt(d.current.step === "done" ? "예약이 끝났어요" : reply); // 긴 안내는 음성으로만
       setStatus("speaking");
       await speak(reply);
       if (g !== gen.current) return;
@@ -208,6 +224,16 @@ export default function VoiceAssistant({ intro = true }: { intro?: boolean }) {
     void converse(++gen.current, null);
   }
 
+  // 취소: 듣기와 말하기를 멈추고 처음 상태로
+  function onCancel() {
+    gen.current++;
+    stopListening();
+    stopSpeaking();
+    setStatus("idle");
+    setHeard("");
+    setHint("");
+  }
+
   const place = confirm ? placeById(confirm.placeId) : undefined;
   const pill =
     status === "listening" ? "듣고 있어요. 말씀하세요" : status === "speaking" ? "안내하고 있어요" : "마이크를 누르고 말해보세요";
@@ -215,28 +241,37 @@ export default function VoiceAssistant({ intro = true }: { intro?: boolean }) {
   return (
     <div className="space-y-4">
       <div className="flex flex-col items-center text-center">
-        <h1 className="text-[22px] font-semibold leading-snug tracking-tight">{prompt}</h1>
-        {first && <p className="mt-1 text-xl font-medium text-brand">말씀해 주세요.</p>}
-
-        <div className="relative mt-6 flex h-72 w-72 items-center justify-center">
+        <div className="relative flex h-72 w-72 items-center justify-center">
           <span className={`absolute inset-0 rounded-full bg-mint/15 ${status === "listening" ? "breathe" : ""}`} />
-          <span className={`absolute inset-8 rounded-full bg-mint/25 ${status === "listening" ? "breathe" : ""}`} />
+          <span className={`absolute inset-9 rounded-full bg-mint/25 ${status === "listening" ? "breathe" : ""}`} />
+          <Waves listening={status === "listening"} side="left-2" />
+          <Waves listening={status === "listening"} side="right-2" />
           <button
             type="button"
             onClick={onMic}
             aria-label="말하기"
-            className={`relative flex h-44 w-44 items-center justify-center rounded-full bg-brand-gradient-strong text-white shadow-[0_12px_32px_rgba(32,127,186,0.35)] ${
+            className={`relative flex h-40 w-40 items-center justify-center rounded-full bg-brand-gradient-strong text-white shadow-[0_12px_32px_rgba(32,127,186,0.35)] ${
               status === "listening" ? "breathe" : ""
             }`}
           >
-            <Mic size={72} />
+            <Mic size={64} strokeWidth={1.75} />
           </button>
         </div>
 
-        <p className="mt-6 min-h-10 text-2xl font-medium">{heard}</p>
-        {first && !heard && <p className="text-lg text-sub">예) 내일 병원 가고 싶어요</p>}
-        <p className="mt-3 rounded-pill bg-white px-5 py-2.5 text-lg font-medium text-sub ring-1 ring-line">{pill}</p>
-        {hint && <p className="mt-3 text-lg font-medium text-navy">{hint}</p>}
+        <h1 className="mt-2 text-[22px] font-semibold leading-snug tracking-tight text-navy">{prompt}</h1>
+        {first && <p className="mt-1 text-xl font-medium text-brand">말씀해 주세요.</p>}
+        {first && !heard && <p className="mt-2 text-lg text-sub">예) 내일 아침에 읍내 병원 가야 돼</p>}
+        {heard && <p className="mt-2 text-2xl font-medium">{heard}</p>}
+        {hint ? (
+          <p className="mt-3 text-lg font-medium text-navy">{hint}</p>
+        ) : (
+          <p className="mt-3 text-lg text-sub">{pill}</p>
+        )}
+        {status !== "idle" && (
+          <Button variant="secondary" size="sm" full={false} className="mt-4 px-8" onClick={onCancel}>
+            취소
+          </Button>
+        )}
       </div>
 
       <div className="space-y-4">
@@ -265,7 +300,7 @@ export default function VoiceAssistant({ intro = true }: { intro?: boolean }) {
 
         {done && (
           <Card className="space-y-4">
-            <InfoRow icon={CalendarCheck} title="예약이 끝났어요" desc="가는 편과 오는 편을 함께 계획했어요" />
+            <InfoRow icon={CalendarCheck} title="왕복 이동을 계획했어요" desc="가는 편과 오는 편을 함께 준비했어요" />
             <Button onClick={() => router.push("/rider/chain")}>일정 보기</Button>
           </Card>
         )}

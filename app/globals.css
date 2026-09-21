@@ -19,9 +19,9 @@
   --text-2xl: 20px; /* 강조 */
   --text-2xl--line-height: 1.4;
 
-  --radius-card: 1.25rem;
+  --radius-card: 1.5rem;
   --radius-pill: 9999px;
-  --shadow-card: 0 1px 2px rgba(15, 43, 60, 0.04), 0 8px 24px rgba(15, 43, 60, 0.06);
+  --shadow-card: 0 2px 4px rgba(32, 127, 186, 0.04), 0 12px 32px rgba(32, 127, 186, 0.08);
   --shadow-frame: 0 24px 60px rgba(15, 43, 60, 0.18);
 
   --font-sans: "Pretendard Variable", Pretendard, -apple-system, "Malgun Gothic", sans-serif;
@@ -33,6 +33,18 @@
 }
 .bg-brand-gradient-strong {
   background: linear-gradient(135deg, #3fb2bc 0%, #207fba 100%);
+}
+/* 버튼: 흰 글씨가 잘 읽히도록 파랑 안에서만 살짝 그라데이션 */
+.bg-brand-button {
+  background: linear-gradient(135deg, #2287bb 0%, #1a6c9f 100%);
+}
+/* 음성 파형 막대 (듣는 중에 움직임) */
+@keyframes wave {
+  0%, 100% { transform: scaleY(0.35); }
+  50% { transform: scaleY(1); }
+}
+.wave-bar {
+  animation: wave 1s ease-in-out infinite;
 }
 /* 그림이 없을 때 자리 표시 */
 .bg-brand-wash {
