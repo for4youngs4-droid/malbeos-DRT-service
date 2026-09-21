@@ -1,9 +1,8 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Button, Illustration, PhoneFrame } from "@/components/ui";
-import { speak, stopSpeaking } from "@/lib/speech";
 
 const SLIDES = [
   {
@@ -32,13 +31,6 @@ export default function OnboardingPage() {
   const router = useRouter();
   const [index, setIndex] = useState(0);
   const touchX = useRef<number | null>(null);
-
-  // 장이 바뀔 때마다 음성으로 읽기
-  useEffect(() => {
-    const s = SLIDES[index];
-    speak(`${s.title.replace("\n", " ")}. ${s.desc}`);
-    return stopSpeaking;
-  }, [index]);
 
   const go = (i: number) => setIndex(Math.max(0, Math.min(SLIDES.length - 1, i)));
 
