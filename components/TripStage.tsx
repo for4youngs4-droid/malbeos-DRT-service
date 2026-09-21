@@ -5,6 +5,7 @@ import { Mic, Navigation } from "lucide-react";
 import MapView from "@/components/map/MapView";
 import { Button, Card, InfoRow } from "@/components/ui";
 import { angle } from "@/components/ui/gradientAngle";
+import { BRAND } from "@/lib/colors";
 import { HERO, placeById } from "@/lib/data";
 import { pointAt, routeBetween, type LatLng } from "@/lib/geo";
 import { isPickup } from "@/lib/intent";
@@ -30,7 +31,7 @@ function TripMap({ route, p, place }: { route: LatLng[]; p: number; place: LatLn
   return (
     <MapView
       className="h-64"
-      lines={[{ points: route, color: "#207fba" }]}
+      lines={[{ points: route, color: BRAND }]}
       pins={[
         { pos: HOME, kind: "home" },
         { pos: place, kind: "place" },

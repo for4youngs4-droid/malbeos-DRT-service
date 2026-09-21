@@ -5,6 +5,7 @@ import { ArrowRight } from "lucide-react";
 import MapView from "@/components/map/MapView";
 import { Card } from "@/components/ui";
 import { angle } from "@/components/ui/gradientAngle";
+import { BRAND, BRAND_TINT } from "@/lib/colors";
 import { placeById } from "@/lib/data";
 import { pointAt, routeBetween, type LatLng } from "@/lib/geo";
 import { demoRequests, poolRequests, stats, unpooled } from "@/lib/pooling";
@@ -43,8 +44,8 @@ export default function AdminPage() {
       after: stats(a),
       place: p,
       lines: {
-        before: reqs.map((r) => ({ points: routeBetween(r.home, dest), color: "#b5d3e6" })),
-        after: [{ points: path, color: "#1a6c9f" }],
+        before: reqs.map((r) => ({ points: routeBetween(r.home, dest), color: BRAND_TINT })),
+        after: [{ points: path, color: BRAND }],
       },
       pins: {
         before: [...reqs.map((r) => ({ pos: r.home, kind: "home" as const })), { pos: dest, kind: "place" as const }],

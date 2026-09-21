@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { Bus, Users } from "lucide-react";
 import MapView from "@/components/map/MapView";
 import { Button, Card, Illustration, InfoRow, ListGroup, ListRow, PeopleIcons, PhoneFrame, SectionTitle, Tabs, TopBar } from "@/components/ui";
+import { BRAND } from "@/lib/colors";
 import { HERO, placeById } from "@/lib/data";
 import { pointAt, routeBetween, type LatLng } from "@/lib/geo";
 import { groupOfMine, myPickup, myRequests, neighborRequests, poolRequests } from "@/lib/pooling";
@@ -135,7 +136,7 @@ export default function TogetherPage() {
               <MapView
                 key={`${activeTab}-${i}`}
                 className="h-56"
-                lines={[{ points: route, color: "#207fba" }]}
+                lines={[{ points: route, color: BRAND }]}
                 pins={[
                   { pos: [p.lat, p.lng], kind: "place" },
                   { pos: pointAt(route, 0.3), kind: "bus" },
