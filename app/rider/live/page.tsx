@@ -14,7 +14,7 @@ import { koTime, toTs } from "@/lib/time";
 import { nextReservation, tripTimes } from "@/lib/trip";
 
 const HOME: LatLng = [HERO.lat, HERO.lng];
-const RIDE_MS = 20000; // 시연용: 20초 동안 이동
+const RIDE_MS = 3000; // 시연용: 편도를 3초에 이동
 
 // 지도 + 버스. p는 경로를 얼마나 갔는지(0~1)
 function TripMap({ route, p, place }: { route: LatLng[]; p: number; place: LatLng }) {
@@ -31,7 +31,7 @@ function TripMap({ route, p, place }: { route: LatLng[]; p: number; place: LatLn
   );
 }
 
-// 20초짜리 이동 애니메이션. 끝나면 onDone
+// 시연용 이동 애니메이션(RIDE_MS). 끝나면 onDone
 function Ride({
   route,
   place,
@@ -54,14 +54,14 @@ function Ride({
   useEffect(() => {
     let t = 0;
     const id = setInterval(() => {
-      t += 100;
+      t += 50;
       const next = Math.min(1, t / RIDE_MS);
       setP(next);
       if (next >= 1) {
         clearInterval(id);
         done.current();
       }
-    }, 100);
+    }, 50);
     return () => clearInterval(id);
   }, []);
 
