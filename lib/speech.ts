@@ -67,7 +67,11 @@ export function speak(text: string, force = false): Promise<void> {
     u.lang = "ko-KR";
     u.rate = 0.9;
     const voice = pickVoice();
-    if (voice) u.voice = voice;
+    try {
+      if (voice) u.voice = voice;
+    } catch {
+      // 목소리 지정이 안 되면 브라우저 기본 한국어 목소리로 읽는다
+    }
     u.onend = () => resolve();
     u.onerror = () => resolve();
     synth.speak(u);

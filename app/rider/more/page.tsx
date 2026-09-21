@@ -1,10 +1,13 @@
 "use client";
 
-import { Check, CircleHelp, History, Phone, Volume2 } from "lucide-react";
+import { useState } from "react";
+import { Check, ChevronDown, CircleHelp, History, Phone, Volume2 } from "lucide-react";
 import { Badge, ListGroup, ListRow, PhoneFrame, SectionTitle, Toggle, TopBar } from "@/components/ui";
 import { HERO } from "@/lib/data";
 import { speak, useKoVoices } from "@/lib/speech";
 import { useStore } from "@/lib/store";
+
+const VISIBLE_VOICES = 3; // 목소리는 3개까지만 바로 보이고, 나머지는 "더보기"로 접는다
 
 const SOON = [
   { icon: History, title: "이동 기록" },
@@ -18,6 +21,9 @@ export default function MorePage() {
   const voiceName = useStore((s) => s.voiceName);
   const setVoiceName = useStore((s) => s.setVoiceName);
   const voices = useKoVoices();
+  const [showMore, setShowMore] = useState(false);
+  const shown = voices.slice(0, VISIBLE_VOICES);
+  const rest = voices.slice(VISIBLE_VOICES);
   const current = voices.find((v) => v.name === voiceName)?.name ?? voices[0]?.name;
 
   // "Microsoft SunHi Online (Natural) - Korean (Korea)" -> "SunHi Online" (괄호 부분은 뺀다)
@@ -27,6 +33,16 @@ export default function MorePage() {
     setVoiceName(name);
     void speak(`안녕하세요, ${HERO.name}님. 어디로 가실까요?`, true); // 고르면 바로 들려준다
   };
+
+  const voiceRow = (v: SpeechSynthesisVoice, i: number) => (
+    <button key={v.name} type="button" onClick={() => pick(v.name)} className="block w-full text-left">
+      <ListRow
+        title={short(v.name)}
+        desc={i === 0 && voices.length > 1 ? "추천 · 누르면 들어볼 수 있어요" : "누르면 들어볼 수 있어요"}
+        right={v.name === current ? <Check size={22} className="text-brand" /> : undefined}
+      />
+    </button>
+  );
 
   return (
     <PhoneFrame tabs>
@@ -45,15 +61,24 @@ export default function MorePage() {
         <SectionTitle>목소리</SectionTitle>
         <ListGroup>
           {voices.length === 0 && <ListRow title="한국어 목소리가 없어요" desc="다른 브라우저에서 열어 보세요" />}
-          {voices.map((v, i) => (
-            <button key={v.name} type="button" onClick={() => pick(v.name)} className="block w-full text-left">
-              <ListRow
-                title={short(v.name)}
-                desc={i === 0 && voices.length > 1 ? "추천 · 누르면 들어볼 수 있어요" : "누르면 들어볼 수 있어요"}
-                right={v.name === current ? <Check size={22} className="text-brand" /> : undefined}
-              />
-            </button>
-          ))}
+          {shown.map((v, i) => voiceRow(v, i))}
+          {rest.length > 0 && (
+            <>
+              {/* 아코디언: 높이가 0에서 자기 크기로 부드럽게 열린다 */}
+              <div className={`grid border-t-0! transition-[grid-template-rows] duration-300 ease-out ${showMore ? "grid-rows-[1fr]" : "grid-rows-[0fr]"}`}>
+                <div className="min-h-0 overflow-hidden" inert={!showMore}>
+                  <div className="divide-y divide-line border-t border-line">{rest.map((v, i) => voiceRow(v, i + VISIBLE_VOICES))}</div>
+                </div>
+              </div>
+              <button type="button" onClick={() => setShowMore(!showMore)} aria-expanded={showMore} className="block w-full text-left">
+                <ListRow
+                  title={showMore ? "접기" : "더보기"}
+                  desc={showMore ? undefined : `목소리 ${rest.length}개가 더 있어요`}
+                  right={<ChevronDown size={22} className={`text-sub transition-transform duration-300 ${showMore ? "rotate-180" : ""}`} />}
+                />
+              </button>
+            </>
+          )}
         </ListGroup>
         {voices.length === 1 && <p className="px-1 text-lg text-sub">더 자연스러운 목소리는 Edge 브라우저에서 볼 수 있어요</p>}
 
