@@ -60,22 +60,6 @@ function spokenDay(date: string, now: number) {
   return `${weekdayName(date)}요일`;
 }
 
-// 마이크 양옆 음파 막대 (듣는 중에 움직인다)
-function Waves({ listening, side }: { listening: boolean; side: string }) {
-  const heights = [22, 40, 28];
-  return (
-    <span className={`absolute ${side} flex items-center gap-1.5`} aria-hidden>
-      {heights.map((h, i) => (
-        <span
-          key={i}
-          className={`w-1 rounded-full bg-[#56b5c5]/70 ${listening ? "wave-bar" : ""}`}
-          style={{ height: h, animationDelay: `${i * 0.15}s` }}
-        />
-      ))}
-    </span>
-  );
-}
-
 // 음성 예약 대화 전체 (홈 화면과 /rider/voice 에서 같이 쓴다)
 // routineOffers: 루틴 알림이 있으면 그 질문에 마이크로 바로 답하게 한다 (홈에서 켠다)
 export default function VoiceAssistant({ intro = true, routineOffers = false }: { intro?: boolean; routineOffers?: boolean }) {
@@ -299,8 +283,6 @@ export default function VoiceAssistant({ intro = true, routineOffers = false }: 
         <div className="relative flex h-72 w-72 items-center justify-center">
           <span className={`absolute inset-0 rounded-full bg-rec-gradient opacity-15 ${status === "listening" ? "breathe" : ""}`} />
           <span className={`absolute inset-9 rounded-full bg-rec-gradient opacity-25 ${status === "listening" ? "breathe" : ""}`} />
-          <Waves listening={status === "listening"} side="left-2" />
-          <Waves listening={status === "listening"} side="right-2" />
           <button
             type="button"
             onClick={onMic}

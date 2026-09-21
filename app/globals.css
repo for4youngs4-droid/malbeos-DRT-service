@@ -43,14 +43,6 @@
 .bg-brand-button {
   background: linear-gradient(135deg, #2287bb 0%, #1a6c9f 100%);
 }
-/* 음성 파형 막대 (듣는 중에 움직임) */
-@keyframes wave {
-  0%, 100% { transform: scaleY(0.35); }
-  50% { transform: scaleY(1); }
-}
-.wave-bar {
-  animation: wave 1s ease-in-out infinite;
-}
 /* 그림이 없을 때 자리 표시 */
 .bg-brand-wash {
   background: linear-gradient(135deg, #eaf3fa 0%, #dcebf7 100%);
