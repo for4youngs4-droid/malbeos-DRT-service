@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Check, ChevronRight, Hospital, House, Navigation, Users } from "lucide-react";
+import EmptyState from "@/components/EmptyState";
 import TripStage, { tripPhase } from "@/components/TripStage";
 import { Button, Card, InfoRow, PhoneFrame, SectionTitle, Timeline, Toggle, TopBar } from "@/components/ui";
 import { placeById } from "@/lib/data";
@@ -84,12 +85,7 @@ export default function TripPage() {
     return (
       <PhoneFrame tabs>
         <TopBar title="내 이동" />
-        <div className="space-y-4 px-5 pt-3">
-          <Card>
-            <InfoRow icon={House} title="예정된 이동이 없어요" desc="홈에서 말로 예약해 보세요" />
-          </Card>
-          <Button onClick={() => router.push("/rider")}>홈으로</Button>
-        </div>
+        <EmptyState title="예정된 이동이 없어요" desc="홈에서 말로 예약해 보세요" actionLabel="홈으로" onAction={() => router.push("/rider")} />
       </PhoneFrame>
     );
   }
