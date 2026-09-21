@@ -30,7 +30,7 @@ export default function Modal({
   return createPortal(
     <div className="pointer-events-auto absolute inset-0 z-50 flex items-end" role="dialog" aria-modal="true" aria-label={title}>
       <div className="modal-backdrop absolute inset-0 bg-ink/40" onClick={onClose} />
-      <div className="modal-sheet relative max-h-[90%] w-full overflow-y-auto rounded-t-[36px] bg-white px-5 pb-8 pt-3 shadow-[0_-12px_40px_rgba(15,37,64,0.2)]">
+      <div className="modal-sheet relative max-h-[90%] w-full overflow-y-auto rounded-t-[36px] bg-white px-5 pb-[max(env(safe-area-inset-bottom),2rem)] pt-3 shadow-[0_-12px_40px_rgba(15,37,64,0.2)]">
         <div className="mx-auto mb-3 h-1.5 w-10 rounded-full bg-line" />
         <div className="mb-4 flex items-center justify-between">
           <h2 className="text-[22px] font-semibold tracking-tight">{title}</h2>

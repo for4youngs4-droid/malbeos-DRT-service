@@ -15,7 +15,7 @@ const tabs = [
 export default function BottomNav() {
   const path = usePathname();
   return (
-    <nav className="flex shrink-0 border-t border-line/70 bg-white/95 pb-2 shadow-[0_-8px_20px_rgba(32,127,186,0.10)] backdrop-blur">
+    <nav className="flex shrink-0 border-t border-line/70 bg-white/95 pb-[max(env(safe-area-inset-bottom),0.5rem)] shadow-[0_-8px_20px_rgba(32,127,186,0.10)] backdrop-blur">
       {tabs.map(({ href, label, icon: Icon, solid: Solid }) => {
         // 함께 타기 화면은 "내 이동" 안에서 열리므로 내 이동 탭을 켜 둔다
         const active = path === href || (href === "/rider/chain" && path === "/rider/together");

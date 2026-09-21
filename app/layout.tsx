@@ -1,5 +1,11 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import "./globals.css";
+
+// viewportFit: 폰에서 화면 끝까지 그리고, 상태바·홈바 자리는 아래 CSS(env(safe-area-inset-*))로 직접 비운다
+export const viewport: Viewport = {
+  viewportFit: "cover",
+  themeColor: "#ffffff",
+};
 
 export const metadata: Metadata = {
   title: "온다 DRT",
