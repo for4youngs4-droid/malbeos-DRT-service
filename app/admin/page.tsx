@@ -13,13 +13,13 @@ const pct = (before: number, after: number) => Math.round((1 - after / before) *
 function Compare({ label, before, after, note }: { label: string; before: string; after: string; note: string }) {
   return (
     <Card className="space-y-3 p-6">
-      <p className="text-[16px] font-bold text-sub">{label}</p>
-      <p className="flex flex-wrap items-center gap-x-2 text-[26px] font-bold">
+      <p className="text-[15px] font-medium text-sub">{label}</p>
+      <p className="flex flex-wrap items-center gap-x-2 text-[26px] font-semibold">
         <span className="text-sub">{before}</span>
         <ArrowRight size={24} className="shrink-0 text-brand" />
         <span className="text-navy">{after}</span>
       </p>
-      <p className="text-[24px] font-bold text-brand">{note}</p>
+      <p className="text-[20px] font-semibold text-brand">{note}</p>
     </Card>
   );
 }
@@ -42,8 +42,8 @@ export default function AdminPage() {
       after: stats(a),
       place: p,
       lines: {
-        before: reqs.map((r) => ({ points: routeBetween(r.home, dest), color: "#a9bbec" })),
-        after: [{ points: path, color: "#3f57a6" }],
+        before: reqs.map((r) => ({ points: routeBetween(r.home, dest), color: "#b5d3e6" })),
+        after: [{ points: path, color: "#1a6c9f" }],
       },
       pins: {
         before: [...reqs.map((r) => ({ pos: r.home, kind: "home" as const })), { pos: dest, kind: "place" as const }],
@@ -59,7 +59,7 @@ export default function AdminPage() {
   return (
     <main className="mx-auto max-w-5xl space-y-6 p-8 text-[16px]">
       <header>
-        <h1 className="text-[24px] font-bold">화요일 오전 운행 비교</h1>
+        <h1 className="text-[24px] font-semibold">화요일 오전 운행 비교</h1>
         <p className="mt-1 text-sub">{place.name} 방향, 가는 편 기준 · 같은 방향 승객 {before.cars}명</p>
       </header>
 
@@ -91,7 +91,7 @@ export default function AdminPage() {
               key={m}
               type="button"
               onClick={() => setMode(m)}
-              className={`min-h-12 rounded-pill px-6 text-[16px] font-bold ${mode === m ? "bg-navy text-white" : "bg-white text-sub shadow-card"}`}
+              className={`min-h-12 rounded-pill px-6 text-[15px] font-medium ${mode === m ? "bg-navy text-white" : "bg-white text-sub ring-1 ring-line"}`}
             >
               {m === "before" ? "묶기 전" : "묶기 후"}
             </button>

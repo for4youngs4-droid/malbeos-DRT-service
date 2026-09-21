@@ -86,7 +86,7 @@ export default function ChainPage() {
           ]}
         />
 
-        <p className="rounded-pill bg-brand-soft px-5 py-3 text-center text-lg font-bold text-navy">
+        <p className="rounded-pill bg-white px-5 py-3 text-center text-lg font-medium text-sub ring-1 ring-line">
           {allOn ? "왕복 이동이 함께 계획되어 있어요." : "따로 이동하는 곳이 있어요."}
         </p>
 

@@ -33,14 +33,14 @@ export default function RoutinesPage() {
         {lead && leadPlace && (
           <Card className="space-y-3">
             <Badge>루틴 학습 중</Badge>
-            <p className="text-xl font-bold">다음 주에도 비슷한 일정이 있어요</p>
+            <p className="text-xl font-semibold">다음 주에도 비슷한 일정이 있어요</p>
             <InfoRow
               icon={HeartPulse}
               title={`매주 ${dayLabel(lead.weekday)}요일 ${koTime(lead.time)}`}
               desc={leadPlace.name}
             />
             <div className="flex items-center justify-between gap-3 border-t border-line pt-3">
-              <span className="text-xl font-bold">자동 알림 받기</span>
+              <span className="text-xl font-medium">자동 알림 받기</span>
               <Toggle checked={lead.alertOn} onChange={(on) => setAlert(lead.id, on)} label="자동 알림 받기" />
             </div>
             <p className="text-lg text-sub">더 정확한 예측을 위해 이동 기록을 학습하고 있어요.</p>
@@ -59,13 +59,14 @@ export default function RoutinesPage() {
                 <InfoRow
                   icon={ICONS[p.kind] ?? Package}
                   title={weekly ? `${dayLabel(r.weekday)}요일 ${koTime(r.time)}` : "월 1회"}
-                  desc={weekly ? `${p.name} (${p.kind})` : `${p.name} 검진`}
+                  desc={weekly ? `${p.name} · 매주` : `${p.name} 검진 · 매월`}
                   right={<Toggle checked={r.alertOn} onChange={(on) => setAlert(r.id, on)} label={`${p.name} 알림`} />}
                 />
-                <div className="flex items-center gap-3 pl-14">
-                  <span className="text-lg text-sub">{weekly ? "(매주)" : "(매월)"}</span>
-                  {r.learning && <Badge>루틴 학습 중</Badge>}
-                </div>
+                {r.learning && (
+                  <div className="pl-14">
+                    <Badge>루틴 학습 중</Badge>
+                  </div>
+                )}
               </Card>
             );
           })}

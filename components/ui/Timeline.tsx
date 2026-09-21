@@ -26,9 +26,9 @@ export default function Timeline({ items }: { items: TimelineItem[] }) {
           </div>
           <div className="flex flex-1 items-start justify-between gap-3 pb-6">
             <div className={dim ? "opacity-50" : ""}>
-              <p className="text-xl font-bold">{title}</p>
+              <p className="text-xl font-semibold">{title}</p>
               {desc && <p className="text-lg text-sub">{desc}</p>}
-              {tag && <p className="mt-1 text-lg font-bold text-navy">{tag}</p>}
+              {tag && <p className="mt-1 text-lg font-medium text-brand">{tag}</p>}
             </div>
             {onToggle && <Toggle checked={!!on} onChange={onToggle} label={title} />}
           </div>

@@ -57,7 +57,7 @@ export default function TogetherPage() {
     <PhoneFrame tabs>
       <TopBar />
       <div className="space-y-5 px-5 pt-2">
-        <h1 className="text-[22px] font-bold leading-snug">
+        <h1 className="text-[22px] font-semibold leading-snug tracking-tight">
           {others > 0 ? "다른 이용자와 함께 이동하고 있어요" : "함께 이동 안내"}
         </h1>
         <p className="text-lg text-sub">비슷한 목적지의 승객들과 함께 더 효율적인 경로로 이동합니다.</p>
@@ -66,7 +66,7 @@ export default function TogetherPage() {
         {g && place ? (
           <Card className="space-y-4">
             <InfoRow icon={Users} title="오늘의 탑승 정보" desc={`${place.name} 방향`} />
-            <p className="text-2xl font-bold">
+            <p className="text-2xl font-semibold">
               총 {g.members.length}명 / 1대
             </p>
             <Button variant="secondary" onClick={() => setOpen(!open)}>
@@ -86,7 +86,7 @@ export default function TogetherPage() {
           </Card>
         )}
 
-        <h2 className="pt-2 text-[22px] font-bold">운행 현황</h2>
+        <h2 className="pt-2 text-xl font-semibold">운행 현황</h2>
         <Tabs items={["오늘", "내일"]} value={activeTab} onChange={setTab} />
 
         {shown.length === 0 && <p className="text-lg text-sub">이 날은 함께 이동 소식이 없어요.</p>}
@@ -100,7 +100,7 @@ export default function TogetherPage() {
               <MapView
                 key={`${activeTab}-${i}`}
                 className="h-56"
-                lines={[{ points: route, color: "#5b7fe8" }]}
+                lines={[{ points: route, color: "#207fba" }]}
                 pins={[
                   { pos: [p.lat, p.lng], kind: "place" },
                   { pos: pointAt(route, 0.3), kind: "bus" },

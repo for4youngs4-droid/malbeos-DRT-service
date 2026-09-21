@@ -27,7 +27,7 @@ export default function TopBar({ title, left = "none", right }: Props) {
           {right}
         </div>
       )}
-      {title && <h1 className="mt-2 text-[22px] font-bold leading-snug">{title}</h1>}
+      {title && <h1 className="mt-2 text-[22px] font-semibold leading-snug tracking-tight">{title}</h1>}
     </header>
   );
 }

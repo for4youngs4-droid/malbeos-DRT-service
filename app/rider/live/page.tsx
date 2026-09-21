@@ -21,7 +21,7 @@ function TripMap({ route, p, place }: { route: LatLng[]; p: number; place: LatLn
   return (
     <MapView
       className="h-72"
-      lines={[{ points: route, color: "#5b7fe8" }]}
+      lines={[{ points: route, color: "#207fba" }]}
       pins={[
         { pos: HOME, kind: "home" },
         { pos: place, kind: "place" },
@@ -75,7 +75,7 @@ function Ride({
       <TripMap route={route} p={p} place={place} />
       <Card className="space-y-4">
         <InfoRow icon={Navigation} title="현재 위치" desc={p >= 1 ? "도착했어요" : `${near} 근처`} />
-        <p className="rounded-pill bg-brand-soft px-5 py-3 text-center text-xl font-bold text-navy">
+        <p className="rounded-pill bg-brand-soft px-5 py-3 text-center text-xl font-medium text-navy">
           {p >= 1 ? "도착했어요" : `도착 예정 ${left}분 후`}
         </p>
       </Card>
@@ -172,7 +172,7 @@ export default function LivePage() {
             <TripMap route={goRoute} p={0} place={placePos} />
             <Card className="space-y-4">
               <InfoRow icon={Navigation} title="현재 위치" desc="집 앞" />
-              <p className="rounded-pill bg-brand-soft px-5 py-3 text-center text-xl font-bold text-navy">
+              <p className="rounded-pill bg-brand-soft px-5 py-3 text-center text-xl font-medium text-navy">
                 {koTime(t.depart)}에 출발해요
               </p>
             </Card>
@@ -208,7 +208,7 @@ export default function LivePage() {
         {phase === "stay" && (
           <div className="space-y-5 pt-2">
             <Card className="space-y-2 text-center">
-              <p className="whitespace-pre-line text-[22px] font-bold leading-snug">
+              <p className="whitespace-pre-line text-[22px] font-semibold leading-snug tracking-tight">
                 {place.name}에{"\n"}도착했어요
               </p>
               <p className="text-lg text-sub">{place.kind === "병원" ? "진료 잘 받으세요" : "볼일 잘 보세요"}</p>
@@ -225,7 +225,7 @@ export default function LivePage() {
                     type="button"
                     aria-label="말로 부르기"
                     onClick={listenPickup}
-                    className="flex h-14 w-14 items-center justify-center rounded-full bg-brand text-white shadow-card"
+                    className="flex h-14 w-14 items-center justify-center rounded-full bg-brand-gradient-strong text-white shadow-card"
                   >
                     <Mic size={26} />
                   </button>

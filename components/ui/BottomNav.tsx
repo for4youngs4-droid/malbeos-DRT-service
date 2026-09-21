@@ -14,18 +14,18 @@ const tabs = [
 export default function BottomNav() {
   const path = usePathname();
   return (
-    <nav className="flex shrink-0 border-t border-line bg-white/95 pb-2">
+    <nav className="flex shrink-0 border-t border-line bg-white/90 pb-2 backdrop-blur">
       {tabs.map(({ href, label, icon: Icon }) => {
         const active = path === href;
         return (
           <Link
             key={href}
             href={href}
-            className={`flex min-h-14 flex-1 flex-col items-center justify-center gap-1 text-[14px] font-bold ${
-              active ? "text-brand" : "text-sub"
+            className={`flex min-h-14 flex-1 flex-col items-center justify-center gap-1 text-[12px] ${
+              active ? "font-semibold text-brand" : "font-medium text-sub"
             }`}
           >
-            <Icon size={24} />
+            <Icon size={22} strokeWidth={active ? 2.2 : 1.75} />
             {label}
           </Link>
         );

@@ -73,7 +73,7 @@ export default function RoutineAlertPage() {
         <p className="text-lg text-sub">DRT를 예약하시겠어요?</p>
         <Card className="flex flex-col items-center gap-3 text-center">
           <Illustration name="routine-calendar" className="h-32 w-32" />
-          <p className="text-xl font-bold">
+          <p className="text-xl font-semibold">
             {weekdayName(alert.date)}요일 {koTime(routine.time)}
           </p>
           <p className="text-xl">

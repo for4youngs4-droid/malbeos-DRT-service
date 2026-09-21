@@ -38,7 +38,7 @@ export default function RiderHome() {
         <header className="flex items-start justify-between">
           <div>
             <p className="text-lg text-sub">안녕하세요,</p>
-            <h1 className="text-[22px] font-bold">{HERO.name}님</h1>
+            <h1 className="text-[22px] font-semibold tracking-tight">{HERO.name}님</h1>
           </div>
           <Link
             href={unread.length ? "/rider/routine-alert" : "/rider"}
@@ -68,11 +68,11 @@ export default function RiderHome() {
           />
           {next && nextPlace ? (
             <>
-              <p className="text-xl font-bold">
+              <p className="text-xl font-semibold">
                 {nextPlace.name} ({nextPlace.kind})
               </p>
               {others > 0 && (
-                <Link href="/rider/together" className="flex min-h-14 items-center gap-3 rounded-pill bg-sky px-4 text-xl font-bold text-navy">
+                <Link href="/rider/together" className="flex min-h-14 items-center gap-3 rounded-pill bg-brand-soft px-4 text-xl font-medium text-navy">
                   <Users size={26} />
                   다른 분 {others}명과 함께 타세요
                 </Link>

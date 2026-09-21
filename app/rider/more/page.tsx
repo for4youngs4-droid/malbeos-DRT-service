@@ -47,8 +47,8 @@ export default function MorePage() {
               key={v.name}
               type="button"
               onClick={() => pick(v.name)}
-              className={`flex min-h-14 w-full items-center justify-between gap-2 rounded-pill px-5 text-left text-lg font-bold ${
-                v.name === current ? "bg-brand text-white" : "bg-sky text-ink"
+              className={`flex min-h-14 w-full items-center justify-between gap-2 rounded-pill px-5 text-left text-lg font-medium ${
+                v.name === current ? "bg-navy text-white" : "bg-sky text-ink"
               }`}
             >
               <span>

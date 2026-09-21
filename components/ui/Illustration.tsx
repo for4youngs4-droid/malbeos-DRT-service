@@ -13,7 +13,7 @@ export default function Illustration({ name, className = "h-48 w-full" }: { name
     img.src = `/images/${name}.png`;
   }, [name]);
 
-  if (loaded !== name) return <div className={`rounded-card bg-brand-soft ${className}`} />;
+  if (loaded !== name) return <div className={`rounded-card bg-brand-wash ${className}`} />;
   return (
     // eslint-disable-next-line @next/next/no-img-element
     <img src={`/images/${name}.png`} alt="" className={`object-contain ${className}`} />

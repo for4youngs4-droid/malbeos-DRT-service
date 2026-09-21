@@ -215,17 +215,17 @@ export default function VoiceAssistant({ intro = true }: { intro?: boolean }) {
   return (
     <div className="space-y-4">
       <div className="flex flex-col items-center text-center">
-        <h1 className="text-[22px] font-bold leading-snug">{prompt}</h1>
-        {first && <p className="mt-1 text-2xl text-brand">말씀해 주세요.</p>}
+        <h1 className="text-[22px] font-semibold leading-snug tracking-tight">{prompt}</h1>
+        {first && <p className="mt-1 text-xl font-medium text-brand">말씀해 주세요.</p>}
 
         <div className="relative mt-6 flex h-72 w-72 items-center justify-center">
-          <span className={`absolute inset-0 rounded-full bg-brand-soft/40 ${status === "listening" ? "breathe" : ""}`} />
-          <span className={`absolute inset-8 rounded-full bg-brand-soft/70 ${status === "listening" ? "breathe" : ""}`} />
+          <span className={`absolute inset-0 rounded-full bg-mint/15 ${status === "listening" ? "breathe" : ""}`} />
+          <span className={`absolute inset-8 rounded-full bg-mint/25 ${status === "listening" ? "breathe" : ""}`} />
           <button
             type="button"
             onClick={onMic}
             aria-label="말하기"
-            className={`relative flex h-44 w-44 items-center justify-center rounded-full bg-brand text-white shadow-card ${
+            className={`relative flex h-44 w-44 items-center justify-center rounded-full bg-brand-gradient-strong text-white shadow-[0_12px_32px_rgba(32,127,186,0.35)] ${
               status === "listening" ? "breathe" : ""
             }`}
           >
@@ -233,10 +233,10 @@ export default function VoiceAssistant({ intro = true }: { intro?: boolean }) {
           </button>
         </div>
 
-        <p className="mt-6 min-h-10 text-2xl font-bold">{heard}</p>
+        <p className="mt-6 min-h-10 text-2xl font-medium">{heard}</p>
         {first && !heard && <p className="text-lg text-sub">예) 내일 병원 가고 싶어요</p>}
-        <p className="mt-3 rounded-pill bg-white px-6 py-3 text-lg font-bold text-sub shadow-card">{pill}</p>
-        {hint && <p className="mt-3 text-lg font-bold text-navy">{hint}</p>}
+        <p className="mt-3 rounded-pill bg-white px-5 py-2.5 text-lg font-medium text-sub ring-1 ring-line">{pill}</p>
+        {hint && <p className="mt-3 text-lg font-medium text-navy">{hint}</p>}
       </div>
 
       <div className="space-y-4">
