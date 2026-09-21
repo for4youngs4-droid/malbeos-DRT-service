@@ -11,7 +11,7 @@ export default function Tabs({ items, value, onChange }: Props) {
           type="button"
           onClick={() => onChange(t)}
           className={`min-h-10 shrink-0 rounded-pill px-4 text-lg transition ${
-            t === value ? "bg-navy font-semibold text-white" : "bg-white font-medium text-sub ring-1 ring-line"
+            t === value ? "bg-rec-gradient font-semibold text-white [text-shadow:0_1px_2px_rgba(15,37,64,0.3)]" : "bg-white font-medium text-sub ring-1 ring-line"
           }`}
         >
           {t}

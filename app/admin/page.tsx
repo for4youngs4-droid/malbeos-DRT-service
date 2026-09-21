@@ -91,7 +91,7 @@ export default function AdminPage() {
               key={m}
               type="button"
               onClick={() => setMode(m)}
-              className={`min-h-12 rounded-pill px-6 text-[15px] font-medium ${mode === m ? "bg-navy text-white" : "bg-white text-sub ring-1 ring-line"}`}
+              className={`min-h-12 rounded-pill px-6 text-[15px] font-medium ${mode === m ? "bg-rec-gradient text-white [text-shadow:0_1px_2px_rgba(15,37,64,0.3)]" : "bg-white text-sub ring-1 ring-line"}`}
             >
               {m === "before" ? "묶기 전" : "묶기 후"}
             </button>

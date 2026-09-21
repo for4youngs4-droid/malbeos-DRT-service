@@ -7,7 +7,7 @@ type Props = ButtonHTMLAttributes<HTMLButtonElement> & {
 };
 
 const COLOR = {
-  primary: "bg-brand-button text-white shadow-[0_8px_20px_rgba(26,108,159,0.25)]",
+  primary: "bg-rec-gradient text-white [text-shadow:0_1px_2px_rgba(15,37,64,0.3)] shadow-[0_8px_20px_rgba(86,181,197,0.35)]",
   secondary: "bg-brand-soft text-navy",
   outline: "bg-white text-navy ring-1 ring-brand/40",
 };

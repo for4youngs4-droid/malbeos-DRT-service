@@ -51,7 +51,7 @@ export default function RoutinesPage() {
                 key={r.id}
                 icon={ICONS[p.kind] ?? Package}
                 title={`${dayWord(date)} ${koTime(r.time)}`}
-                desc={`${p.name} · ${koDate(date)}`}
+                desc={`${p.name} · ${koDate(date).replace(/ \(.\)$/, "")}`} // 요일은 제목에 있으므로 날짜만
                 right={
                   reserved ? (
                     <Link href="/rider/chain">

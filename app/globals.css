@@ -39,10 +39,6 @@
   background: linear-gradient(135deg, #8decd0 0%, #56b5c5 50%, #207fba 100%);
 }
 
-/* 버튼: 흰 글씨가 잘 읽히도록 파랑 안에서만 살짝 그라데이션 */
-.bg-brand-button {
-  background: linear-gradient(135deg, #2287bb 0%, #1a6c9f 100%);
-}
 /* 그림이 없을 때 자리 표시 */
 .bg-brand-wash {
   background: linear-gradient(135deg, #eaf3fa 0%, #dcebf7 100%);

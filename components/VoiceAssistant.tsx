@@ -388,7 +388,7 @@ export default function VoiceAssistant({ intro = true, routineOffers = false }: 
             <button
               type="submit"
               aria-label="보내기"
-              className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-navy text-white"
+              className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-rec-gradient text-white shadow-[0_6px_14px_rgba(86,181,197,0.35)]"
             >
               <Send size={20} />
             </button>
