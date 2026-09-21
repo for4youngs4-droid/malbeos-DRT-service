@@ -229,14 +229,14 @@ export default function VoiceAssistant({ intro = true, routineOffers = false }: 
 
     if (text === null) {
       setTextMode(true);
-      setHint("음성 인식을 쓸 수 없어요. 글자로 입력해 주세요.");
+      setHint("음성 인식을 쓸 수 없어요, 글자로 입력해 주세요");
       return;
     }
     if (text === "") {
       d.current.fails += 1;
       const s = d.current.step;
       if (d.current.fails >= 2 && CHOICES[s]) setChoices(CHOICES[s]);
-      setHint("잘 못 들었어요. 마이크를 눌러 다시 말씀해 주세요.");
+      setHint("잘 못 들었어요, 마이크를 눌러 다시 말씀해 주세요");
       await speak("잘 못 들었어요. 마이크를 눌러 다시 말씀해 주세요.");
       return;
     }
@@ -289,8 +289,8 @@ export default function VoiceAssistant({ intro = true, routineOffers = false }: 
 
   const place = confirm ? placeById(confirm.placeId) : undefined;
   const pill =
-    status === "listening" ? "듣고 있어요. 말씀하세요" : status === "speaking" ? "안내하고 있어요" : "마이크를 누르고 말해보세요";
-  const shownPrompt = offering && alert && alertRoutine ? offerText(alert, alertRoutine) : prompt;
+    status === "listening" ? "듣고 있어요" : status === "speaking" ? "안내하고 있어요" : "";
+  const shownPrompt = (offering && alert && alertRoutine ? offerText(alert, alertRoutine) : prompt).replace(/\.\s*/g, "\n").trim(); // 화면에는 마침표 없이
 
   // 예약이 끝났을 때 보여줄 세 가지 요약 (왕복 / 함께 타기 / 루틴)
   const doneRes = doneId ? reservations.find((r) => r.id === doneId) : undefined;
@@ -326,14 +326,16 @@ export default function VoiceAssistant({ intro = true, routineOffers = false }: 
             <Badge>루틴 알림 · 먼저 알려드려요</Badge>
           </div>
         )}
-        <h1 className="mt-2 text-[22px] font-semibold leading-snug tracking-tight text-navy">{shownPrompt}</h1>
-        {first && !offering && <p className="mt-1 text-xl font-medium text-brand">말씀해 주세요.</p>}
+        <h1 className="mt-2 whitespace-pre-line text-[22px] font-semibold leading-snug tracking-tight text-navy">{shownPrompt}</h1>
+        {/* 안내 문구는 제목 하나로 (반복 삭제) */}
         {first && !offering && !heard && <p className="mt-2 text-lg text-sub">예) 내일 아침에 읍내 병원 가야 돼</p>}
         {heard && <p className="mt-2 text-2xl font-medium">{heard}</p>}
         {hint ? (
           <p className="mt-3 text-lg font-medium text-navy">{hint}</p>
         ) : (
-          <p className="mt-3 text-lg text-sub">{offering ? "마이크로 '네' 또는 '나중에'라고 답해도 돼요" : pill}</p>
+          (offering || pill) && (
+            <p className="mt-3 text-lg text-sub">{offering ? "마이크로 '네' 또는 '나중에'라고 답해도 돼요" : pill}</p>
+          )
         )}
         {status !== "idle" && (
           <Button variant="secondary" size="sm" full={false} className="mt-4 px-8" onClick={onCancel}>

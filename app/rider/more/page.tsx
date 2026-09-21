@@ -54,7 +54,7 @@ export default function MorePage() {
             </button>
           ))}
         </ListGroup>
-        {voices.length === 1 && <p className="px-1 text-lg text-sub">더 자연스러운 목소리는 Edge 브라우저에서 볼 수 있어요.</p>}
+        {voices.length === 1 && <p className="px-1 text-lg text-sub">더 자연스러운 목소리는 Edge 브라우저에서 볼 수 있어요</p>}
 
         <SectionTitle>기타</SectionTitle>
         <ListGroup>

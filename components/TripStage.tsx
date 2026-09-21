@@ -128,7 +128,7 @@ export default function TripStage({ r, onFinished }: { r: Reservation; onFinishe
       setMsg("");
       callPickup();
     } else {
-      setMsg(heard === null ? "음성 인식을 쓸 수 없어요. 큰 버튼을 눌러 주세요." : "잘 못 들었어요. 다시 말씀해 주세요.");
+      setMsg(heard === null ? "음성 인식을 쓸 수 없어요, 큰 버튼을 눌러 주세요" : "잘 못 들었어요, 다시 말씀해 주세요");
     }
   };
 
@@ -179,7 +179,7 @@ export default function TripStage({ r, onFinished }: { r: Reservation; onFinishe
         {r.returnOn ? (
           <>
             <Button className="min-h-20 text-xl" onClick={callPickup}>
-              {errand} 끝났어요.
+              {errand} 끝났어요
               <br />
               데리러 와주세요
             </Button>

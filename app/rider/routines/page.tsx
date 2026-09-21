@@ -91,7 +91,7 @@ export default function RoutinesPage() {
             );
           })}
         </ListGroup>
-        <p className="px-1 text-lg text-sub">알림을 켜 두면 루틴 전날 저녁에 홈에서 먼저 알려드려요.</p>
+        <p className="px-1 text-lg text-sub">알림을 켜 두면 루틴 전날 저녁에 홈에서 먼저 알려드려요</p>
       </div>
     </PhoneFrame>
   );

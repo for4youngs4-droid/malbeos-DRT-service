@@ -67,7 +67,7 @@ export default function TogetherPage() {
         <h1 className="text-[22px] font-semibold leading-snug tracking-tight">
           {others > 0 ? "이웃 " + others + "분과 함께 타요" : "함께 타기"}
         </h1>
-        <p className="text-lg text-sub">비슷한 목적지의 승객들과 함께 더 효율적인 경로로 이동합니다.</p>
+        <p className="text-lg text-sub">비슷한 목적지의 승객들과 함께 더 효율적인 경로로 이동해요</p>
         <Illustration name="together-bus" className="h-40 w-full" />
 
         {g && place ? (
@@ -124,7 +124,7 @@ export default function TogetherPage() {
         <SectionTitle>운행 현황</SectionTitle>
         <Tabs items={["오늘", "내일"]} value={activeTab} onChange={setTab} />
 
-        {shown.length === 0 && <p className="text-lg text-sub">이 날은 함께 이동 소식이 없어요.</p>}
+        {shown.length === 0 && <p className="text-lg text-sub">이 날은 함께 이동 소식이 없어요</p>}
         {shown.map((x, i) => {
           const p = placeById(x.placeId)!;
           // 지도에는 차량 경로와 버스만 (다른 승객 집 위치는 표시하지 않는다)
