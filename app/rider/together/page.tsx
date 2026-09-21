@@ -4,7 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Bus, Users } from "lucide-react";
 import MapView from "@/components/map/MapView";
-import { Button, Card, Illustration, InfoRow, ListGroup, ListRow, PeopleIcons, PhoneFrame, SectionTitle, Tabs, TopBar } from "@/components/ui";
+import { Button, Card, InfoRow, ListGroup, ListRow, PeopleIcons, PhoneFrame, SectionTitle, Tabs, TopBar } from "@/components/ui";
 import { BRAND } from "@/lib/colors";
 import { HERO, placeById } from "@/lib/data";
 import { pointAt, routeBetween, type LatLng } from "@/lib/geo";
@@ -69,7 +69,6 @@ export default function TogetherPage() {
           {others > 0 ? "이웃 " + others + "분과 함께 타요" : "함께 타기"}
         </h1>
         <p className="text-lg text-sub">비슷한 목적지의 승객들과 함께 더 효율적인 경로로 이동해요</p>
-        <Illustration name="together-bus" className="h-40 w-full" />
 
         {g && place ? (
           <Card className="space-y-4">
