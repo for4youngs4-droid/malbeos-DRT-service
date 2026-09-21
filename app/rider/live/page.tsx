@@ -14,7 +14,7 @@ import { koTime, toTs } from "@/lib/time";
 import { nextReservation, tripTimes } from "@/lib/trip";
 
 const HOME: LatLng = [HERO.lat, HERO.lng];
-const RIDE_MS = 3000; // 시연용: 편도를 3초에 이동
+const RIDE_MS = 5000; // 시연용: 편도를 3초에 이동
 
 // 지도 + 버스. p는 경로를 얼마나 갔는지(0~1)
 function TripMap({ route, p, place }: { route: LatLng[]; p: number; place: LatLng }) {
@@ -53,16 +53,20 @@ function Ride({
 
   useEffect(() => {
     let t = 0;
+    let hold: ReturnType<typeof setTimeout> | undefined;
     const id = setInterval(() => {
       t += 50;
       const next = Math.min(1, t / RIDE_MS);
       setP(next);
       if (next >= 1) {
         clearInterval(id);
-        done.current();
+        hold = setTimeout(() => done.current(), 1500); // 도착한 모습을 잠깐 보여준다
       }
     }, 50);
-    return () => clearInterval(id);
+    return () => {
+      clearInterval(id);
+      clearTimeout(hold);
+    };
   }, []);
 
   const left = Math.ceil(minutes * (1 - p));
@@ -92,7 +96,7 @@ export default function LivePage() {
   const t = r ? tripTimes(r) : undefined;
   const departTs = r && t ? toTs(r.date, t.depart) : 0;
   const arriveTs = r && t ? toTs(r.date, t.arrive) : 0;
-  const phase = !r ? "none" : r.pickupCalled ? "returning" : now >= arriveTs ? "stay" : now >= departTs ? "riding" : "before";
+  const phase = !r ? "none" : r.pickupCalled ? "returning" : r.arrived ? "stay" : now >= departTs ? "riding" : "before";
 
   // 단계가 바뀔 때마다 안내
   useEffect(() => {
@@ -191,7 +195,8 @@ export default function LivePage() {
               minutes={9}
               near={place.name}
               onDone={() => {
-                setTime(arriveTs);
+                if (now < arriveTs) setTime(arriveTs);
+                update(r.id, { arrived: true });
               }}
             />
             <Button variant="secondary" onClick={() => router.push("/rider")}>

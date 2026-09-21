@@ -13,6 +13,7 @@ export function newReservation(date: string, goTime: string, placeId: string, st
     goOn: true,
     stopOn: true,
     returnOn: true,
+    arrived: false,
     pickupCalled: false,
     done: false,
   };
