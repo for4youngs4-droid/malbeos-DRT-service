@@ -10,8 +10,6 @@ export type Reservation = {
   goTime: string; // HH:MM
   placeId: string;
   stayMin: number;
-  goOn: boolean; // 가는 편을 함께 계획할지
-  stopOn: boolean; // 목적지 예약(대기 예약)
   returnOn: boolean; // 오는 편을 함께 계획할지
   arrived: boolean; // 가는 길 이동을 마치고 목적지에 도착했는지
   pickupCalled: boolean; // "데리러 와주세요"를 눌렀는지

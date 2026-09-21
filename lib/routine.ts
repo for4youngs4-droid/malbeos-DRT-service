@@ -2,7 +2,7 @@
 
 import { placeById, type PastTrip } from "./data";
 import type { AppNotification, Reservation, Routine } from "./store";
-import { addMinutes, dateKey, weekdayName, weekdayOf } from "./time";
+import { addMinutes, dateKey, spokenTime, toTs, weekdayName, weekdayOf } from "./time";
 
 const toMin = (hhmm: string) => {
   const [h, m] = hhmm.split(":").map(Number);
@@ -86,3 +86,27 @@ export function dueAlerts(
   return out;
 }
 
+
+// 루틴이 다음에 일어날 날짜: 오늘부터 7일 안에서 요일이 같고 아직 지나지 않은 첫 날
+export function nextOccurrence(r: Routine, now: number): string {
+  const n = new Date(now);
+  for (let off = 0; off <= 7; off++) {
+    const day = new Date(n.getFullYear(), n.getMonth(), n.getDate() + off);
+    if (day.getDay() !== r.weekday) continue;
+    const date = dateKey(day.getTime());
+    if (toTs(date, r.time) >= now) return date;
+  }
+  return dateKey(now);
+}
+
+// 이 장소로 가는 매주 루틴 (학습이 끝난 것만)
+export function routineForPlace(routines: Routine[], placeId: string) {
+  return routines.find((r) => r.placeId === placeId && r.frequency === "weekly" && !r.learning);
+}
+
+// 홈에서 먼저 묻는 말: "내일 오전 9시에 행복내과 가시는 날이죠? 예약할까요?"
+export function offerText(alert: AppNotification, routine: Routine) {
+  const place = placeById(routine.placeId);
+  const dayWord = alert.title.split(" ")[0]; // "내일", "오늘", "화요일"
+  return `${dayWord} ${spokenTime(routine.time)}에 ${place?.name ?? ""} 가시는 날이죠? 예약할까요?`;
+}

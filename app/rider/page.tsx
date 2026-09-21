@@ -6,26 +6,29 @@ import { useRouter } from "next/navigation";
 import { Bell, Bus, CalendarClock, ChevronRight, Users } from "lucide-react";
 import VoiceAssistant from "@/components/VoiceAssistant";
 import { Button, Card, InfoRow, PhoneFrame, SectionTitle } from "@/components/ui";
-import { placeById, HERO } from "@/lib/data";
+import { HERO, placeById } from "@/lib/data";
+import { groupOfMine } from "@/lib/pooling";
+import { offerText } from "@/lib/routine";
 import { speak, stopSpeaking } from "@/lib/speech";
 import { useStore } from "@/lib/store";
-import { dateKey, koDate, koTime } from "@/lib/time";
-import { groupOfMine } from "@/lib/pooling";
+import { dateKey, koDate, koNow, koTime } from "@/lib/time";
 import { nextReservation } from "@/lib/trip";
 
 export default function RiderHome() {
   const router = useRouter();
   const now = useStore((s) => s.now);
   const reservations = useStore((s) => s.reservations);
-  const notifications = useStore((s) => s.notifications);
+  const alert = useStore((s) => s.notifications.find((n) => !n.read));
+  const alertRoutine = useStore((s) => (alert ? s.routines.find((r) => r.id === alert.routineId) : undefined));
   const setTime = useStore((s) => s.setTime);
 
+  // 루틴 알림이 있으면 그 질문을, 없으면 인사를 읽어준다
+  const spoken = alert && alertRoutine ? offerText(alert, alertRoutine) : `안녕하세요, ${HERO.name}님. 어디로 가실까요? 마이크를 누르고 말씀해 주세요.`;
   useEffect(() => {
-    speak(`안녕하세요, ${HERO.name}님. 어디로 가실까요? 마이크를 누르고 말씀해 주세요.`);
+    speak(spoken);
     return stopSpeaking;
-  }, []);
+  }, [spoken]);
 
-  const unread = notifications.filter((n) => !n.read);
   const next = nextReservation(reservations, now);
   const group = next ? groupOfMine(next, reservations) : undefined;
   const others = group ? group.members.length - 1 : 0;
@@ -39,26 +42,15 @@ export default function RiderHome() {
           <div>
             <p className="text-lg text-sub">안녕하세요,</p>
             <h1 className="text-[22px] font-semibold tracking-tight">{HERO.name}님</h1>
+            <p className="mt-0.5 text-[13px] text-sub">{koNow(now)}</p>
           </div>
-          <Link
-            href={unread.length ? "/rider/routine-alert" : "/rider"}
-            aria-label="알림"
-            className="relative flex h-12 w-12 items-center justify-center rounded-full text-ink"
-          >
+          <span aria-label={alert ? "새 알림이 있어요" : "알림"} className="relative flex h-12 w-12 items-center justify-center text-ink">
             <Bell size={26} />
-            {unread.length > 0 && <span className="absolute right-2.5 top-2.5 h-3.5 w-3.5 rounded-full bg-alert ring-2 ring-white" />}
-          </Link>
+            {alert && <span className="absolute right-2.5 top-2.5 h-3.5 w-3.5 rounded-full bg-alert ring-2 ring-white" />}
+          </span>
         </header>
 
-        {unread.map((n) => (
-          <Link key={n.id} href="/rider/routine-alert" className="block">
-            <Card className="ring-2 ring-brand/60">
-              <InfoRow icon={Bell} title="새 알림" desc={n.title} right={<ChevronRight size={28} className="text-sub" />} />
-            </Card>
-          </Link>
-        ))}
-
-        <VoiceAssistant intro={false} />
+        <VoiceAssistant intro={false} routineOffers />
 
         <SectionTitle>{moving ? "지금 이동 중이에요" : "예정된 이동"}</SectionTitle>
         {next && nextPlace ? (
@@ -75,15 +67,9 @@ export default function RiderHome() {
                 다른 분 {others}명과 함께 타세요
               </Link>
             )}
-            {moving ? (
-              <Button size="sm" onClick={() => router.push("/rider/live")}>
-                실시간 위치 보기
-              </Button>
-            ) : (
-              <Button size="sm" onClick={() => router.push("/rider/chain")}>
-                예약 확인하기 &rarr;
-              </Button>
-            )}
+            <Button size="sm" onClick={() => router.push("/rider/chain")}>
+              {moving ? "실시간 위치 보기" : "내 이동 보기 →"}
+            </Button>
           </Card>
         ) : (
           <Card>

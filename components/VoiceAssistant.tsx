@@ -2,16 +2,30 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
-import { CalendarCheck, CalendarClock, MapPin, Mic, Send } from "lucide-react";
-import { Button, Card, InfoRow } from "@/components/ui";
+import { CalendarCheck, CalendarClock, MapPin, Mic, Repeat, Send, Users } from "lucide-react";
+import { Badge, Button, Card, InfoRow } from "@/components/ui";
 import { avgStayMin, placeById } from "@/lib/data";
 import { isNo, isYes, parseDate, parsePlace, parseTime } from "@/lib/intent";
+import { groupOfMine } from "@/lib/pooling";
+import { nextOccurrence, offerText, routineForPlace } from "@/lib/routine";
 import { listen, speak, stopListening, stopSpeaking } from "@/lib/speech";
 import { useStore } from "@/lib/store";
 import { newReservation } from "@/lib/trip";
-import { addMinutes, dateKey, koDate, koTime, roundHalfHour, spokenClock, spokenTime, weekdayName } from "@/lib/time";
+import {
+  addMinutes,
+  dateKey,
+  dayLabel,
+  koDate,
+  koTime,
+  roundHalfHour,
+  spokenClock,
+  spokenTime,
+  weekdayName,
+  weekdayOf,
+} from "@/lib/time";
 
-type Step = "place" | "date" | "time" | "confirm" | "done";
+// rest: 대화를 잠시 끝낸 상태 (예: 루틴 알림에 "나중에"라고 답함)
+type Step = "place" | "date" | "time" | "confirm" | "done" | "rest";
 type Choice = { label: string; text: string };
 type Status = "idle" | "speaking" | "listening";
 
@@ -63,9 +77,14 @@ function Waves({ listening, side }: { listening: boolean; side: string }) {
 }
 
 // 음성 예약 대화 전체 (홈 화면과 /rider/voice 에서 같이 쓴다)
-export default function VoiceAssistant({ intro = true }: { intro?: boolean }) {
+// routineOffers: 루틴 알림이 있으면 그 질문에 마이크로 바로 답하게 한다 (홈에서 켠다)
+export default function VoiceAssistant({ intro = true, routineOffers = false }: { intro?: boolean; routineOffers?: boolean }) {
   const router = useRouter();
   const addReservation = useStore((s) => s.addReservation);
+  const reservations = useStore((s) => s.reservations);
+  const routines = useStore((s) => s.routines);
+  const alert = useStore((s) => (routineOffers ? s.notifications.find((n) => !n.read) : undefined));
+  const alertRoutine = useStore((s) => (alert ? s.routines.find((r) => r.id === alert.routineId) : undefined));
 
   // 대화 상태는 ref에 (비동기 흐름에서 최신 값을 읽기 위해), 화면에 필요한 것만 state에 복사
   const d = useRef<{ place?: string; date?: string; time?: string; step: Step; fails: number }>({ step: "place", fails: 0 });
@@ -77,10 +96,12 @@ export default function VoiceAssistant({ intro = true }: { intro?: boolean }) {
   const [status, setStatus] = useState<Status>("idle");
   const [hint, setHint] = useState("");
   const [choices, setChoices] = useState<Choice[]>([]);
-  const [confirm, setConfirm] = useState<{ date: string; time: string; placeId: string } | null>(null);
-  const [done, setDone] = useState(false);
+  const [confirm, setConfirm] = useState<{ date: string; time: string; placeId: string; fromRoutine: boolean } | null>(null);
+  const [doneId, setDoneId] = useState<string | null>(null);
   const [textMode, setTextMode] = useState(false);
   const [typed, setTyped] = useState("");
+
+  const offering = !!(alert && alertRoutine) && !doneId && !confirm; // 루틴 알림 질문 중
 
   useEffect(() => {
     if (intro) speak(`${FIRST_PROMPT} 말씀해 주세요.`);
@@ -97,27 +118,45 @@ export default function VoiceAssistant({ intro = true }: { intro?: boolean }) {
     return `${spokenDay(date!, useStore.getState().now)} ${spokenTime(time!)}에 ${placeById(place!)!.name}로 가시는 거 맞으세요?`;
   }
 
-  function finalize(): string {
-    const { date, time, place } = d.current;
-    const p = placeById(place!)!;
-    const stay = avgStayMin(p.id);
-    addReservation(newReservation(date!, time!, p.id, stay));
+  // 예약을 만들고 안내 문장을 돌려준다
+  function book(date: string, time: string, placeId: string, stay: number): string {
+    const p = placeById(placeId)!;
+    const res = newReservation(date, time, placeId, stay);
+    addReservation(res);
     d.current.step = "done";
     setConfirm(null);
     setChoices([]);
-    setDone(true);
-    const end = roundHalfHour(addMinutes(time!, 30 + stay)); // 이동 30분 + 평균 체류
-    return `가는 차는 ${spokenTime(time!)}에 집 앞으로 가요. 오시는 차는 ${
+    setDoneId(res.id);
+    setFirst(false);
+    const end = roundHalfHour(addMinutes(time, 30 + stay)); // 이동 30분 + 평균 체류
+    return `가는 차는 ${spokenTime(time)}에 집 앞으로 가요. 오시는 차는 ${
       p.kind === "병원" ? "진료" : "볼일"
     } 끝나고 불러주시면 바로 갈게요. 보통 ${spokenClock(end)}쯤 끝나세요.`;
   }
 
   // 들은 말을 받아서 다음에 할 말(앱의 대답)을 돌려준다
-  function respond(text: string): string {
-    const now = useStore.getState().now;
-    setHeard(text);
+  function respond(text: string, silent = false): string {
+    const st = useStore.getState();
+    const now = st.now;
+    setHeard(silent ? "" : text); // 버튼으로 누른 것은 말한 글로 남기지 않는다
     setHint("");
     const s = d.current;
+
+    // 루틴 알림 질문에 대한 대답
+    const offerAlert = routineOffers ? st.notifications.find((n) => !n.read) : undefined;
+    const offerRoutine = offerAlert ? st.routines.find((r) => r.id === offerAlert.routineId) : undefined;
+    if (offerAlert && offerRoutine && s.step !== "done") {
+      if (isYes(text) || /예약/.test(text)) {
+        return book(offerAlert.date, offerRoutine.time, offerRoutine.placeId, offerRoutine.avgStayMin);
+      }
+      st.markRead(offerAlert.id); // 나중에, 또는 다른 말을 하면 알림은 닫는다
+      if (isNo(text)) {
+        s.step = "rest";
+        setPrompt(FIRST_PROMPT);
+        setFirst(true);
+        return "알겠어요. 필요하시면 말씀해 주세요.";
+      }
+    }
 
     if (s.step === "confirm") {
       if (isNo(text)) {
@@ -129,7 +168,7 @@ export default function VoiceAssistant({ intro = true }: { intro?: boolean }) {
         setFirst(true);
         return `다시 말씀해 주세요. ${QUESTION.place}`;
       }
-      if (isYes(text)) return finalize();
+      if (isYes(text)) return book(s.date!, s.time!, s.place!, avgStayMin(s.place!));
       return `${confirmSentence()} 맞으면 네, 아니면 아니요라고 말씀해 주세요.`;
     }
 
@@ -142,13 +181,27 @@ export default function VoiceAssistant({ intro = true }: { intro?: boolean }) {
     const understood = !!(p || dt || tm);
     s.fails = understood ? 0 : s.fails + 1;
 
+    // 루틴이 있는 곳인데 시간을 말하지 않았으면, 매주 가시던 시간으로 먼저 제안한다
+    let fromRoutine = false;
+    if (s.place && !s.time) {
+      const r = routineForPlace(st.routines, s.place);
+      if (r && !s.date) {
+        s.date = nextOccurrence(r, now);
+        s.time = r.time;
+        fromRoutine = true;
+      } else if (r && s.date && weekdayOf(s.date) === r.weekday) {
+        s.time = r.time;
+        fromRoutine = true;
+      }
+    }
+
     const missing = !s.place ? "place" : !s.date ? "date" : !s.time ? "time" : null;
     setFirst(false);
     if (!missing) {
       s.step = "confirm";
-      setConfirm({ date: s.date!, time: s.time!, placeId: s.place! });
+      setConfirm({ date: s.date!, time: s.time!, placeId: s.place!, fromRoutine });
       setChoices([]);
-      return confirmSentence();
+      return confirmSentence() + (fromRoutine ? " 매주 가시던 시간이에요." : "");
     }
     s.step = missing;
     setConfirm(null);
@@ -166,7 +219,7 @@ export default function VoiceAssistant({ intro = true }: { intro?: boolean }) {
       await speak(reply);
       if (g !== gen.current) return;
     }
-    if (d.current.step === "done") return setStatus("idle");
+    if (d.current.step === "done" || d.current.step === "rest") return setStatus("idle");
 
     setStatus("listening");
     setHeard("");
@@ -190,7 +243,17 @@ export default function VoiceAssistant({ intro = true }: { intro?: boolean }) {
     await converse(g, respond(text));
   }
 
-  function submit(text: string) {
+  function resetDialog() {
+    d.current = { step: "place", fails: 0 };
+    setDoneId(null);
+    setConfirm(null);
+    setChoices([]);
+    setPrompt(FIRST_PROMPT);
+    setFirst(true);
+    setHeard("");
+  }
+
+  function submit(text: string, silent = false) {
     const t = text.trim();
     if (!t) return;
     const g = ++gen.current;
@@ -198,18 +261,8 @@ export default function VoiceAssistant({ intro = true }: { intro?: boolean }) {
     stopSpeaking();
     setStatus("idle");
     setTyped("");
-    if (d.current.step === "done") resetDialog();
-    void converse(g, respond(t));
-  }
-
-  function resetDialog() {
-    d.current = { step: "place", fails: 0 };
-    setDone(false);
-    setConfirm(null);
-    setChoices([]);
-    setPrompt(FIRST_PROMPT);
-    setFirst(true);
-    setHeard("");
+    if (d.current.step === "done" || d.current.step === "rest") resetDialog();
+    void converse(g, respond(t, silent));
   }
 
   function onMic() {
@@ -220,7 +273,7 @@ export default function VoiceAssistant({ intro = true }: { intro?: boolean }) {
       return;
     }
     if (status === "speaking") return stopSpeaking(); // 말 건너뛰기: 곧바로 듣기 시작
-    if (d.current.step === "done") resetDialog();
+    if (d.current.step === "done" || d.current.step === "rest") resetDialog();
     void converse(++gen.current, null);
   }
 
@@ -237,6 +290,16 @@ export default function VoiceAssistant({ intro = true }: { intro?: boolean }) {
   const place = confirm ? placeById(confirm.placeId) : undefined;
   const pill =
     status === "listening" ? "듣고 있어요. 말씀하세요" : status === "speaking" ? "안내하고 있어요" : "마이크를 누르고 말해보세요";
+  const shownPrompt = offering && alert && alertRoutine ? offerText(alert, alertRoutine) : prompt;
+
+  // 예약이 끝났을 때 보여줄 세 가지 요약 (왕복 / 함께 타기 / 루틴)
+  const doneRes = doneId ? reservations.find((r) => r.id === doneId) : undefined;
+  const doneGroup = doneRes ? groupOfMine(doneRes, reservations) : undefined;
+  const doneOthers = doneGroup ? doneGroup.members.length - 1 : 0;
+  const donePlace = doneRes ? placeById(doneRes.placeId) : undefined;
+  const doneRoutine = doneRes
+    ? routines.find((r) => r.placeId === doneRes.placeId && r.frequency === "weekly" && r.weekday === weekdayOf(doneRes.date))
+    : undefined;
 
   return (
     <div className="space-y-4">
@@ -258,14 +321,19 @@ export default function VoiceAssistant({ intro = true }: { intro?: boolean }) {
           </button>
         </div>
 
-        <h1 className="mt-2 text-[22px] font-semibold leading-snug tracking-tight text-navy">{prompt}</h1>
-        {first && <p className="mt-1 text-xl font-medium text-brand">말씀해 주세요.</p>}
-        {first && !heard && <p className="mt-2 text-lg text-sub">예) 내일 아침에 읍내 병원 가야 돼</p>}
+        {offering && (
+          <div className="mt-2">
+            <Badge>루틴 알림 · 먼저 알려드려요</Badge>
+          </div>
+        )}
+        <h1 className="mt-2 text-[22px] font-semibold leading-snug tracking-tight text-navy">{shownPrompt}</h1>
+        {first && !offering && <p className="mt-1 text-xl font-medium text-brand">말씀해 주세요.</p>}
+        {first && !offering && !heard && <p className="mt-2 text-lg text-sub">예) 내일 아침에 읍내 병원 가야 돼</p>}
         {heard && <p className="mt-2 text-2xl font-medium">{heard}</p>}
         {hint ? (
           <p className="mt-3 text-lg font-medium text-navy">{hint}</p>
         ) : (
-          <p className="mt-3 text-lg text-sub">{pill}</p>
+          <p className="mt-3 text-lg text-sub">{offering ? "마이크로 '네' 또는 '나중에'라고 답해도 돼요" : pill}</p>
         )}
         {status !== "idle" && (
           <Button variant="secondary" size="sm" full={false} className="mt-4 px-8" onClick={onCancel}>
@@ -275,10 +343,19 @@ export default function VoiceAssistant({ intro = true }: { intro?: boolean }) {
       </div>
 
       <div className="space-y-4">
+        {offering && (
+          <div className="flex gap-3">
+            <Button onClick={() => submit("예약해줘", true)}>예약하기</Button>
+            <Button variant="secondary" onClick={() => submit("나중에", true)}>
+              나중에
+            </Button>
+          </div>
+        )}
+
         {choices.length > 0 && (
           <div className="space-y-3">
             {choices.map((c) => (
-              <Button key={c.label} variant="secondary" onClick={() => submit(c.text)}>
+              <Button key={c.label} variant="secondary" onClick={() => submit(c.text, true)}>
                 {c.label}
               </Button>
             ))}
@@ -287,21 +364,36 @@ export default function VoiceAssistant({ intro = true }: { intro?: boolean }) {
 
         {confirm && place && (
           <Card className="space-y-4">
+            {confirm.fromRoutine && <Badge>루틴 · 매주 가시던 시간이에요</Badge>}
             <InfoRow icon={CalendarClock} title={`${koDate(confirm.date)} ${koTime(confirm.time)}`} desc="가는 시간" />
             <InfoRow icon={MapPin} title={place.name} desc={place.kind} />
             <div className="space-y-3 pt-1">
-              <Button onClick={() => submit("네")}>맞아요</Button>
-              <Button variant="secondary" onClick={() => submit("아니요")}>
+              <Button onClick={() => submit("네", true)}>맞아요</Button>
+              <Button variant="secondary" onClick={() => submit("아니요", true)}>
                 다시 말할게요
               </Button>
             </div>
           </Card>
         )}
 
-        {done && (
+        {doneRes && donePlace && (
           <Card className="space-y-4">
-            <InfoRow icon={CalendarCheck} title="왕복 이동을 계획했어요" desc="가는 편과 오는 편을 함께 준비했어요" />
-            <Button onClick={() => router.push("/rider/chain")}>일정 보기</Button>
+            <InfoRow
+              icon={CalendarCheck}
+              title="왕복을 한 번에 예약했어요"
+              desc={`가는 차 ${koTime(doneRes.goTime)} · 오는 차는 ${donePlace.kind === "병원" ? "진료" : "볼일"} 후 호출`}
+            />
+            <InfoRow
+              icon={Users}
+              title={doneOthers > 0 ? `이웃 ${doneOthers}분과 한 차로 가요` : "이번에는 혼자 타요"}
+              desc={doneOthers > 0 ? `차 ${doneOthers + 1}대가 1대로 줄어요` : "같은 방향 분이 있으면 묶어 드려요"}
+            />
+            <InfoRow
+              icon={Repeat}
+              title={doneRoutine ? `매주 ${dayLabel(doneRoutine.weekday)}요일 루틴이에요` : "자주 가시면 루틴으로 알려드려요"}
+              desc={doneRoutine ? "전날 저녁에 먼저 알려드려요" : "이동 기록을 보고 배워요"}
+            />
+            <Button onClick={() => router.push("/rider/chain")}>내 이동 보기</Button>
           </Card>
         )}
 

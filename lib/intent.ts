@@ -57,7 +57,7 @@ export function parsePlace(text: string): string | null {
 }
 
 export function isNo(text: string) {
-  return /아니/.test(text);
+  return /아니|나중/.test(text);
 }
 
 export function isYes(text: string) {

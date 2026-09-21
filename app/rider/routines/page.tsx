@@ -1,13 +1,14 @@
 "use client";
 
-import { useState } from "react";
-import { HeartPulse, Package, ShoppingBasket, Stethoscope } from "lucide-react";
-import { Badge, Card, InfoRow, PhoneFrame, Tabs, Toggle, TopBar } from "@/components/ui";
+import Link from "next/link";
+import { Package, ShoppingBasket, Stethoscope } from "lucide-react";
+import { Badge, Button, ListGroup, ListRow, PhoneFrame, SectionTitle, Toggle, TopBar } from "@/components/ui";
 import { placeById } from "@/lib/data";
+import { nextOccurrence } from "@/lib/routine";
+import { speak } from "@/lib/speech";
 import { useStore } from "@/lib/store";
-import { dayLabel, koTime } from "@/lib/time";
-
-const TABS = ["전체", "병원", "장보기", "기타"];
+import { dateKey, dayLabel, koDate, koTime } from "@/lib/time";
+import { newReservation } from "@/lib/trip";
 
 const ICONS: Record<string, typeof Package> = {
   병원: Stethoscope,
@@ -16,61 +17,81 @@ const ICONS: Record<string, typeof Package> = {
 };
 
 export default function RoutinesPage() {
-  const [tab, setTab] = useState("전체");
+  const now = useStore((s) => s.now);
   const routines = useStore((s) => s.routines);
+  const reservations = useStore((s) => s.reservations);
   const setAlert = useStore((s) => s.setRoutineAlert);
+  const addReservation = useStore((s) => s.addReservation);
 
-  // 맨 위 안내 카드는 학습이 끝난 첫 번째 주간 루틴
-  const lead = routines.find((r) => r.frequency === "weekly");
-  const leadPlace = lead ? placeById(lead.placeId) : undefined;
-
-  const list = routines.filter((r) => tab === "전체" || placeById(r.placeId)?.kind === tab);
+  const today = dateKey(now);
+  const d = new Date(now);
+  const tomorrow = dateKey(new Date(d.getFullYear(), d.getMonth(), d.getDate() + 1).getTime());
+  const dayWord = (date: string) => (date === today ? "오늘" : date === tomorrow ? "내일" : koDate(date));
+  // 다음 예정: 학습이 끝난 매주 루틴이 다음에 오는 날, 예약했는지까지 함께
+  const upcoming = routines
+    .filter((r) => r.frequency === "weekly" && !r.learning)
+    .map((r) => {
+      const date = nextOccurrence(r, now);
+      const reserved = reservations.some((x) => x.date === date && x.placeId === r.placeId && !x.done);
+      return { r, date, reserved };
+    })
+    .sort((a, b) => (a.date + a.r.time).localeCompare(b.date + b.r.time));
 
   return (
     <PhoneFrame tabs>
       <TopBar title="내 루틴" />
-      <div className="space-y-5 px-5 pt-4">
-        {lead && leadPlace && (
-          <Card className="space-y-3">
-            <Badge>루틴 학습 중</Badge>
-            <p className="text-xl font-semibold">다음 주에도 비슷한 일정이 있어요</p>
-            <InfoRow
-              icon={HeartPulse}
-              title={`매주 ${dayLabel(lead.weekday)}요일 ${koTime(lead.time)}`}
-              desc={leadPlace.name}
-            />
-            <div className="flex items-center justify-between gap-3 border-t border-line pt-3">
-              <span className="text-xl font-medium">자동 알림 받기</span>
-              <Toggle checked={lead.alertOn} onChange={(on) => setAlert(lead.id, on)} label="자동 알림 받기" />
-            </div>
-            <p className="text-lg text-sub">더 정확한 예측을 위해 이동 기록을 학습하고 있어요.</p>
-          </Card>
-        )}
+      <div className="space-y-3 px-5 pt-3">
+        <SectionTitle>다음 예정</SectionTitle>
+        <ListGroup>
+          {upcoming.length === 0 && <ListRow title="아직 찾은 루틴이 없어요" desc="이동 기록을 보고 배워요" />}
+          {upcoming.map(({ r, date, reserved }) => {
+            const p = placeById(r.placeId)!;
+            return (
+              <ListRow
+                key={r.id}
+                icon={ICONS[p.kind] ?? Package}
+                title={`${dayWord(date)} ${koTime(r.time)}`}
+                desc={`${p.name} · ${koDate(date)}`}
+                right={
+                  reserved ? (
+                    <Link href="/rider/chain">
+                      <Badge>예약됨</Badge>
+                    </Link>
+                  ) : (
+                    <Button
+                      size="sm"
+                      full={false}
+                      onClick={() => {
+                        addReservation(newReservation(date, r.time, r.placeId, r.avgStayMin));
+                        speak("예약했어요. 내 이동에서 확인할 수 있어요.");
+                      }}
+                    >
+                      예약하기
+                    </Button>
+                  )
+                }
+              />
+            );
+          })}
+        </ListGroup>
 
-        <Tabs items={TABS} value={tab} onChange={setTab} />
-
-        <div className="space-y-4">
-          {list.length === 0 && <p className="text-lg text-sub">이 분류에는 루틴이 없어요.</p>}
-          {list.map((r) => {
+        <SectionTitle>알림 받는 루틴</SectionTitle>
+        <ListGroup>
+          {routines.map((r) => {
             const p = placeById(r.placeId)!;
             const weekly = r.frequency === "weekly";
             return (
-              <Card key={r.id} className={`space-y-2 ${r.alertOn ? "" : "opacity-90"}`}>
-                <InfoRow
-                  icon={ICONS[p.kind] ?? Package}
-                  title={weekly ? `${dayLabel(r.weekday)}요일 ${koTime(r.time)}` : "월 1회"}
-                  desc={weekly ? `${p.name} · 매주` : `${p.name} 검진 · 매월`}
-                  right={<Toggle checked={r.alertOn} onChange={(on) => setAlert(r.id, on)} label={`${p.name} 알림`} />}
-                />
-                {r.learning && (
-                  <div className="pl-14">
-                    <Badge>루틴 학습 중</Badge>
-                  </div>
-                )}
-              </Card>
+              <ListRow
+                key={r.id}
+                icon={ICONS[p.kind] ?? Package}
+                title={weekly ? `${dayLabel(r.weekday)}요일 ${koTime(r.time)}` : "월 1회"}
+                desc={weekly ? `${p.name} · 매주` : `${p.name} 검진 · 매월 · 학습 중`}
+                right={<Toggle checked={r.alertOn} onChange={(on) => setAlert(r.id, on)} label={`${p.name} 알림`} />}
+              />
             );
           })}
-        </div>
+        </ListGroup>
+        <p className="px-1 text-lg text-sub">알림을 켜 두면 루틴 전날 저녁에 홈에서 먼저 알려드려요.</p>
       </div>
     </PhoneFrame>
   );

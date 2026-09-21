@@ -62,10 +62,10 @@ export default function TogetherPage() {
 
   return (
     <PhoneFrame tabs>
-      <TopBar />
+      <TopBar left="back" />
       <div className="space-y-5 px-5 pt-2">
         <h1 className="text-[22px] font-semibold leading-snug tracking-tight">
-          {others > 0 ? "다른 이용자와 함께 이동하고 있어요" : "함께 이동 안내"}
+          {others > 0 ? "이웃 " + others + "분과 함께 타요" : "함께 타기"}
         </h1>
         <p className="text-lg text-sub">비슷한 목적지의 승객들과 함께 더 효율적인 경로로 이동합니다.</p>
         <Illustration name="together-bus" className="h-40 w-full" />

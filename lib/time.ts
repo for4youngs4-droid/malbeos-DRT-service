@@ -69,3 +69,10 @@ export function koDate(dateStr: string) {
   const [, m, d] = dateStr.split("-").map(Number);
   return `${m}월 ${d}일 (${weekdayName(dateStr)})`;
 }
+
+// 가상 시각 -> "9월 21일 (월) 오전 10:00"
+export function koNow(ts: number) {
+  const d = new Date(ts);
+  const hhmm = `${String(d.getHours()).padStart(2, "0")}:${String(d.getMinutes()).padStart(2, "0")}`;
+  return `${koDate(dateKey(ts))} ${koTime(hhmm)}`;
+}

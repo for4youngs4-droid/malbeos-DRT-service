@@ -10,8 +10,6 @@ export function newReservation(date: string, goTime: string, placeId: string, st
     goTime,
     placeId,
     stayMin,
-    goOn: true,
-    stopOn: true,
     returnOn: true,
     arrived: false,
     pickupCalled: false,
