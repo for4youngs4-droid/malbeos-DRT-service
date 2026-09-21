@@ -57,7 +57,7 @@ export default function RiderHome() {
           <Card className="space-y-4">
             <InfoRow
               icon={moving ? Bus : CalendarClock}
-              title={`${nextPlace.name} (${nextPlace.kind})`}
+              title={nextPlace.name}
               desc={moving ? `${nextPlace.name} 가는 중 · ${koTime(next.goTime)} 출발` : `${koDate(next.date)} ${koTime(next.goTime)}`}
               right={!moving && <ChevronRight size={22} className="text-sub" />}
             />
@@ -83,7 +83,7 @@ export default function RiderHome() {
           onClick={() => setTime(new Date(2026, 8, 21, 19, 0).getTime())}
           className="block min-h-14 w-full rounded-pill border border-dashed border-line text-lg text-sub"
         >
-          (임시) 월요일 저녁 7시로 바꾸기
+          월요일 저녁 7시로 바꾸기
         </button>
       </div>
     </PhoneFrame>

@@ -145,7 +145,7 @@ export default function TripStage({ r, onFinished }: { r: Reservation; onFinishe
           onClick={() => setTime(toTs(r.date, t.depart))}
           className="block min-h-12 w-full rounded-pill border border-dashed border-line text-lg text-sub"
         >
-          (임시) 출발 시각으로 바꾸기
+          출발 시각으로 바꾸기
         </button>
       </div>
     );

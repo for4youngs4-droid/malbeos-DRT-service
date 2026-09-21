@@ -20,8 +20,8 @@ export default function MorePage() {
   const voices = useKoVoices();
   const current = voices.find((v) => v.name === voiceName)?.name ?? voices[0]?.name;
 
-  // "Microsoft SunHi Online (Natural) - Korean (Korea)" -> "SunHi Online (Natural)"
-  const short = (n: string) => n.replace(/^Microsoft\s+/, "").replace(/\s+-\s+Korean.*$/, "");
+  // "Microsoft SunHi Online (Natural) - Korean (Korea)" -> "SunHi Online" (괄호 부분은 뺀다)
+  const short = (n: string) => n.replace(/^Microsoft\s+/, "").replace(/\s+-\s+Korean.*$/, "").replace(/\s*\([^)]*\)/g, "");
 
   const pick = (name: string) => {
     setVoiceName(name);

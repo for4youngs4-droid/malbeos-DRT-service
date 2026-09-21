@@ -106,7 +106,7 @@ export default function TripPage() {
       <TopBar title="내 이동" />
       <div className="space-y-5 px-5 pt-1">
         <p className="text-lg text-sub">
-          {koDate(r.date)} {place.kind === "병원" ? "병원" : place.name} 방문 (왕복)
+          {koDate(r.date)} {place.kind === "병원" ? "병원" : place.name} 방문
         </p>
 
         <Stepper current={current} />
@@ -118,7 +118,7 @@ export default function TripPage() {
           <Timeline
             items={[
               { icon: House, title: "집", desc: `${koTime(t.depart)} 출발` },
-              { icon: Hospital, title: `${place.name} (${place.kind})`, desc: `${koTime(t.arrive)} - ${koTime(t.leave)}` },
+              { icon: Hospital, title: place.name, desc: `${koTime(t.arrive)} - ${koTime(t.leave)}` },
               {
                 icon: House,
                 title: "집",

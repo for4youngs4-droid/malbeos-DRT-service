@@ -81,7 +81,7 @@ export default function TogetherPage() {
             </Button>
             {open && pickup && r && (
               <div className="space-y-3">
-                <InfoRow icon={Bus} title={`${g.vehicle} (${g.seats}인승)`} desc={`집 앞 도착 ${koTime(pickup)}`} />
+                <InfoRow icon={Bus} title={g.vehicle} desc={`집 앞 도착 ${koTime(pickup)}`} />
                 <PeopleIcons count={g.members.length} />
               </div>
             )}
@@ -113,7 +113,7 @@ export default function TogetherPage() {
                       {i + 1}
                     </span>
                   }
-                  title={m.mine ? "나 (집 앞)" : "같은 방향 승객"}
+                  title={m.mine ? "나" : "같은 방향 승객"}
                   desc={koTime(g.pickups[i])}
                 />
               ))}
