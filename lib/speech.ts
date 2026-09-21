@@ -3,8 +3,8 @@
 import { useSyncExternalStore } from "react";
 import { useStore } from "./store";
 
-// 말 빠르기: 1이 기본 속도. 예전 0.9에서 1.5배 빠르게 (0.9 x 1.5 = 1.35)
-const SPEECH_RATE = 1.35;
+// 말 빠르기: 1이 기본 속도. 처음 0.9, 1.5배(1.35)는 빨라서 조금 느리게 1.2
+const SPEECH_RATE = 1.2;
 
 // ---- 목소리 고르기 ----
 // 자연스러운 목소리일수록 점수를 높게 (Edge의 Natural, 구글, 애플 등). 옛날 스타일(Heami)은 낮게
