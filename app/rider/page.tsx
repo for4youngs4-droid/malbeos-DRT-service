@@ -37,15 +37,15 @@ export default function RiderHome() {
         <header className="flex items-start justify-between">
           <div>
             <p className="text-lg text-sub">안녕하세요,</p>
-            <h1 className="text-[28px] font-bold">{HERO.name}님</h1>
+            <h1 className="text-[22px] font-bold">{HERO.name}님</h1>
           </div>
           <Link
             href={unread.length ? "/rider/routine-alert" : "/rider"}
             aria-label="알림"
-            className="relative flex h-14 w-14 items-center justify-center rounded-full text-ink"
+            className="relative flex h-12 w-12 items-center justify-center rounded-full text-ink"
           >
-            <Bell size={30} />
-            {unread.length > 0 && <span className="absolute right-3 top-3 h-3.5 w-3.5 rounded-full bg-brand" />}
+            <Bell size={26} />
+            {unread.length > 0 && <span className="absolute right-2.5 top-2.5 h-3.5 w-3.5 rounded-full bg-brand" />}
           </Link>
         </header>
 

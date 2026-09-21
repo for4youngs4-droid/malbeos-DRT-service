@@ -59,7 +59,7 @@ export default function AdminPage() {
   return (
     <main className="mx-auto max-w-5xl space-y-6 p-8 text-[16px]">
       <header>
-        <h1 className="text-[28px] font-bold">화요일 오전 운행 비교</h1>
+        <h1 className="text-[24px] font-bold">화요일 오전 운행 비교</h1>
         <p className="mt-1 text-sub">{place.name} 방향, 가는 편 기준 · 같은 방향 승객 {before.cars}명</p>
       </header>
 

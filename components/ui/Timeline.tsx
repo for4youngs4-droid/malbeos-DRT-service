@@ -19,8 +19,8 @@ export default function Timeline({ items }: { items: TimelineItem[] }) {
       {items.map(({ icon: Icon, title, desc, tag, dim, on, onToggle }, i) => (
         <li key={i} className="flex gap-3">
           <div className="flex flex-col items-center">
-            <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-brand-soft text-brand">
-              <Icon size={24} />
+            <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-brand-soft text-brand">
+              <Icon size={22} />
             </span>
             {i < items.length - 1 && <span className="my-1 w-0.5 flex-1 bg-line" />}
           </div>

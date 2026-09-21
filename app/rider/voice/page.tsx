@@ -219,28 +219,28 @@ export default function VoicePage() {
             type="button"
             aria-label="도움말"
             onClick={() => speak("마이크를 누르고 가고 싶은 곳과 때를 말씀해 주세요. 예를 들어, 내일 병원 가고 싶어요.")}
-            className="flex h-14 w-14 items-center justify-center text-ink"
+            className="flex h-12 w-12 items-center justify-center text-ink"
           >
-            <CircleHelp size={30} />
+            <CircleHelp size={26} />
           </button>
         }
       />
       <div className="flex flex-col items-center px-6 pt-2 text-center">
-        <h1 className="text-[28px] font-bold leading-snug">{prompt}</h1>
+        <h1 className="text-[22px] font-bold leading-snug">{prompt}</h1>
         {first && <p className="mt-1 text-2xl text-brand">말씀해 주세요.</p>}
 
-        <div className="relative mt-10 flex h-56 w-56 items-center justify-center">
+        <div className="relative mt-10 flex h-48 w-48 items-center justify-center">
           <span className={`absolute inset-0 rounded-full bg-brand-soft/40 ${status === "listening" ? "breathe" : ""}`} />
           <span className={`absolute inset-6 rounded-full bg-brand-soft/70 ${status === "listening" ? "breathe" : ""}`} />
           <button
             type="button"
             onClick={onMic}
             aria-label="말하기"
-            className={`relative flex h-32 w-32 items-center justify-center rounded-full bg-brand text-white shadow-card ${
+            className={`relative flex h-28 w-28 items-center justify-center rounded-full bg-brand text-white shadow-card ${
               status === "listening" ? "breathe" : ""
             }`}
           >
-            <Mic size={56} />
+            <Mic size={46} />
           </button>
         </div>
 
@@ -297,14 +297,14 @@ export default function VoicePage() {
               value={typed}
               onChange={(e) => setTyped(e.target.value)}
               placeholder="예) 내일 병원 가고 싶어요"
-              className="min-h-16 min-w-0 flex-1 rounded-pill border border-line bg-white px-5 text-xl outline-none focus:border-brand"
+              className="min-h-14 min-w-0 flex-1 rounded-pill border border-line bg-white px-5 text-xl outline-none focus:border-brand"
             />
             <button
               type="submit"
               aria-label="보내기"
-              className="flex h-16 w-16 shrink-0 items-center justify-center rounded-full bg-navy text-white"
+              className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-navy text-white"
             >
-              <Send size={26} />
+              <Send size={22} />
             </button>
           </form>
         )}

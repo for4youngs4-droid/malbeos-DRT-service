@@ -10,7 +10,7 @@ export default function Button({ variant = "primary", full = true, className = "
   return (
     <button
       {...rest}
-      className={`min-h-16 rounded-pill px-8 text-xl font-bold transition active:scale-[0.98] disabled:opacity-50 ${color} ${full ? "w-full" : ""} ${className}`}
+      className={`min-h-14 rounded-pill px-6 text-xl font-bold transition active:scale-[0.98] disabled:opacity-50 ${color} ${full ? "w-full" : ""} ${className}`}
     />
   );
 }

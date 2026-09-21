@@ -10,7 +10,7 @@ export default function Tabs({ items, value, onChange }: Props) {
           key={t}
           type="button"
           onClick={() => onChange(t)}
-          className={`min-h-12 shrink-0 rounded-pill px-4 text-lg font-bold ${
+          className={`min-h-10 shrink-0 rounded-pill px-4 text-lg font-bold ${
             t === value ? "bg-brand text-white" : "bg-white text-sub"
           }`}
         >

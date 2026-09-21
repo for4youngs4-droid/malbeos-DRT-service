@@ -24,11 +24,11 @@ export default function BottomNav() {
           <Link
             key={href}
             href={href}
-            className={`flex min-h-16 flex-1 flex-col items-center justify-center gap-1 text-lg font-bold ${
+            className={`flex min-h-14 flex-1 flex-col items-center justify-center gap-1 text-lg font-bold ${
               active ? "text-brand" : "text-sub"
             }`}
           >
-            <Icon size={28} />
+            <Icon size={24} />
             {label}
           </Link>
         );

@@ -17,9 +17,9 @@ export default function TopBar({ title, left = "none", right }: Props) {
               type="button"
               onClick={() => router.back()}
               aria-label={left === "back" ? "뒤로" : "닫기"}
-              className="-ml-2 flex h-14 w-14 items-center justify-center text-ink"
+              className="-ml-2 flex h-12 w-12 items-center justify-center text-ink"
             >
-              {left === "back" ? <ChevronLeft size={36} /> : <X size={32} />}
+              {left === "back" ? <ChevronLeft size={30} /> : <X size={28} />}
             </button>
           ) : (
             <span />
@@ -27,7 +27,7 @@ export default function TopBar({ title, left = "none", right }: Props) {
           {right}
         </div>
       )}
-      {title && <h1 className="mt-2 text-[28px] font-bold leading-snug">{title}</h1>}
+      {title && <h1 className="mt-2 text-[22px] font-bold leading-snug">{title}</h1>}
     </header>
   );
 }

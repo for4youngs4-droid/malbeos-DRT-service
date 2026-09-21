@@ -203,14 +203,14 @@ export default function LivePage() {
         {phase === "stay" && (
           <div className="space-y-5 pt-2">
             <Card className="space-y-2 text-center">
-              <p className="whitespace-pre-line text-[28px] font-bold leading-snug">
+              <p className="whitespace-pre-line text-[22px] font-bold leading-snug">
                 {place.name}에{"\n"}도착했어요
               </p>
               <p className="text-lg text-sub">{place.kind === "병원" ? "진료 잘 받으세요" : "볼일 잘 보세요"}</p>
             </Card>
             {r.returnOn ? (
               <>
-                <Button className="min-h-24 text-2xl" onClick={callPickup}>
+                <Button className="min-h-20 text-xl" onClick={callPickup}>
                   {place.kind === "병원" ? "진료 끝났어요." : "볼일 끝났어요."}
                   <br />
                   데리러 와주세요
@@ -220,9 +220,9 @@ export default function LivePage() {
                     type="button"
                     aria-label="말로 부르기"
                     onClick={listenPickup}
-                    className="flex h-16 w-16 items-center justify-center rounded-full bg-brand text-white shadow-card"
+                    className="flex h-14 w-14 items-center justify-center rounded-full bg-brand text-white shadow-card"
                   >
-                    <Mic size={30} />
+                    <Mic size={26} />
                   </button>
                   <p className="text-lg text-sub">{msg || "또는 눌러서 \"다 끝났어\"라고 말하세요"}</p>
                 </div>

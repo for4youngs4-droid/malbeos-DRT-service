@@ -67,7 +67,7 @@ export default function OnboardingPage() {
             {SLIDES.map((s, i) => (
               <section key={i} className="w-full shrink-0 px-6 pt-10">
                 <Illustration name={`onboarding-${i + 1}`} className="h-64 w-full" />
-                <h1 className="mt-8 whitespace-pre-line text-[28px] font-bold leading-snug">{s.title}</h1>
+                <h1 className="mt-8 whitespace-pre-line text-[22px] font-bold leading-snug">{s.title}</h1>
                 <p className="mt-4 text-lg text-sub">{s.desc}</p>
               </section>
             ))}

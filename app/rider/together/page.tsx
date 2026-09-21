@@ -57,7 +57,7 @@ export default function TogetherPage() {
     <PhoneFrame tabs>
       <TopBar />
       <div className="space-y-5 px-5 pt-2">
-        <h1 className="text-[28px] font-bold leading-snug">
+        <h1 className="text-[22px] font-bold leading-snug">
           {others > 0 ? "다른 이용자와 함께 이동하고 있어요" : "함께 이동 안내"}
         </h1>
         <p className="text-lg text-sub">비슷한 목적지의 승객들과 함께 더 효율적인 경로로 이동합니다.</p>
@@ -86,7 +86,7 @@ export default function TogetherPage() {
           </Card>
         )}
 
-        <h2 className="pt-2 text-[28px] font-bold">운행 현황</h2>
+        <h2 className="pt-2 text-[22px] font-bold">운행 현황</h2>
         <Tabs items={["오늘", "내일"]} value={activeTab} onChange={setTab} />
 
         {shown.length === 0 && <p className="text-lg text-sub">이 날은 함께 이동 소식이 없어요.</p>}
