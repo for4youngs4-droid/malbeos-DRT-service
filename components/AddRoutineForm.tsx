@@ -18,7 +18,7 @@ function Chip({ selected, onClick, children, className = "" }: { selected: boole
       onClick={onClick}
       aria-pressed={selected}
       className={`rounded-pill text-lg transition ${
-        selected ? "bg-rec-gradient rec-3d font-semibold text-white [text-shadow:0_1px_2px_rgba(15,37,64,0.3)]" : "raised font-medium text-sub"
+        selected ? "bg-brand font-semibold text-white" : "raised font-medium text-sub"
       } ${className}`}
     >
       {children}

@@ -67,7 +67,7 @@ export default function RiderHome() {
                 다른 분 {others}명과 함께 타세요
               </Link>
             )}
-            <Button size="sm" onClick={() => router.push("/rider/chain")}>
+            <Button size="sm" gradient onClick={() => router.push("/rider/chain")}>
               {moving ? "실시간 위치 보기" : "내 이동 보기 →"}
             </Button>
           </Card>

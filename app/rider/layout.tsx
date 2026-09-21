@@ -34,7 +34,7 @@ export default function RiderLayout({ children }: { children: ReactNode }) {
     <PhoneChrome tabs={showTabs} mainRef={mainRef}>
       <ShellProvider>
         {/* 밀려 들어오는 동안 삐져나가는 부분을 잘라서 스크롤바가 생기지 않게 한다 */}
-        <div className="overflow-hidden">
+        <div className="overflow-hidden pb-10">
           <div key={path} className={motion}>
             {children}
           </div>

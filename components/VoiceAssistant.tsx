@@ -65,6 +65,7 @@ function spokenDay(date: string, now: number) {
 // routineOffers: 루틴 알림이 있으면 그 질문에 마이크로 바로 답하게 한다 (홈에서 켠다)
 export default function VoiceAssistant({ intro = true, routineOffers = false }: { intro?: boolean; routineOffers?: boolean }) {
   const router = useRouter();
+  const fancy = routineOffers; // 그라데이션 효과는 홈 화면에서만
   const addReservation = useStore((s) => s.addReservation);
   const reservations = useStore((s) => s.reservations);
   const routines = useStore((s) => s.routines);
@@ -282,14 +283,14 @@ export default function VoiceAssistant({ intro = true, routineOffers = false }: 
     <div className="space-y-4">
       <div className="flex flex-col items-center text-center">
         <div className="relative flex h-72 w-72 items-center justify-center">
-          <span style={angle(315)} className={`absolute inset-0 rounded-full bg-rec-gradient opacity-15 ${status === "listening" ? "breathe" : ""}`} />
-          <span style={angle(200)} className={`absolute inset-9 rounded-full bg-rec-gradient opacity-25 ${status === "listening" ? "breathe" : ""}`} />
+          <span style={fancy ? angle(315) : undefined} className={`absolute inset-0 rounded-full ${fancy ? "bg-rec-gradient opacity-15" : "bg-brand/10"} ${status === "listening" ? "breathe" : ""}`} />
+          <span style={fancy ? angle(200) : undefined} className={`absolute inset-9 rounded-full ${fancy ? "bg-rec-gradient opacity-25" : "bg-brand/15"} ${status === "listening" ? "breathe" : ""}`} />
           <button
             type="button"
             onClick={onMic}
             aria-label="말하기"
-            style={angle(145)}
-            className={`relative flex h-40 w-40 items-center justify-center rounded-full bg-rec-gradient text-white shadow-[inset_0_3px_4px_rgba(255,255,255,0.5),inset_0_-8px_14px_rgba(32,127,186,0.35),0_12px_32px_rgba(86,181,197,0.45)] ${
+            style={fancy ? angle(145) : undefined}
+            className={`relative flex h-40 w-40 items-center justify-center rounded-full text-white ${fancy ? "bg-rec-gradient shadow-[inset_0_3px_4px_rgba(255,255,255,0.5),inset_0_-8px_14px_rgba(32,127,186,0.35),0_12px_32px_rgba(86,181,197,0.45)]" : "bg-brand"} ${
               status === "listening" ? "breathe" : ""
             }`}
           >
@@ -322,7 +323,7 @@ export default function VoiceAssistant({ intro = true, routineOffers = false }: 
       <div className="space-y-4">
         {offering && (
           <div className="flex gap-3">
-            <Button onClick={() => submit("예약해줘", true)}>예약하기</Button>
+            <Button gradient={fancy} onClick={() => submit("예약해줘", true)}>예약하기</Button>
             <Button variant="secondary" onClick={() => submit("나중에", true)}>
               나중에
             </Button>
@@ -345,7 +346,7 @@ export default function VoiceAssistant({ intro = true, routineOffers = false }: 
             <InfoRow icon={CalendarClock} title={`${koDate(confirm.date)} ${koTime(confirm.time)}`} desc="가는 시간" />
             <InfoRow icon={MapPin} title={place.name} desc={place.kind} />
             <div className="space-y-3 pt-1">
-              <Button onClick={() => submit("네", true)}>맞아요</Button>
+              <Button gradient={fancy} onClick={() => submit("네", true)}>맞아요</Button>
               <Button variant="secondary" onClick={() => submit("아니요", true)}>
                 다시 말할게요
               </Button>
@@ -370,7 +371,7 @@ export default function VoiceAssistant({ intro = true, routineOffers = false }: 
               title={doneRoutine ? `매주 ${dayLabel(doneRoutine.weekday)}요일 루틴이에요` : "자주 가시면 루틴으로 알려드려요"}
               desc={doneRoutine ? "전날 저녁에 먼저 알려드려요" : "이동 기록을 보고 배워요"}
             />
-            <Button onClick={() => router.push("/rider/chain")}>내 이동 보기</Button>
+            <Button gradient={fancy} onClick={() => router.push("/rider/chain")}>내 이동 보기</Button>
           </Card>
         )}
 
@@ -390,8 +391,8 @@ export default function VoiceAssistant({ intro = true, routineOffers = false }: 
             <button
               type="submit"
               aria-label="보내기"
-              style={angle(50)}
-              className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-rec-gradient rec-3d text-white"
+              style={fancy ? angle(50) : undefined}
+              className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-full text-white ${fancy ? "bg-rec-gradient rec-3d" : "bg-brand"}`}
             >
               <Send size={20} />
             </button>
