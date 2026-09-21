@@ -36,11 +36,14 @@ export function CalendarCheckSolid(p: P) {
   );
 }
 
-export function RepeatSolid(p: P) {
+export function ClockSolid(p: P) {
   return (
     <Svg {...p}>
-      <path d="M17 1.6 21.4 6 17 10.4V7.2H7.4A2.4 2.4 0 0 0 5 9.6V11H2.6V9.6A4.8 4.8 0 0 1 7.4 4.8H17V1.6Z" />
-      <path d="M7 22.4 2.6 18 7 13.6v3.2h9.6a2.4 2.4 0 0 0 2.4-2.4V13h2.4v1.4a4.8 4.8 0 0 1-4.8 4.8H7v3.2Z" />
+      <mask id="solid-clock-hands">
+        <rect width="24" height="24" fill="white" />
+        <path d="M12 6.8V12l3.4 2" fill="none" stroke="black" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+      </mask>
+      <circle cx="12" cy="12" r="10" mask="url(#solid-clock-hands)" />
     </Svg>
   );
 }

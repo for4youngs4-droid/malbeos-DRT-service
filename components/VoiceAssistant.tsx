@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
-import { CalendarCheck, CalendarClock, MapPin, Mic, Repeat, Send, Users } from "lucide-react";
+import { CalendarCheck, CalendarClock, Clock, MapPin, Mic, Send, Users } from "lucide-react";
 import { Badge, Button, Card, InfoRow } from "@/components/ui";
 import { angle } from "@/components/ui/gradientAngle";
 import { avgStayMin, placeById } from "@/lib/data";
@@ -367,7 +367,7 @@ export default function VoiceAssistant({ intro = true, routineOffers = false }: 
               desc={doneOthers > 0 ? `차 ${doneOthers + 1}대가 1대로 줄어요` : "같은 방향 분이 있으면 묶어 드려요"}
             />
             <InfoRow
-              icon={Repeat}
+              icon={Clock}
               title={doneRoutine ? `매주 ${dayLabel(doneRoutine.weekday)}요일 루틴이에요` : "자주 가시면 루틴으로 알려드려요"}
               desc={doneRoutine ? "전날 저녁에 먼저 알려드려요" : "이동 기록을 보고 배워요"}
             />

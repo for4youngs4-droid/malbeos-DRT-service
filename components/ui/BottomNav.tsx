@@ -2,13 +2,13 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { CalendarCheck, Home, Repeat, Settings } from "lucide-react";
-import { CalendarCheckSolid, HomeSolid, RepeatSolid, SettingsSolid } from "./SolidIcons";
+import { CalendarCheck, Clock, Home, Settings } from "lucide-react";
+import { CalendarCheckSolid, ClockSolid, HomeSolid, SettingsSolid } from "./SolidIcons";
 
 const tabs = [
   { href: "/rider", label: "홈", icon: Home, solid: HomeSolid },
   { href: "/rider/chain", label: "내 이동", icon: CalendarCheck, solid: CalendarCheckSolid },
-  { href: "/rider/routines", label: "내 루틴", icon: Repeat, solid: RepeatSolid },
+  { href: "/rider/routines", label: "내 루틴", icon: Clock, solid: ClockSolid },
   { href: "/rider/more", label: "설정", icon: Settings, solid: SettingsSolid },
 ];
 
