@@ -140,7 +140,7 @@ export default function TripStage({ r, onFinished }: { r: Reservation; onFinishe
         <Card flat>
           <InfoRow icon={Navigation} title={`${koTime(t.depart)}에 출발해요`} desc="차가 집 앞으로 와요" />
         </Card>
-        {/* 임시: 블록 6의 시연 조작판이 생기면 지운다 */}
+        {/* 출발 시연 버튼: 가상 시각을 출발 시각으로 옮겨 이동을 시작한다 (시연 조작판은 만들지 않는다) */}
         <button
           type="button"
           onClick={() => setTime(toTs(r.date, t.depart))}

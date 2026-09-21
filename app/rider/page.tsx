@@ -100,7 +100,7 @@ export default function RiderHome() {
           </Card>
         )}
 
-        {/* 임시: 블록 6의 시연 조작판이 생기면 지운다 */}
+        {/* 알림 시연 버튼: 가상 시각을 월요일 저녁 7시로 옮겨 루틴 알림을 띄운다 (시연 조작판은 만들지 않는다) */}
         <button
           type="button"
           onClick={() => setTime(new Date(2026, 8, 21, 19, 0).getTime())}
