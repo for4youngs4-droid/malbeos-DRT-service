@@ -3,6 +3,9 @@
 import { useSyncExternalStore } from "react";
 import { useStore } from "./store";
 
+// 말 빠르기: 1이 기본 속도. 예전 0.9에서 1.5배 빠르게 (0.9 x 1.5 = 1.35)
+const SPEECH_RATE = 1.35;
+
 // ---- 목소리 고르기 ----
 // 자연스러운 목소리일수록 점수를 높게 (Edge의 Natural, 구글, 애플 등). 옛날 스타일(Heami)은 낮게
 function voiceScore(v: SpeechSynthesisVoice) {
@@ -65,7 +68,7 @@ export function speak(text: string, force = false): Promise<void> {
     synth.cancel();
     const u = new SpeechSynthesisUtterance(text);
     u.lang = "ko-KR";
-    u.rate = 0.9;
+    u.rate = SPEECH_RATE;
     const voice = pickVoice();
     try {
       if (voice) u.voice = voice;
