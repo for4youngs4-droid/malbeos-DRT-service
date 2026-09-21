@@ -49,6 +49,7 @@ type State = {
   addReservation: (r: Reservation) => void;
   updateReservation: (id: string, patch: Partial<Reservation>) => void;
   removeReservation: (id: string) => void;
+  addRoutine: (r: Routine) => void;
   setRoutineAlert: (id: string, on: boolean) => void;
   markRead: (id: string) => void;
   setVoiceOn: (v: boolean) => void;
@@ -85,6 +86,18 @@ export const useStore = create<State>((set) => ({
 
   updateReservation: (id, patch) =>
     set((s) => ({ reservations: s.reservations.map((r) => (r.id === id ? { ...r, ...patch } : r)) })),
+
+  // 직접 추가한 루틴: 매주 루틴은 요일 순으로 넣고, 지금 알림 시각이면 바로 알림도 만든다
+  addRoutine: (r) =>
+    set((s) => {
+      const routines = [...s.routines, r].sort(
+        (a, b) => Number(a.frequency === "monthly") - Number(b.frequency === "monthly") || a.weekday - b.weekday,
+      );
+      return {
+        routines,
+        notifications: [...s.notifications, ...dueAlerts(s.now, routines, s.reservations, s.notifications)],
+      };
+    }),
 
   // 끄면 그 루틴의 알림이 오지 않고, 이미 온 안 읽은 알림도 사라진다
   setRoutineAlert: (id, on) =>

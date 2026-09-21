@@ -12,3 +12,4 @@ export { default as Illustration } from "./Illustration";
 export { default as PhoneFrame } from "./PhoneFrame";
 export { default as SectionTitle } from "./SectionTitle";
 export { ListGroup, ListRow } from "./ListGroup";
+export { default as Modal } from "./Modal";
