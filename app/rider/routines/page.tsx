@@ -4,7 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { Package, Plus, ShoppingBasket, Stethoscope } from "lucide-react";
 import AddRoutineForm from "@/components/AddRoutineForm";
-import { Badge, Button, ListGroup, ListRow, Modal, PhoneFrame, SectionTitle, Toggle, TopBar } from "@/components/ui";
+import { Badge, Button, FloatingButton, ListGroup, ListRow, Modal, PhoneFrame, SectionTitle, Toggle, TopBar } from "@/components/ui";
 import { placeById } from "@/lib/data";
 import { nextOccurrence } from "@/lib/routine";
 import { speak } from "@/lib/speech";
@@ -78,15 +78,7 @@ export default function RoutinesPage() {
           })}
         </ListGroup>
 
-        <div className="flex items-center justify-between">
-          <SectionTitle>알림 받는 루틴</SectionTitle>
-          <Button size="sm" variant="secondary" full={false} onClick={() => setAdding(true)}>
-            <span className="flex items-center gap-1">
-              <Plus size={18} strokeWidth={2.5} />
-              추가
-            </span>
-          </Button>
-        </div>
+        <SectionTitle>알림 받는 루틴</SectionTitle>
         <ListGroup>
           {routines.map((r) => {
             const p = placeById(r.placeId)!;
@@ -104,6 +96,10 @@ export default function RoutinesPage() {
         </ListGroup>
         <p className="px-1 text-lg text-sub">알림을 켜 두면 루틴 전날 저녁에 홈에서 먼저 알려드려요</p>
       </div>
+
+      <FloatingButton label="루틴 추가" onClick={() => setAdding(true)}>
+        <Plus size={28} strokeWidth={2.5} />
+      </FloatingButton>
 
       <Modal open={adding} onClose={() => setAdding(false)} title="루틴 추가">
         <AddRoutineForm onDone={() => setAdding(false)} />
