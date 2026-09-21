@@ -3,8 +3,9 @@
 import { useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Bell, CalendarClock, ChevronRight, Mic, Users } from "lucide-react";
-import { Button, Card, Illustration, InfoRow, PhoneFrame } from "@/components/ui";
+import { Bell, CalendarClock, ChevronRight, Users } from "lucide-react";
+import VoiceAssistant from "@/components/VoiceAssistant";
+import { Button, Card, InfoRow, PhoneFrame } from "@/components/ui";
 import { placeById, HERO } from "@/lib/data";
 import { speak, stopSpeaking } from "@/lib/speech";
 import { useStore } from "@/lib/store";
@@ -20,7 +21,7 @@ export default function RiderHome() {
   const setTime = useStore((s) => s.setTime);
 
   useEffect(() => {
-    speak(`안녕하세요, ${HERO.name}님. 오늘도 안전한 이동을 응원해요.`);
+    speak(`안녕하세요, ${HERO.name}님. 어디로 가실까요? 마이크를 누르고 말씀해 주세요.`);
     return stopSpeaking;
   }, []);
 
@@ -57,23 +58,7 @@ export default function RiderHome() {
           </Link>
         ))}
 
-        <Link
-          href="/rider/voice"
-          className="flex min-h-20 items-center gap-4 rounded-card bg-brand px-5 text-white shadow-card active:scale-[0.98]"
-        >
-          <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-white/25">
-            <Mic size={28} />
-          </span>
-          <span>
-            <span className="block text-xl font-bold">말로 예약하기</span>
-            <span className="block text-lg text-white/90">누르고 가고 싶은 곳을 말씀하세요</span>
-          </span>
-        </Link>
-
-        <Card className="flex flex-col items-center bg-brand-soft text-center">
-          <Illustration name="home-bus" className="h-36 w-full" />
-          <p className="mt-3 text-xl font-bold">오늘도 안전한 이동을 응원해요!</p>
-        </Card>
+        <VoiceAssistant intro={false} />
 
         <Card className="space-y-4">
           <InfoRow
