@@ -10,7 +10,7 @@ import { pointAt, routeBetween, type LatLng } from "@/lib/geo";
 import { groupOfMine, myPickup, myRequests, neighborRequests, poolRequests } from "@/lib/pooling";
 import { speak, stopSpeaking } from "@/lib/speech";
 import { useStore } from "@/lib/store";
-import { dateKey, koTime, spokenTime } from "@/lib/time";
+import { dateKey, koDate, koTime, spokenTime } from "@/lib/time";
 import { nextReservation } from "@/lib/trip";
 
 const COUNT = ["", "한", "두", "세", "네", "다섯"];
@@ -24,10 +24,8 @@ export default function TogetherPage() {
   const [open, setOpen] = useState(false);
   const [tab, setTab] = useState<string | null>(null);
 
-  const mine = useMemo(
-    () => poolRequests([...neighborRequests(), ...myRequests(reservations)]).filter((g) => g.members.some((m) => m.mine)),
-    [reservations],
-  );
+  // 그날 운행하는 묶음 전체 (내 예약이 없어도 보인다)
+  const dayGroups = useMemo(() => poolRequests([...neighborRequests(), ...myRequests(reservations)]), [reservations]);
   const g = r ? groupOfMine(r, reservations) : undefined;
   const others = g ? g.members.length - 1 : 0;
   const place = g ? placeById(g.placeId) : undefined;
@@ -48,10 +46,19 @@ export default function TogetherPage() {
   }, [gKey]);
 
   const today = dateKey(now);
+  // 아직 내 예약이 없을 때 보여줄 이웃들의 이동 소식 (인원 수만, 누군지는 표시하지 않음)
+  const first = dayGroups.find((x) => x.date >= today);
+  const upcoming = first
+    ? {
+        label: first.date === today ? "오늘" : `${koDate(first.date)}`,
+        place: placeById(first.placeId)?.name ?? "",
+        count: first.members.length,
+      }
+    : undefined;
   const d = new Date(now);
   const tomorrow = dateKey(new Date(d.getFullYear(), d.getMonth(), d.getDate() + 1).getTime());
-  const activeTab = tab ?? (mine.some((x) => x.date === today) ? "오늘" : "내일");
-  const shown = mine.filter((x) => x.date === (activeTab === "오늘" ? today : tomorrow));
+  const activeTab = tab ?? (dayGroups.some((x) => x.date === today) ? "오늘" : "내일");
+  const shown = dayGroups.filter((x) => x.date === (activeTab === "오늘" ? today : tomorrow));
 
   return (
     <PhoneFrame tabs>
@@ -81,8 +88,12 @@ export default function TogetherPage() {
           </Card>
         ) : (
           <Card className="space-y-4">
-            <InfoRow icon={Users} title="함께 이동 소식이 아직 없어요" desc="예약하면 같은 방향 분들과 묶어 드려요" />
-            <Button onClick={() => router.push("/rider/voice")}>말로 예약하기</Button>
+            <InfoRow
+              icon={Users}
+              title={upcoming ? `${upcoming.label} ${upcoming.place} 방향` : "함께 이동 소식이 아직 없어요"}
+              desc={upcoming ? `같은 방향으로 ${upcoming.count}명이 이동해요` : "예약하면 같은 방향 분들과 묶어 드려요"}
+            />
+            <Button onClick={() => router.push("/rider")}>말로 예약하고 함께 타기</Button>
           </Card>
         )}
 
@@ -118,7 +129,7 @@ export default function TogetherPage() {
           const p = placeById(x.placeId)!;
           // 지도에는 차량 경로와 버스만 (다른 승객 집 위치는 표시하지 않는다)
           const route = routeBetween(HOME, [p.lat, p.lng]);
-          const me = x.members.findIndex((m) => m.mine);
+          const me = Math.max(0, x.members.findIndex((m) => m.mine));
           return (
             <div key={i} className="space-y-4">
               <MapView

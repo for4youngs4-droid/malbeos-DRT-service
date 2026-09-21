@@ -2,11 +2,12 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { CalendarCheck, Home, Repeat, Settings } from "lucide-react";
+import { CalendarCheck, Home, Repeat, Settings, Users } from "lucide-react";
 
 const tabs = [
   { href: "/rider", label: "홈", icon: Home },
   { href: "/rider/chain", label: "이동계획", icon: CalendarCheck },
+  { href: "/rider/together", label: "함께이동", icon: Users },
   { href: "/rider/routines", label: "내 루틴", icon: Repeat },
   { href: "/rider/more", label: "설정", icon: Settings },
 ];
