@@ -8,6 +8,7 @@ type Props = ButtonHTMLAttributes<HTMLButtonElement> & {
   size?: "md" | "sm";
   full?: boolean;
   gradient?: boolean; // 브랜드 그라데이션 효과 (홈 화면에서만 켠다)
+  flat?: boolean; // 그림자·볼록 효과 없이 평평하게
 };
 
 const COLOR = {
@@ -16,16 +17,22 @@ const COLOR = {
   secondary: "raised-blue text-navy",
   outline: "raised text-navy ring-1 ring-brand/30",
 };
+const FLAT = {
+  primary: "bg-brand text-white",
+  gradient: "bg-brand text-white",
+  secondary: "bg-brand-soft text-navy",
+  outline: "bg-white text-navy ring-1 ring-brand/40",
+};
 const SIZE = { md: "min-h-14 px-6 text-xl", sm: "min-h-11 px-5 text-lg" };
 
-export default function Button({ variant = "primary", size = "md", full = true, gradient = false, className = "", style, ...rest }: Props) {
+export default function Button({ variant = "primary", size = "md", full = true, gradient = false, flat = false, className = "", style, ...rest }: Props) {
   const grad = useGradientStyle();
   const fancy = variant === "primary" && gradient;
   return (
     <button
       {...rest}
       style={fancy ? { ...grad, ...style } : style}
-      className={`rounded-pill font-semibold transition active:scale-[0.98] disabled:opacity-50 ${SIZE[size]} ${fancy ? COLOR.gradient : COLOR[variant]} ${full ? "w-full" : ""} ${className}`}
+      className={`rounded-pill font-semibold transition active:scale-[0.98] disabled:opacity-50 ${SIZE[size]} ${fancy ? COLOR.gradient : flat ? FLAT[variant] : COLOR[variant]} ${full ? "w-full" : ""} ${className}`}
     />
   );
 }

@@ -29,7 +29,7 @@ export function tripPhase(r: Reservation, now: number): TripPhase {
 function TripMap({ route, p, place }: { route: LatLng[]; p: number; place: LatLng }) {
   return (
     <MapView
-      className="h-64"
+      className="h-64 shadow-none!"
       lines={[{ points: route, color: BRAND }]}
       pins={[
         { pos: HOME, kind: "home" },
@@ -82,9 +82,9 @@ function Ride({
   return (
     <>
       <TripMap route={route} p={p} place={place} />
-      <Card className="space-y-3">
+      <Card flat className="space-y-3">
         <InfoRow icon={Navigation} title="현재 위치" desc={p >= 1 ? "도착했어요" : `${near} 근처`} />
-        <p className="rounded-pill raised-blue px-5 py-3 text-center text-xl font-medium text-navy">
+        <p className="rounded-pill bg-brand-soft px-5 py-3 text-center text-xl font-medium text-navy">
           {p >= 1 ? "도착했어요" : `도착 예정 ${left}분 후`}
         </p>
       </Card>
@@ -137,7 +137,7 @@ export default function TripStage({ r, onFinished }: { r: Reservation; onFinishe
     return (
       <div className="space-y-4">
         <TripMap route={goRoute} p={0} place={placePos} />
-        <Card>
+        <Card flat>
           <InfoRow icon={Navigation} title={`${koTime(t.depart)}에 출발해요`} desc="차가 집 앞으로 와요" />
         </Card>
         {/* 임시: 블록 6의 시연 조작판이 생기면 지운다 */}
@@ -173,13 +173,13 @@ export default function TripStage({ r, onFinished }: { r: Reservation; onFinishe
   if (phase === "stay") {
     return (
       <div className="space-y-4">
-        <Card className="space-y-1 text-center">
+        <Card flat className="space-y-1 text-center">
           <p className="text-[22px] font-semibold leading-snug tracking-tight">{place.name}에 도착했어요</p>
           <p className="text-lg text-sub">{errand} 잘 받으세요</p>
         </Card>
         {r.returnOn ? (
           <>
-            <Button className="min-h-20 text-xl" onClick={callPickup}>
+            <Button flat className="min-h-20 text-xl" onClick={callPickup}>
               {errand} 끝났어요
               <br />
               데리러 와주세요
@@ -197,7 +197,7 @@ export default function TripStage({ r, onFinished }: { r: Reservation; onFinishe
             </div>
           </>
         ) : (
-          <Card>
+          <Card flat>
             <InfoRow icon={Navigation} title="오시는 길은 따로 이동해요" desc="차를 부르지 않아도 돼요" />
           </Card>
         )}

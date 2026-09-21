@@ -27,10 +27,10 @@ function Stepper({ current }: { current: number }) {
             <span
               className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-[12px] font-semibold ${
                 i < current
-                  ? "tile text-white"
+                  ? "bg-brand text-white"
                   : i === current
-                    ? "tile text-white ring-4 ring-brand/20"
-                    : "raised text-sub"
+                    ? "bg-brand text-white ring-4 ring-brand/20"
+                    : "bg-white text-sub ring-1 ring-line"
               }`}
             >
               {i < current ? <Check size={13} strokeWidth={3} /> : i + 1}
@@ -72,10 +72,10 @@ export default function TripPage() {
         <TopBar title="내 이동" />
         <div className="space-y-4 px-5 pt-3">
           <Stepper current={STEPS.length} />
-          <Card>
+          <Card flat>
             <InfoRow icon={Navigation} title="집에 도착했어요" desc="오늘도 수고하셨어요" />
           </Card>
-          <Button onClick={() => router.push("/rider")}>홈으로</Button>
+          <Button flat onClick={() => router.push("/rider")}>홈으로</Button>
         </div>
       </PhoneFrame>
     );
@@ -110,7 +110,7 @@ export default function TripPage() {
         <TripStage r={r} onFinished={() => setFinished(true)} />
 
         <SectionTitle>왕복 계획</SectionTitle>
-        <Card className="pb-0">
+        <Card flat className="pb-0">
           <Timeline
             items={[
               { icon: House, title: "집", desc: `${koTime(t.depart)} 출발` },
@@ -124,7 +124,7 @@ export default function TripPage() {
             ]}
           />
         </Card>
-        <Card>
+        <Card flat>
           <div className="flex items-center justify-between gap-3">
             <div>
               <p className="text-xl font-semibold">오시는 차도 함께 예약</p>
@@ -133,6 +133,7 @@ export default function TripPage() {
               </p>
             </div>
             <Toggle
+              flat
               checked={r.returnOn}
               onChange={(on) => {
                 update(r.id, { returnOn: on });
@@ -145,7 +146,7 @@ export default function TripPage() {
 
         <SectionTitle>함께 타기</SectionTitle>
         <Link href="/rider/together" className="block">
-          <Card>
+          <Card flat>
             <InfoRow
               icon={Users}
               title={others > 0 ? `이웃 ${others}분과 함께 타요` : "이번에는 혼자 타요"}
@@ -163,6 +164,7 @@ export default function TripPage() {
 
         {phase === "before" && (
           <Button
+            flat
             variant="outline"
             onClick={() => {
               remove(r.id);

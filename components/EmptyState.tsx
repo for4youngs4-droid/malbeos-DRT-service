@@ -24,7 +24,7 @@ export default function EmptyState({
         <h2 className="mt-5 text-[22px] font-semibold leading-snug tracking-tight">{title}</h2>
         <p className="mt-1 text-lg text-sub">{desc}</p>
       </div>
-      <Button onClick={onAction}>{actionLabel}</Button>
+      <Button flat onClick={onAction}>{actionLabel}</Button>
     </div>
   );
 }

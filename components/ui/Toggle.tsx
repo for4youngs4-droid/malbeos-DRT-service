@@ -1,8 +1,8 @@
 "use client";
 
-type Props = { checked: boolean; onChange: (v: boolean) => void; label?: string };
+type Props = { checked: boolean; onChange: (v: boolean) => void; label?: string; flat?: boolean };
 
-export default function Toggle({ checked, onChange, label }: Props) {
+export default function Toggle({ checked, onChange, label, flat = false }: Props) {
   return (
     <button
       type="button"
@@ -13,7 +13,7 @@ export default function Toggle({ checked, onChange, label }: Props) {
       className={`relative h-8 w-14 shrink-0 rounded-pill transition-colors ${checked ? "bg-brand" : "bg-[#d3deea]"}`}
     >
       <span
-        className={`absolute top-1 h-6 w-6 rounded-full bg-gradient-to-b from-white to-[#e4edf6] shadow-[0_2px_5px_rgba(15,37,64,0.35),inset_0_1px_0_#fff] transition-all ${checked ? "left-[28px]" : "left-1"}`}
+        className={`absolute top-1 h-6 w-6 rounded-full ${flat ? "bg-white" : "bg-gradient-to-b from-white to-[#e4edf6] shadow-[0_2px_5px_rgba(15,37,64,0.35),inset_0_1px_0_#fff]"} transition-all ${checked ? "left-[28px]" : "left-1"}`}
       />
     </button>
   );
