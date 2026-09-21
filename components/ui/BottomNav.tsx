@@ -23,11 +23,11 @@ export default function BottomNav() {
           <Link
             key={href}
             href={href}
-            className={`flex min-h-14 flex-1 flex-col items-center justify-center gap-0.5 text-[12px] ${
+            className={`flex min-h-14 flex-1 flex-col items-center justify-center gap-0.5 text-[12px] transition-colors duration-200 ${
               active ? "font-semibold text-brand" : "font-medium text-sub"
             }`}
           >
-            <span className="flex h-8 w-11 items-center justify-center">
+            <span className={`flex h-8 w-11 items-center justify-center ${active ? "tab-pop" : ""}`}>
               {active ? <Solid size={26} /> : <Icon size={24} strokeWidth={1.75} />}
             </span>
             {label}
