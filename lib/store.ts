@@ -45,6 +45,7 @@ type State = {
   notifications: AppNotification[];
   voiceOn: boolean;
   voiceName: string | null; // 고른 목소리 이름 (없으면 자동으로 가장 자연스러운 목소리)
+  greeted: boolean; // 홈 첫 인사를 이미 들려줬는지 (처음 들어왔을 때 한 번만)
   setTime: (ts: number) => void;
   addReservation: (r: Reservation) => void;
   updateReservation: (id: string, patch: Partial<Reservation>) => void;
@@ -54,6 +55,7 @@ type State = {
   markRead: (id: string) => void;
   setVoiceOn: (v: boolean) => void;
   setVoiceName: (name: string | null) => void;
+  markGreeted: () => void;
   reset: () => void;
 };
 
@@ -64,6 +66,7 @@ export const useStore = create<State>((set) => ({
   notifications: [],
   voiceOn: true, // 기본은 켜짐 (홈·설정에서 끌 수 있다)
   voiceName: null,
+  greeted: false,
 
   // 시각이 바뀌면 새 루틴 알림이 생겼는지 확인한다
   setTime: (ts) =>
@@ -114,8 +117,9 @@ export const useStore = create<State>((set) => ({
     set((s) => ({ notifications: s.notifications.map((n) => (n.id === id ? { ...n, read: true } : n)) })),
   setVoiceOn: (voiceOn) => set({ voiceOn }),
   setVoiceName: (voiceName) => set({ voiceName }),
+  markGreeted: () => set({ greeted: true }),
 
-  // 처음 상태로 (음성 안내 설정은 유지)
+  // 처음 상태로 (음성 안내 설정은 유지). 첫 인사도 다시 나온다
   reset: () =>
-    set({ now: DEFAULT_NOW, reservations: [], routines: findRoutines(PAST_TRIPS), notifications: [] }),
+    set({ now: DEFAULT_NOW, reservations: [], routines: findRoutines(PAST_TRIPS), notifications: [], greeted: false }),
 }));
