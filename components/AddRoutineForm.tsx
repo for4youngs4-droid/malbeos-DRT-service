@@ -10,15 +10,15 @@ import { dayLabel, koTime } from "@/lib/time";
 const WEEKDAYS = [1, 2, 3, 4, 5, 6, 0]; // 월요일부터
 const TIMES = ["08:00", "09:00", "10:00", "12:00", "14:00", "16:00"];
 
-// 고르는 버튼 (선택되면 브랜드 그라데이션)
+// 고르는 버튼: 평평한 테두리(스트로크), 선택되면 파랑 단색으로 채움
 function Chip({ selected, onClick, children, className = "" }: { selected: boolean; onClick: () => void; children: React.ReactNode; className?: string }) {
   return (
     <button
       type="button"
       onClick={onClick}
       aria-pressed={selected}
-      className={`rounded-pill text-lg transition ${
-        selected ? "bg-brand font-semibold text-white" : "raised font-medium text-sub"
+      className={`rounded-pill border-[1.5px] text-lg transition ${
+        selected ? "border-brand bg-brand font-semibold text-white" : "border-[#cfdbe7] bg-white font-medium text-sub"
       } ${className}`}
     >
       {children}
