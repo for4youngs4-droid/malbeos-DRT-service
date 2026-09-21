@@ -18,7 +18,7 @@ export function ListRow({ icon: Icon, lead, title, desc, right }: RowProps) {
   return (
     <div className="flex min-h-16 items-center gap-3 px-5 py-3">
       {Icon && (
-        <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full tile text-white">
+        <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-chip text-white">
           <Icon size={20} />
         </span>
       )}
