@@ -19,7 +19,8 @@ export default function FloatingButton({ label, onClick, children }: { label: st
       type="button"
       aria-label={label}
       onClick={onClick}
-      className="tab-pop pointer-events-auto absolute bottom-[84px] right-5 z-40 flex h-14 w-14 items-center justify-center rounded-full bg-brand text-white shadow-[0_8px_20px_rgba(32,127,186,0.35)] transition active:scale-95"
+      style={{ ["--rec-angle" as string]: "145deg" }}
+      className="tab-pop pointer-events-auto absolute bottom-[84px] right-5 z-40 flex h-14 w-14 items-center justify-center rounded-full bg-rec-gradient rec-3d text-white transition active:scale-95"
     >
       {children}
     </button>,
