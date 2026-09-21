@@ -106,7 +106,7 @@ export default function RiderHome() {
           onClick={() => setTime(new Date(2026, 8, 21, 19, 0).getTime())}
           className="block min-h-14 w-full rounded-pill border border-dashed border-line text-lg text-sub"
         >
-          월요일 저녁 7시로 바꾸기
+          알림보기
         </button>
       </div>
     </PhoneFrame>
