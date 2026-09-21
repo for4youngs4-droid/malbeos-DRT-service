@@ -18,6 +18,11 @@ export function weekdayName(dateStr: string) {
   return DAYS[weekdayOf(dateStr)];
 }
 
+// 0=일 ... 6=토 -> "화"
+export function dayLabel(weekday: number) {
+  return DAYS[weekday];
+}
+
 // "09:00" -> "오전 9:00"
 export function koTime(hhmm: string) {
   const [h, m] = hhmm.split(":").map(Number);

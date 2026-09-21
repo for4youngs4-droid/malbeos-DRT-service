@@ -15,6 +15,7 @@ export default function RiderHome() {
   const now = useStore((s) => s.now);
   const reservations = useStore((s) => s.reservations);
   const notifications = useStore((s) => s.notifications);
+  const setTime = useStore((s) => s.setTime);
 
   useEffect(() => {
     speak(`안녕하세요, ${HERO.name}님. 오늘도 안전한 이동을 응원해요.`);
@@ -78,6 +79,15 @@ export default function RiderHome() {
             <Button onClick={() => router.push("/rider/voice")}>말로 예약하기</Button>
           )}
         </Card>
+
+        {/* 임시: 블록 6의 시연 조작판이 생기면 지운다 */}
+        <button
+          type="button"
+          onClick={() => setTime(new Date(2026, 8, 21, 19, 0).getTime())}
+          className="block min-h-14 w-full rounded-pill border border-dashed border-line text-lg text-sub"
+        >
+          (임시) 월요일 저녁 7시로 바꾸기
+        </button>
       </div>
     </PhoneFrame>
   );
