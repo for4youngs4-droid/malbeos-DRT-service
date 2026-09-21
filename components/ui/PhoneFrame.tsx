@@ -23,7 +23,7 @@ export function PhoneChrome({
   return (
     <div className="flex min-h-dvh items-center justify-center md:p-6">
       <div className="relative flex h-dvh w-full flex-col overflow-hidden bg-gradient-to-b from-white to-sky md:h-[min(844px,calc(100dvh-3rem))] md:w-[390px] md:rounded-[44px] md:border-[8px] md:border-ink md:shadow-frame">
-        <main ref={mainRef} className="flex-1 overflow-y-auto overflow-x-hidden pb-6 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+        <main ref={mainRef} className="flex flex-1 flex-col overflow-y-auto overflow-x-hidden pb-6 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
           {children}
         </main>
         {tabs && <BottomNav />}
