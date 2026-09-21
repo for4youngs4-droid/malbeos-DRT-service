@@ -26,7 +26,7 @@ export default function BottomNav() {
               active ? "font-semibold text-brand" : "font-medium text-sub"
             }`}
           >
-            <span className={`flex h-8 w-11 items-center justify-center rounded-[12px] ${active ? "tile text-white" : ""}`}>
+            <span className={`flex h-8 w-11 items-center justify-center rounded-[16px] ${active ? "tile text-white" : ""}`}>
               <Icon size={20} strokeWidth={active ? 2.2 : 1.75} />
             </span>
             {label}

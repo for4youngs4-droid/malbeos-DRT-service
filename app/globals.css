@@ -26,7 +26,7 @@
   --text-2xl: 20px; /* 강조 */
   --text-2xl--line-height: 1.4;
 
-  --radius-card: 1.5rem;
+  --radius-card: 2rem; /* 카드·목록·지도 모서리 R값 32px */
   --radius-pill: 9999px;
   --shadow-card: 0 2px 4px rgba(32, 127, 186, 0.04), 0 12px 32px rgba(32, 127, 186, 0.08);
   --shadow-frame: 0 24px 60px rgba(15, 37, 64, 0.18);
