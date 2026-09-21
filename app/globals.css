@@ -148,3 +148,21 @@ body {
 @media (prefers-reduced-motion: reduce) {
   .modal-backdrop, .modal-sheet { animation: none; }
 }
+
+/* 마이크 바깥 원의 일렁임: 모양이 물처럼 살짝 출렁이고, 천천히 커졌다 작아지며 조금씩 돈다 */
+@keyframes ripple-blob {
+  0%, 100% { border-radius: 50% 50% 50% 50% / 50% 50% 50% 50%; }
+  33% { border-radius: 53% 47% 48% 52% / 48% 54% 46% 52%; }
+  66% { border-radius: 47% 53% 53% 47% / 53% 47% 53% 47%; }
+}
+@keyframes ripple-drift {
+  0%, 100% { transform: scale(1) rotate(0deg); }
+  50% { transform: scale(var(--ripple-amp, 1.045)) rotate(7deg); }
+}
+.ripple-a { animation: ripple-blob 9s ease-in-out infinite, ripple-drift 5.5s ease-in-out infinite; }
+.ripple-b { animation: ripple-blob 7s ease-in-out infinite reverse, ripple-drift 4.2s ease-in-out infinite -1.6s; }
+/* 듣는 중에는 더 크고 빠르게 */
+.ripple-a.live, .ripple-b.live { --ripple-amp: 1.11; animation-duration: 5s, 2.4s; }
+@media (prefers-reduced-motion: reduce) {
+  .ripple-a, .ripple-b { animation: none; }
+}

@@ -265,6 +265,9 @@ export default function VoiceAssistant({ intro = true, routineOffers = false }: 
     setHint("");
   }
 
+  // 마이크 바깥 원의 움직임: 홈에서는 일렁이고(듣는 중에는 더 크게), 그 밖에서는 듣는 중에만 부드럽게 커졌다 작아진다
+  const ring = (n: "a" | "b") => (fancy ? `ripple-${n}${status === "listening" ? " live" : ""}` : status === "listening" ? "breathe" : "");
+
   const place = confirm ? placeById(confirm.placeId) : undefined;
   const pill =
     status === "listening" ? "듣고 있어요" : status === "speaking" ? "안내하고 있어요" : "";
@@ -283,8 +286,8 @@ export default function VoiceAssistant({ intro = true, routineOffers = false }: 
     <div className="space-y-4">
       <div className="flex flex-col items-center text-center">
         <div className="relative flex h-72 w-72 items-center justify-center">
-          <span style={fancy ? angle(315) : undefined} className={`absolute inset-0 rounded-full ${fancy ? "bg-rec-gradient opacity-15" : "bg-brand/10"} ${status === "listening" ? "breathe" : ""}`} />
-          <span style={fancy ? angle(200) : undefined} className={`absolute inset-9 rounded-full ${fancy ? "bg-rec-gradient opacity-25" : "bg-brand/15"} ${status === "listening" ? "breathe" : ""}`} />
+          <span style={fancy ? angle(315) : undefined} className={`absolute inset-0 rounded-full ${fancy ? "bg-rec-gradient opacity-15" : "bg-brand/10"} ${ring("a")}`} />
+          <span style={fancy ? angle(200) : undefined} className={`absolute inset-9 rounded-full ${fancy ? "bg-rec-gradient opacity-25" : "bg-brand/15"} ${ring("b")}`} />
           <button
             type="button"
             onClick={onMic}
