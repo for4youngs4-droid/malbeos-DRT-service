@@ -3,12 +3,13 @@
 import { useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Bell, CalendarClock, ChevronRight } from "lucide-react";
+import { Bell, CalendarClock, ChevronRight, Users } from "lucide-react";
 import { Button, Card, Illustration, InfoRow, PhoneFrame } from "@/components/ui";
 import { placeById, HERO } from "@/lib/data";
 import { speak, stopSpeaking } from "@/lib/speech";
 import { useStore } from "@/lib/store";
 import { dateKey, koDate, koTime } from "@/lib/time";
+import { groupOfMine } from "@/lib/pooling";
 import { nextReservation } from "@/lib/trip";
 
 export default function RiderHome() {
@@ -25,6 +26,8 @@ export default function RiderHome() {
 
   const unread = notifications.filter((n) => !n.read);
   const next = nextReservation(reservations, now);
+  const group = next ? groupOfMine(next, reservations) : undefined;
+  const others = group ? group.members.length - 1 : 0;
   const moving = !!next && next.date === dateKey(now); // 이동 당일
   const nextPlace = next ? placeById(next.placeId) : undefined;
 
@@ -70,6 +73,12 @@ export default function RiderHome() {
               <p className="text-xl font-bold">
                 {nextPlace.name} ({nextPlace.kind})
               </p>
+              {others > 0 && (
+                <Link href="/rider/together" className="flex min-h-14 items-center gap-3 rounded-pill bg-sky px-4 text-xl font-bold text-navy">
+                  <Users size={26} />
+                  다른 분 {others}명과 함께 타세요
+                </Link>
+              )}
               <Button variant="secondary" onClick={() => router.push("/rider/chain")}>
                 일정 보기 &rarr;
               </Button>

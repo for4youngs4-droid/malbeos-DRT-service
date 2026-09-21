@@ -8,11 +8,13 @@ import { placeById } from "@/lib/data";
 import { speak, stopSpeaking } from "@/lib/speech";
 import { useStore } from "@/lib/store";
 import { koTime, spokenTime, weekdayName } from "@/lib/time";
-import { assignedVehicle, nextReservation, tripTimes } from "@/lib/trip";
+import { groupOfMine, myPickup } from "@/lib/pooling";
+import { nextReservation, tripTimes } from "@/lib/trip";
 
 export default function ChainPage() {
   const router = useRouter();
   const r = useStore((s) => nextReservation(s.reservations, s.now));
+  const reservations = useStore((s) => s.reservations);
   const update = useStore((s) => s.updateReservation);
   const [open, setOpen] = useState(false);
 
@@ -40,7 +42,7 @@ export default function ChainPage() {
 
   const place = placeById(r.placeId)!;
   const t = tripTimes(r);
-  const vehicle = assignedVehicle(r);
+  const group = groupOfMine(r, reservations);
   const allOn = r.goOn && r.stopOn && r.returnOn;
 
   const change = (patch: Partial<typeof r>, on: boolean, offSpeech: string) => {
@@ -94,7 +96,15 @@ export default function ChainPage() {
 
         {open && (
           <Card className="space-y-4">
-            <InfoRow icon={Bus} title={`가는 차: ${vehicle.name}`} desc={`${vehicle.seats}인승 · 집 앞 도착 ${koTime(t.depart)}`} />
+            <InfoRow
+              icon={Bus}
+              title={`가는 차: ${group?.vehicle ?? "배정 중"}`}
+              desc={
+                group
+                  ? `${group.seats}인승 · 집 앞 도착 ${koTime(myPickup(group, r))}${group.members.length > 1 ? ` · 함께 ${group.members.length - 1}명` : ""}`
+                  : "곧 배정돼요"
+              }
+            />
             <InfoRow icon={Bus} title="오시는 차" desc="불러주시면 15분 뒤 도착해요" />
           </Card>
         )}

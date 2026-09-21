@@ -1,6 +1,5 @@
 // 예약 하나에서 하루 이동 계획(시각, 차량)을 계산한다
 
-import { NEIGHBOR_BOOKINGS, VEHICLES } from "./data";
 import type { Reservation } from "./store";
 import { addMinutes, dateKey, roundHalfHour } from "./time";
 
@@ -32,10 +31,4 @@ export function tripTimes(r: Reservation) {
   const arrive = addMinutes(r.goTime, 30);
   const leave = roundHalfHour(addMinutes(arrive, r.stayMin));
   return { depart: r.goTime, arrive, leave, home: addMinutes(leave, 30) };
-}
-
-// 같은 날·같은 목적지로 가는 이웃이 있으면 큰 차, 없으면 작은 차
-export function assignedVehicle(r: Reservation) {
-  const size = 1 + NEIGHBOR_BOOKINGS.filter((b) => b.date === r.date && b.placeId === r.placeId).length;
-  return [...VEHICLES].sort((a, b) => a.seats - b.seats).find((v) => v.seats >= size) ?? VEHICLES[0];
 }
