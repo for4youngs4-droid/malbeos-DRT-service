@@ -8,6 +8,7 @@ import { avgStayMin, placeById } from "@/lib/data";
 import { isNo, isYes, parseDate, parsePlace, parseTime } from "@/lib/intent";
 import { listen, speak, stopListening, stopSpeaking } from "@/lib/speech";
 import { useStore } from "@/lib/store";
+import { newReservation } from "@/lib/trip";
 import { addMinutes, dateKey, koDate, koTime, roundHalfHour, spokenClock, spokenTime, weekdayName } from "@/lib/time";
 
 type Step = "place" | "date" | "time" | "confirm" | "done";
@@ -82,14 +83,7 @@ export default function VoicePage() {
     const { date, time, place } = d.current;
     const p = placeById(place!)!;
     const stay = avgStayMin(p.id);
-    addReservation({
-      id: `r${useStore.getState().reservations.length + 1}`,
-      date: date!,
-      goTime: time!,
-      placeId: p.id,
-      stayMin: stay,
-      returnOn: true,
-    });
+    addReservation(newReservation(date!, time!, p.id, stay));
     d.current.step = "done";
     setConfirm(null);
     setChoices([]);

@@ -9,6 +9,7 @@ import { placeById, HERO } from "@/lib/data";
 import { speak, stopSpeaking } from "@/lib/speech";
 import { useStore } from "@/lib/store";
 import { dateKey, koDate, koTime } from "@/lib/time";
+import { nextReservation } from "@/lib/trip";
 
 export default function RiderHome() {
   const router = useRouter();
@@ -23,10 +24,8 @@ export default function RiderHome() {
   }, []);
 
   const unread = notifications.filter((n) => !n.read);
-  const today = dateKey(now);
-  const next = reservations
-    .filter((r) => r.date >= today)
-    .sort((a, b) => (a.date + a.goTime).localeCompare(b.date + b.goTime))[0];
+  const next = nextReservation(reservations, now);
+  const moving = !!next && next.date === dateKey(now); // 이동 당일
   const nextPlace = next ? placeById(next.placeId) : undefined;
 
   return (
@@ -63,7 +62,7 @@ export default function RiderHome() {
         <Card className="space-y-4">
           <InfoRow
             icon={CalendarClock}
-            title="다음 이동 예정"
+            title={moving ? "지금 이동 중이에요" : "다음 이동 예정"}
             desc={next ? `${koDate(next.date)} ${koTime(next.goTime)}` : "예정된 이동이 없어요"}
           />
           {next && nextPlace ? (
@@ -74,6 +73,7 @@ export default function RiderHome() {
               <Button variant="secondary" onClick={() => router.push("/rider/chain")}>
                 일정 보기 &rarr;
               </Button>
+              {moving && <Button onClick={() => router.push("/rider/live")}>이동 보기</Button>}
             </>
           ) : (
             <Button onClick={() => router.push("/rider/voice")}>말로 예약하기</Button>

@@ -8,6 +8,7 @@ import { isNo, isYes } from "@/lib/intent";
 import { listen, speak, stopListening, stopSpeaking } from "@/lib/speech";
 import { useStore } from "@/lib/store";
 import { koTime, weekdayName } from "@/lib/time";
+import { newReservation } from "@/lib/trip";
 
 export default function RoutineAlertPage() {
   const router = useRouter();
@@ -20,14 +21,7 @@ export default function RoutineAlertPage() {
     if (!alert || !routine) return;
     stopListening();
     stopSpeaking();
-    useStore.getState().addReservation({
-      id: `r${useStore.getState().reservations.length + 1}`,
-      date: alert.date,
-      goTime: routine.time,
-      placeId: routine.placeId,
-      stayMin: routine.avgStayMin,
-      returnOn: true,
-    });
+    useStore.getState().addReservation(newReservation(alert.date, routine.time, routine.placeId, routine.avgStayMin));
     void speak("예약했어요. 하루 이동 계획을 보여드릴게요.");
     router.push("/rider/chain");
   };

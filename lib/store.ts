@@ -10,7 +10,11 @@ export type Reservation = {
   goTime: string; // HH:MM
   placeId: string;
   stayMin: number;
-  returnOn: boolean; // 오는 편 함께 계획할지
+  goOn: boolean; // 가는 편을 함께 계획할지
+  stopOn: boolean; // 목적지 예약(대기 예약)
+  returnOn: boolean; // 오는 편을 함께 계획할지
+  pickupCalled: boolean; // "데리러 와주세요"를 눌렀는지
+  done: boolean; // 집에 돌아왔는지
 };
 
 export type Routine = {
@@ -43,6 +47,7 @@ type State = {
   voiceOn: boolean;
   setTime: (ts: number) => void;
   addReservation: (r: Reservation) => void;
+  updateReservation: (id: string, patch: Partial<Reservation>) => void;
   setRoutineAlert: (id: string, on: boolean) => void;
   markRead: (id: string) => void;
   setVoiceOn: (v: boolean) => void;
@@ -72,6 +77,9 @@ export const useStore = create<State>((set) => ({
         return n.date === r.date && routine?.placeId === r.placeId ? { ...n, read: true } : n;
       }),
     })),
+
+  updateReservation: (id, patch) =>
+    set((s) => ({ reservations: s.reservations.map((r) => (r.id === id ? { ...r, ...patch } : r)) })),
 
   // 끄면 그 루틴의 알림이 오지 않고, 이미 온 안 읽은 알림도 사라진다
   setRoutineAlert: (id, on) =>

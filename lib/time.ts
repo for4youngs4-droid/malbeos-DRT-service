@@ -31,6 +31,13 @@ export function koTime(hhmm: string) {
   return `${ampm} ${h12}:${String(m).padStart(2, "0")}`;
 }
 
+// ("2026-09-22", "09:00") -> 가상 시각 숫자
+export function toTs(dateStr: string, hhmm: string) {
+  const [y, mo, d] = dateStr.split("-").map(Number);
+  const [h, m] = hhmm.split(":").map(Number);
+  return new Date(y, mo - 1, d, h, m).getTime();
+}
+
 // "09:00" + 90 -> "10:30"
 export function addMinutes(hhmm: string, min: number) {
   const [h, m] = hhmm.split(":").map(Number);

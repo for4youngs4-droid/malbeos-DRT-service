@@ -1,0 +1,41 @@
+// 예약 하나에서 하루 이동 계획(시각, 차량)을 계산한다
+
+import { NEIGHBOR_BOOKINGS, VEHICLES } from "./data";
+import type { Reservation } from "./store";
+import { addMinutes, dateKey, roundHalfHour } from "./time";
+
+export function newReservation(date: string, goTime: string, placeId: string, stayMin: number): Reservation {
+  return {
+    id: `${date}-${goTime}-${placeId}`,
+    date,
+    goTime,
+    placeId,
+    stayMin,
+    goOn: true,
+    stopOn: true,
+    returnOn: true,
+    pickupCalled: false,
+    done: false,
+  };
+}
+
+// 오늘 이후의 가장 빠른, 아직 끝나지 않은 예약
+export function nextReservation(list: Reservation[], now: number): Reservation | undefined {
+  const today = dateKey(now);
+  return list
+    .filter((r) => !r.done && r.date >= today)
+    .sort((a, b) => (a.date + a.goTime).localeCompare(b.date + b.goTime))[0];
+}
+
+// 집 -> 목적지 이동 30분, 체류 후 30분 30분 단위로 맞춰 귀가
+export function tripTimes(r: Reservation) {
+  const arrive = addMinutes(r.goTime, 30);
+  const leave = roundHalfHour(addMinutes(arrive, r.stayMin));
+  return { depart: r.goTime, arrive, leave, home: addMinutes(leave, 30) };
+}
+
+// 같은 날·같은 목적지로 가는 이웃이 있으면 큰 차, 없으면 작은 차
+export function assignedVehicle(r: Reservation) {
+  const size = 1 + NEIGHBOR_BOOKINGS.filter((b) => b.date === r.date && b.placeId === r.placeId).length;
+  return [...VEHICLES].sort((a, b) => a.seats - b.seats).find((v) => v.seats >= size) ?? VEHICLES[0];
+}
