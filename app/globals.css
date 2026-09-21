@@ -18,6 +18,15 @@
   --font-sans: "Pretendard Variable", Pretendard, -apple-system, "Malgun Gothic", sans-serif;
 }
 
+/* 듣는 중인 마이크: 천천히 커졌다 작아짐 */
+@keyframes breathe {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.12); }
+}
+.breathe {
+  animation: breathe 2.4s ease-in-out infinite;
+}
+
 html {
   font-size: 20px; /* 본문 최소 20px 기준 */
 }

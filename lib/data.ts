@@ -66,6 +66,14 @@ export const VEHICLES: Vehicle[] = [
   { id: "v3", name: "3호차", seats: 11 },
 ];
 
+// 과거 기록으로 본 평균 체류 시간(분, 5분 단위). 기록이 없으면 30분
+export function avgStayMin(placeId: string) {
+  const trips = PAST_TRIPS.filter((t) => t.placeId === placeId);
+  if (!trips.length) return 30;
+  const avg = trips.reduce((s, t) => s + t.stayMin, 0) / trips.length;
+  return Math.round(avg / 5) * 5;
+}
+
 export function placeById(id: string) {
   return PLACES.find((p) => p.id === id);
 }

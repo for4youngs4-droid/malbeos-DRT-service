@@ -9,7 +9,6 @@ export default function Illustration({ name, className = "h-48 w-full" }: { name
 
   // 화면이 뜨기 전에 이미 실패한 이미지도 잡는다
   useEffect(() => {
-    setFailed(false);
     const img = ref.current;
     if (img && img.complete && img.naturalWidth === 0) setFailed(true);
   }, [name]);
