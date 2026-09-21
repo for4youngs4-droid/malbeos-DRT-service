@@ -86,7 +86,7 @@ export default function OnboardingPage() {
               />
             ))}
           </div>
-          <Button variant={index === 0 || index === SLIDES.length - 1 ? "primary" : "secondary"} onClick={next}>
+          <Button onClick={next}>
             {SLIDES[index].button}
           </Button>
         </div>
