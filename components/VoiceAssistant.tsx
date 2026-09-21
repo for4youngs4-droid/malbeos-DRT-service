@@ -303,18 +303,16 @@ export default function VoiceAssistant({ intro = true, routineOffers = false }: 
 
         {offering && (
           <div className="mt-2">
-            <Badge>루틴 알림 · 먼저 알려드려요</Badge>
+            <Badge>루틴 알림</Badge>
           </div>
         )}
-        <h1 className="mt-2 whitespace-pre-line text-[22px] font-semibold leading-snug tracking-tight text-navy">{shownPrompt}</h1>
+        <h1 className="mt-2 whitespace-pre-line break-keep text-balance text-[22px] font-semibold leading-snug tracking-tight text-navy">{shownPrompt}</h1>
         {/* 안내 문구는 제목 하나로 (반복 삭제) */}
         {heard && <p className="mt-2 text-2xl font-medium">{heard}</p>}
         {hint ? (
           <p className="mt-3 text-lg font-medium text-navy">{hint}</p>
         ) : (
-          (offering || pill) && (
-            <p className="mt-3 text-lg text-sub">{offering ? "마이크로 '네' 또는 '나중에'라고 답해도 돼요" : pill}</p>
-          )
+          !offering && pill && <p className="mt-3 text-lg text-sub">{pill}</p>
         )}
         {status !== "idle" && (
           <Button variant="secondary" size="sm" full={false} className="mt-4 px-8" onClick={onCancel}>

@@ -103,6 +103,8 @@ body {
   background: linear-gradient(180deg, #ffffff 0%, #eff5fb 100%) fixed;
   -webkit-font-smoothing: antialiased;
   letter-spacing: -0.01em;
+  word-break: keep-all; /* 한글은 단어 중간에서 줄바꿈하지 않는다 */
+  overflow-wrap: break-word;
 }
 
 /* 탭을 옮길 때 화면 전환: 새 화면이 방향에 맞춰 살짝 밀려 들어오며 나타난다 */
