@@ -211,7 +211,7 @@ export default function VoicePage() {
     status === "listening" ? "듣고 있어요. 말씀하세요" : status === "speaking" ? "안내하고 있어요" : "마이크를 누르고 말해보세요";
 
   return (
-    <PhoneFrame tabs>
+    <PhoneFrame>
       <TopBar
         left="back"
         right={

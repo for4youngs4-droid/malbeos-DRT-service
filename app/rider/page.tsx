@@ -3,7 +3,7 @@
 import { useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Bell, CalendarClock, ChevronRight, Users } from "lucide-react";
+import { Bell, CalendarClock, ChevronRight, Mic, Users } from "lucide-react";
 import { Button, Card, Illustration, InfoRow, PhoneFrame } from "@/components/ui";
 import { placeById, HERO } from "@/lib/data";
 import { speak, stopSpeaking } from "@/lib/speech";
@@ -57,6 +57,19 @@ export default function RiderHome() {
           </Link>
         ))}
 
+        <Link
+          href="/rider/voice"
+          className="flex min-h-20 items-center gap-4 rounded-card bg-brand px-5 text-white shadow-card active:scale-[0.98]"
+        >
+          <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-white/25">
+            <Mic size={28} />
+          </span>
+          <span>
+            <span className="block text-xl font-bold">말로 예약하기</span>
+            <span className="block text-lg text-white/90">누르고 가고 싶은 곳을 말씀하세요</span>
+          </span>
+        </Link>
+
         <Card className="flex flex-col items-center bg-brand-soft text-center">
           <Illustration name="home-bus" className="h-36 w-full" />
           <p className="mt-3 text-xl font-bold">오늘도 안전한 이동을 응원해요!</p>
@@ -84,9 +97,7 @@ export default function RiderHome() {
               </Button>
               {moving && <Button onClick={() => router.push("/rider/live")}>이동 보기</Button>}
             </>
-          ) : (
-            <Button onClick={() => router.push("/rider/voice")}>말로 예약하기</Button>
-          )}
+          ) : null}
         </Card>
 
         {/* 임시: 블록 6의 시연 조작판이 생기면 지운다 */}
