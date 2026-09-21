@@ -2,6 +2,7 @@
 
 import { Check, CircleHelp, History, Phone, Volume2 } from "lucide-react";
 import { Badge, ListGroup, ListRow, PhoneFrame, SectionTitle, Toggle, TopBar } from "@/components/ui";
+import { HERO } from "@/lib/data";
 import { speak, useKoVoices } from "@/lib/speech";
 import { useStore } from "@/lib/store";
 
@@ -24,7 +25,7 @@ export default function MorePage() {
 
   const pick = (name: string) => {
     setVoiceName(name);
-    void speak("안녕하세요, 김영은님. 어디로 가실까요?", true); // 고르면 바로 들려준다
+    void speak(`안녕하세요, ${HERO.name}님. 어디로 가실까요?`, true); // 고르면 바로 들려준다
   };
 
   return (

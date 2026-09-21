@@ -12,6 +12,8 @@
   --color-alert: #e5484d; /* 알림 배지(빨강) */
   --color-warn: #b45f06; /* 준비 중 배지 글씨(주황) */
   --color-warn-soft: #fff0d9; /* 준비 중 배지 바탕(연한 주황) */
+  --color-ok: #17845a; /* 예약됨 배지 글씨(초록) */
+  --color-ok-soft: #e1f5ea; /* 예약됨 배지 바탕(연한 초록) */
 
   --color-ink: #0f2540; /* 글씨 */
   --color-sub: #5a6b80; /* 보조 글씨 */

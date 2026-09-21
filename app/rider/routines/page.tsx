@@ -7,7 +7,7 @@ import { placeById } from "@/lib/data";
 import { nextOccurrence } from "@/lib/routine";
 import { speak } from "@/lib/speech";
 import { useStore } from "@/lib/store";
-import { dateKey, dayLabel, koDate, koTime } from "@/lib/time";
+import { dateKey, dayLabel, koDate, koTime, weekdayOf } from "@/lib/time";
 import { newReservation } from "@/lib/trip";
 
 const ICONS: Record<string, typeof Package> = {
@@ -26,7 +26,7 @@ export default function RoutinesPage() {
   const today = dateKey(now);
   const d = new Date(now);
   const tomorrow = dateKey(new Date(d.getFullYear(), d.getMonth(), d.getDate() + 1).getTime());
-  const dayWord = (date: string) => (date === today ? "오늘" : date === tomorrow ? "내일" : koDate(date));
+  const dayWord = (date: string) => (date === today ? "오늘" : date === tomorrow ? "내일" : `${dayLabel(weekdayOf(date))}요일`);
   // 다음 예정: 학습이 끝난 매주 루틴이 다음에 오는 날, 예약했는지까지 함께
   const upcoming = routines
     .filter((r) => r.frequency === "weekly" && !r.learning)
@@ -55,7 +55,7 @@ export default function RoutinesPage() {
                 right={
                   reserved ? (
                     <Link href="/rider/chain">
-                      <Badge>예약됨</Badge>
+                      <Badge tone="ok">예약됨</Badge>
                     </Link>
                   ) : (
                     <Button

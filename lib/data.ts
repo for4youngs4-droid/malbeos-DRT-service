@@ -23,7 +23,7 @@ export type NeighborBooking = { neighborId: string; placeId: string; date: strin
 export type Vehicle = { id: string; name: string; seats: number };
 
 // 주인공: 가평읍에서 약 6km 떨어진 마을에 사는 78세
-export const HERO = { name: "김영은", age: 78, lat: 37.88, lng: 127.47 };
+export const HERO = { name: "조영수", age: 78, lat: 37.88, lng: 127.47 };
 
 export const PLACES: Place[] = [
   { id: "hospital", name: "행복내과", kind: "병원", lat: 37.8322, lng: 127.5101, aliases: ["읍내 병원", "병원", "내과"] },
