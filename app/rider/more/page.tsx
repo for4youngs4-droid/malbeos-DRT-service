@@ -22,9 +22,12 @@ export default function MorePage() {
   const setVoiceName = useStore((s) => s.setVoiceName);
   const voices = useKoVoices();
   const [showMore, setShowMore] = useState(false);
-  const shown = voices.slice(0, VISIBLE_VOICES);
-  const rest = voices.slice(VISIBLE_VOICES);
   const current = voices.find((v) => v.name === voiceName)?.name ?? voices[0]?.name;
+  // 지금 쓰는(선택한) 목소리를 항상 맨 위에 두고, 나머지는 추천 순서대로
+  const ordered = [...voices].sort((a, b) => Number(b.name === current) - Number(a.name === current));
+  const recommended = voices[0]?.name; // 가장 자연스러운 목소리
+  const shown = ordered.slice(0, VISIBLE_VOICES);
+  const rest = ordered.slice(VISIBLE_VOICES);
 
   // "Microsoft SunHi Online (Natural) - Korean (Korea)" -> "SunHi Online" (괄호 부분은 뺀다)
   const short = (n: string) => n.replace(/^Microsoft\s+/, "").replace(/\s+-\s+Korean.*$/, "").replace(/\s*\([^)]*\)/g, "");
@@ -34,11 +37,11 @@ export default function MorePage() {
     void speak(`안녕하세요, ${HERO.name}님. 어디로 가실까요?`, true); // 고르면 바로 들려준다
   };
 
-  const voiceRow = (v: SpeechSynthesisVoice, i: number) => (
+  const voiceRow = (v: SpeechSynthesisVoice) => (
     <button key={v.name} type="button" onClick={() => pick(v.name)} className="block w-full text-left">
       <ListRow
         title={short(v.name)}
-        desc={i === 0 && voices.length > 1 ? "추천 · 누르면 들어볼 수 있어요" : "누르면 들어볼 수 있어요"}
+        desc={v.name === recommended && voices.length > 1 ? "추천 · 누르면 들어볼 수 있어요" : "누르면 들어볼 수 있어요"}
         right={v.name === current ? <Check size={22} className="text-brand" /> : undefined}
       />
     </button>
@@ -61,13 +64,13 @@ export default function MorePage() {
         <SectionTitle>목소리</SectionTitle>
         <ListGroup>
           {voices.length === 0 && <ListRow title="한국어 목소리가 없어요" desc="다른 브라우저에서 열어 보세요" />}
-          {shown.map((v, i) => voiceRow(v, i))}
+          {shown.map((v) => voiceRow(v))}
           {rest.length > 0 && (
             <>
               {/* 아코디언: 높이가 0에서 자기 크기로 부드럽게 열린다 */}
               <div className={`grid border-t-0! transition-[grid-template-rows] duration-300 ease-out ${showMore ? "grid-rows-[1fr]" : "grid-rows-[0fr]"}`}>
                 <div className="min-h-0 overflow-hidden" inert={!showMore}>
-                  <div className="divide-y divide-line border-t border-line">{rest.map((v, i) => voiceRow(v, i + VISIBLE_VOICES))}</div>
+                  <div className="divide-y divide-line border-t border-line">{rest.map((v) => voiceRow(v))}</div>
                 </div>
               </div>
               <button type="button" onClick={() => setShowMore(!showMore)} aria-expanded={showMore} className="block w-full text-left">
