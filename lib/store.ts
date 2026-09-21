@@ -46,12 +46,14 @@ type State = {
   routines: Routine[];
   notifications: AppNotification[];
   voiceOn: boolean;
+  voiceName: string | null; // 고른 목소리 이름 (없으면 자동으로 가장 자연스러운 목소리)
   setTime: (ts: number) => void;
   addReservation: (r: Reservation) => void;
   updateReservation: (id: string, patch: Partial<Reservation>) => void;
   setRoutineAlert: (id: string, on: boolean) => void;
   markRead: (id: string) => void;
   setVoiceOn: (v: boolean) => void;
+  setVoiceName: (name: string | null) => void;
   reset: () => void;
 };
 
@@ -61,6 +63,7 @@ export const useStore = create<State>((set) => ({
   routines: findRoutines(PAST_TRIPS),
   notifications: [],
   voiceOn: true,
+  voiceName: null,
 
   // 시각이 바뀌면 새 루틴 알림이 생겼는지 확인한다
   setTime: (ts) =>
@@ -96,6 +99,7 @@ export const useStore = create<State>((set) => ({
   markRead: (id) =>
     set((s) => ({ notifications: s.notifications.map((n) => (n.id === id ? { ...n, read: true } : n)) })),
   setVoiceOn: (voiceOn) => set({ voiceOn }),
+  setVoiceName: (voiceName) => set({ voiceName }),
 
   // 처음 상태로 (음성 안내 설정은 유지)
   reset: () =>

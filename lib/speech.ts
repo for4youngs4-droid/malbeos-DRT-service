@@ -1,6 +1,59 @@
 "use client";
 
+import { useSyncExternalStore } from "react";
 import { useStore } from "./store";
+
+// ---- 목소리 고르기 ----
+// 자연스러운 목소리일수록 점수를 높게 (Edge의 Natural, 구글, 애플 등). 옛날 스타일(Heami)은 낮게
+function voiceScore(v: SpeechSynthesisVoice) {
+  let s = 0;
+  if (/natural|neural/i.test(v.name)) s += 100;
+  if (/online/i.test(v.name)) s += 50;
+  if (/google/i.test(v.name)) s += 40;
+  if (/sunhi|injoon|yuna|sora|nara|flo|shelley/i.test(v.name)) s += 30;
+  if (!v.localService) s += 5;
+  if (/heami|yumi/i.test(v.name)) s -= 20;
+  return s;
+}
+
+let cache: SpeechSynthesisVoice[] = [];
+const EMPTY: SpeechSynthesisVoice[] = [];
+
+function readVoices() {
+  if (typeof window === "undefined" || !("speechSynthesis" in window)) return EMPTY;
+  const list = window.speechSynthesis
+    .getVoices()
+    .filter((v) => v.lang.replace("_", "-").toLowerCase().startsWith("ko"))
+    .sort((a, b) => voiceScore(b) - voiceScore(a));
+  // 내용이 같으면 예전 배열을 그대로 돌려줘서 불필요한 다시 그리기를 막는다
+  if (list.length === cache.length && list.every((v, i) => v.name === cache[i].name)) return cache;
+  cache = list;
+  return cache;
+}
+
+function subscribeVoices(cb: () => void) {
+  if (typeof window === "undefined" || !("speechSynthesis" in window)) return () => {};
+  const synth = window.speechSynthesis;
+  synth.addEventListener("voiceschanged", cb);
+  synth.getVoices(); // 목록 불러오기를 시작시킨다
+  // 이벤트를 놓쳐도 다시 확인한다 (브라우저마다 목록이 늦게 채워짐)
+  const timers = [300, 1000, 2500].map((ms) => setTimeout(cb, ms));
+  return () => {
+    synth.removeEventListener("voiceschanged", cb);
+    timers.forEach(clearTimeout);
+  };
+}
+
+// 쓸 수 있는 한국어 목소리 (좋은 순서)
+export function useKoVoices() {
+  return useSyncExternalStore(subscribeVoices, readVoices, () => EMPTY);
+}
+
+function pickVoice() {
+  const voices = readVoices();
+  const chosen = useStore.getState().voiceName;
+  return voices.find((v) => v.name === chosen) ?? voices[0];
+}
 
 // 한국어로 읽어주기. 읽기가 끝나면 Promise가 끝난다. 설정에서 끄면 바로 끝난다
 export function speak(text: string): Promise<void> {
@@ -12,8 +65,8 @@ export function speak(text: string): Promise<void> {
     const u = new SpeechSynthesisUtterance(text);
     u.lang = "ko-KR";
     u.rate = 0.9;
-    const ko = synth.getVoices().find((v) => v.lang.startsWith("ko"));
-    if (ko) u.voice = ko;
+    const voice = pickVoice();
+    if (voice) u.voice = voice;
     u.onend = () => resolve();
     u.onerror = () => resolve();
     synth.speak(u);
