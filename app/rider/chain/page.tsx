@@ -29,7 +29,7 @@ export default function ChainPage() {
   if (!r) {
     return (
       <PhoneFrame tabs>
-        <TopBar left="back" title="이동 계획" />
+        <TopBar title="이동 계획" />
         <div className="space-y-5 px-5 pt-4">
           <Card>
             <InfoRow icon={House} title="예정된 이동이 없어요" desc="말로 예약해 보세요" />
@@ -52,7 +52,7 @@ export default function ChainPage() {
 
   return (
     <PhoneFrame tabs>
-      <TopBar left="back" title={`${weekdayName(r.date)}요일 이동 계획`} />
+      <TopBar title={`${weekdayName(r.date)}요일 이동 계획`} />
       <div className="space-y-5 px-5 pt-5">
         <Timeline
           items={[

@@ -28,7 +28,7 @@ export default function RoutinesPage() {
 
   return (
     <PhoneFrame tabs>
-      <TopBar left="back" title="내 루틴" />
+      <TopBar title="내 루틴" />
       <div className="space-y-5 px-5 pt-4">
         {lead && leadPlace && (
           <Card className="space-y-3">

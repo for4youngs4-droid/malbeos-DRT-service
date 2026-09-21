@@ -1,7 +1,6 @@
 "use client";
 
-import Link from "next/link";
-import { CalendarCheck, CircleHelp, ChevronRight, History, Phone, Repeat, Volume2 } from "lucide-react";
+import { CircleHelp, History, Phone, Volume2 } from "lucide-react";
 import { Badge, Card, InfoRow, PhoneFrame, Toggle, TopBar } from "@/components/ui";
 import { useStore } from "@/lib/store";
 
@@ -19,16 +18,6 @@ export default function MorePage() {
     <PhoneFrame tabs>
       <TopBar title="더보기" />
       <div className="space-y-4 px-5 pt-4">
-        <Link href="/rider/routines" className="block">
-          <Card>
-            <InfoRow icon={Repeat} title="내 루틴" desc="자주 가는 곳" right={<ChevronRight size={28} className="text-sub" />} />
-          </Card>
-        </Link>
-        <Link href="/rider/chain" className="block">
-          <Card>
-            <InfoRow icon={CalendarCheck} title="하루 이동 계획" right={<ChevronRight size={28} className="text-sub" />} />
-          </Card>
-        </Link>
         <Card>
           <InfoRow
             icon={Volume2}
