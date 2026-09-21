@@ -1,0 +1,30 @@
+@import "tailwindcss";
+
+/* 시안(design/mockup.png)에서 뽑은 색·모양 */
+@theme inline {
+  --color-brand: #5b7fe8; /* 주 파랑 (마이크 버튼, 아이콘) */
+  --color-brand-soft: #dfe8fc; /* 아이콘 원, 활성 알약 배경 */
+  --color-navy: #3f57a6; /* 진한 남색 버튼 */
+  --color-sky: #eef3fe; /* 연한 파랑 배경 */
+  --color-line: #d5e0f8; /* 테두리 */
+  --color-ink: #1c2848; /* 글씨 */
+  --color-sub: #4a587a; /* 보조 글씨 (시안보다 진하게) */
+
+  --radius-card: 1.5rem;
+  --radius-pill: 9999px;
+  --shadow-card: 0 8px 24px rgba(70, 100, 190, 0.12);
+  --shadow-frame: 0 20px 60px rgba(70, 100, 190, 0.25);
+
+  --font-sans: "Pretendard Variable", Pretendard, -apple-system, "Malgun Gothic", sans-serif;
+}
+
+html {
+  font-size: 20px; /* 본문 최소 20px 기준 */
+}
+
+body {
+  min-height: 100vh;
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  background: linear-gradient(180deg, #ffffff 0%, #eaf1fe 100%) fixed;
+}
