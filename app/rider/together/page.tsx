@@ -107,7 +107,7 @@ export default function TogetherPage() {
                   lead={
                     <span
                       className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-[15px] font-semibold ${
-                        m.mine ? "bg-brand text-white" : "bg-brand-soft text-brand"
+                        m.mine ? "tile text-white" : "raised-blue text-brand"
                       }`}
                     >
                       {i + 1}

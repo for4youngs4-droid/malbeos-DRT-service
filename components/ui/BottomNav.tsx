@@ -14,7 +14,7 @@ const tabs = [
 export default function BottomNav() {
   const path = usePathname();
   return (
-    <nav className="flex shrink-0 border-t border-line bg-white/90 pb-2 backdrop-blur">
+    <nav className="flex shrink-0 border-t border-line/70 bg-white/95 pb-2 shadow-[0_-8px_20px_rgba(32,127,186,0.10)] backdrop-blur">
       {tabs.map(({ href, label, icon: Icon }) => {
         // 함께 타기 화면은 "내 이동" 안에서 열리므로 내 이동 탭을 켜 둔다
         const active = path === href || (href === "/rider/chain" && path === "/rider/together");
@@ -22,11 +22,13 @@ export default function BottomNav() {
           <Link
             key={href}
             href={href}
-            className={`flex min-h-14 flex-1 flex-col items-center justify-center gap-1 text-[12px] ${
+            className={`flex min-h-14 flex-1 flex-col items-center justify-center gap-0.5 text-[12px] ${
               active ? "font-semibold text-brand" : "font-medium text-sub"
             }`}
           >
-            <Icon size={22} strokeWidth={active ? 2.2 : 1.75} />
+            <span className={`flex h-8 w-11 items-center justify-center rounded-[12px] ${active ? "tile text-white" : ""}`}>
+              <Icon size={20} strokeWidth={active ? 2.2 : 1.75} />
+            </span>
             {label}
           </Link>
         );

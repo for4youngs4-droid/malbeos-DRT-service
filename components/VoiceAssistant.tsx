@@ -385,7 +385,7 @@ export default function VoiceAssistant({ intro = true, routineOffers = false }: 
               value={typed}
               onChange={(e) => setTyped(e.target.value)}
               placeholder="내일 병원 가고 싶어요"
-              className="h-11 min-w-0 flex-1 rounded-pill border border-line bg-white px-4 text-xl outline-none focus:border-brand"
+              className="h-11 min-w-0 flex-1 rounded-pill inset px-4 text-xl outline-none focus:ring-2 focus:ring-brand/40"
             />
             <button
               type="submit"

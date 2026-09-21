@@ -62,7 +62,7 @@ export default function RiderHome() {
               right={!moving && <ChevronRight size={22} className="text-sub" />}
             />
             {others > 0 && (
-              <Link href="/rider/together" className="flex min-h-11 items-center gap-2 rounded-pill bg-brand-soft px-4 text-lg font-medium text-navy">
+              <Link href="/rider/together" className="flex min-h-11 items-center gap-2 rounded-pill raised-blue px-4 text-lg font-medium text-navy">
                 <Users size={20} />
                 다른 분 {others}명과 함께 타세요
               </Link>

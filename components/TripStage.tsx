@@ -84,7 +84,7 @@ function Ride({
       <TripMap route={route} p={p} place={place} />
       <Card className="space-y-3">
         <InfoRow icon={Navigation} title="현재 위치" desc={p >= 1 ? "도착했어요" : `${near} 근처`} />
-        <p className="rounded-pill bg-brand-soft px-5 py-3 text-center text-xl font-medium text-navy">
+        <p className="rounded-pill raised-blue px-5 py-3 text-center text-xl font-medium text-navy">
           {p >= 1 ? "도착했어요" : `도착 예정 ${left}분 후`}
         </p>
       </Card>

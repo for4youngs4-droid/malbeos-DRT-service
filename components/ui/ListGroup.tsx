@@ -3,7 +3,7 @@ import type { ReactNode } from "react";
 
 // 한 카드 안에 줄로 나뉜 목록 (설정, 기록, 탑승 순서 등)
 export function ListGroup({ children }: { children: ReactNode }) {
-  return <div className="divide-y divide-line overflow-hidden rounded-card bg-white shadow-card ring-1 ring-line/70">{children}</div>;
+  return <div className="divide-y divide-line overflow-hidden rounded-card surface ring-1 ring-line/60">{children}</div>;
 }
 
 type RowProps = {
@@ -18,7 +18,7 @@ export function ListRow({ icon: Icon, lead, title, desc, right }: RowProps) {
   return (
     <div className="flex min-h-16 items-center gap-3 px-5 py-3">
       {Icon && (
-        <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-brand text-white">
+        <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full tile text-white">
           <Icon size={20} />
         </span>
       )}

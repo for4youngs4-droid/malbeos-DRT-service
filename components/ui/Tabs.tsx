@@ -14,7 +14,7 @@ function TabButton({ label, active, onClick }: { label: string; active: boolean;
       className={`min-h-10 shrink-0 rounded-pill px-4 text-lg transition ${
         active
           ? "bg-rec-gradient rec-3d font-semibold text-white [text-shadow:0_1px_2px_rgba(15,37,64,0.3)]"
-          : "bg-white font-medium text-sub ring-1 ring-line"
+          : "raised font-medium text-sub"
       }`}
     >
       {label}

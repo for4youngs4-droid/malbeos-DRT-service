@@ -39,6 +39,43 @@
   background: linear-gradient(var(--rec-angle, 135deg), #8decd0 0%, #56b5c5 50%, #207fba 100%);
 }
 
+/* 입체감 체계: 모든 요소가 같은 방향(위)에서 빛을 받는다
+   surface: 떠 있는 면(카드)  tile: 볼록한 파랑 칩(아이콘)  raised: 볼록한 밝은 버튼
+   inset: 눌려 들어간 면(입력창, 스위치 바탕) */
+.surface {
+  background: linear-gradient(180deg, #ffffff 0%, #f4f8fc 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.95),
+    0 1px 2px rgba(15, 37, 64, 0.05),
+    0 10px 28px rgba(32, 127, 186, 0.1);
+}
+.tile {
+  background: linear-gradient(145deg, #3f97d0 0%, #1a6c9f 100%);
+  box-shadow:
+    inset 0 1.5px 1px rgba(255, 255, 255, 0.45),
+    inset 0 -2px 4px rgba(15, 37, 64, 0.25),
+    0 4px 10px rgba(32, 127, 186, 0.3);
+}
+.raised {
+  background: linear-gradient(180deg, #ffffff 0%, #eaf2fa 100%);
+  box-shadow:
+    inset 0 1px 0 #ffffff,
+    0 1px 2px rgba(15, 37, 64, 0.08),
+    0 4px 10px rgba(32, 127, 186, 0.14);
+}
+.raised-blue {
+  background: linear-gradient(180deg, #eef7fc 0%, #d6e9f6 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.95),
+    0 1px 2px rgba(15, 37, 64, 0.08),
+    0 4px 10px rgba(32, 127, 186, 0.16);
+}
+.inset {
+  background: #f1f6fb;
+  box-shadow:
+    inset 0 2px 5px rgba(15, 37, 64, 0.13),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.9);
+}
 /* 입체감: 위쪽 빛 반사 + 아래쪽 음영 + 은은한 바닥 그림자 */
 .rec-3d {
   box-shadow:

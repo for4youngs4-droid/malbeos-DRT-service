@@ -26,10 +26,10 @@ function Stepper({ current }: { current: number }) {
             <span
               className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-[12px] font-semibold ${
                 i < current
-                  ? "bg-brand text-white"
+                  ? "tile text-white"
                   : i === current
-                    ? "bg-brand text-white ring-4 ring-brand/20"
-                    : "bg-white text-sub ring-1 ring-line"
+                    ? "tile text-white ring-4 ring-brand/20"
+                    : "raised text-sub"
               }`}
             >
               {i < current ? <Check size={13} strokeWidth={3} /> : i + 1}
