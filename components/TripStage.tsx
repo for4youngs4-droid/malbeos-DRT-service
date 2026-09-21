@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { Mic, Navigation } from "lucide-react";
 import MapView from "@/components/map/MapView";
 import { Button, Card, InfoRow } from "@/components/ui";
+import { angle } from "@/components/ui/gradientAngle";
 import { HERO, placeById } from "@/lib/data";
 import { pointAt, routeBetween, type LatLng } from "@/lib/geo";
 import { isPickup } from "@/lib/intent";
@@ -188,7 +189,8 @@ export default function TripStage({ r, onFinished }: { r: Reservation; onFinishe
                 type="button"
                 aria-label="말로 부르기"
                 onClick={listenPickup}
-                className="flex h-14 w-14 items-center justify-center rounded-full bg-rec-gradient text-white shadow-card"
+                style={angle(120)}
+                className="flex h-14 w-14 items-center justify-center rounded-full bg-rec-gradient rec-3d text-white"
               >
                 <Mic size={26} />
               </button>

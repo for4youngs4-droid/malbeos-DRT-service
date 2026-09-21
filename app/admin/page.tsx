@@ -4,6 +4,7 @@ import { useMemo, useState } from "react";
 import { ArrowRight } from "lucide-react";
 import MapView from "@/components/map/MapView";
 import { Card } from "@/components/ui";
+import { angle } from "@/components/ui/gradientAngle";
 import { placeById } from "@/lib/data";
 import { pointAt, routeBetween, type LatLng } from "@/lib/geo";
 import { demoRequests, poolRequests, stats, unpooled } from "@/lib/pooling";
@@ -91,7 +92,8 @@ export default function AdminPage() {
               key={m}
               type="button"
               onClick={() => setMode(m)}
-              className={`min-h-12 rounded-pill px-6 text-[15px] font-medium ${mode === m ? "bg-rec-gradient text-white [text-shadow:0_1px_2px_rgba(15,37,64,0.3)]" : "bg-white text-sub ring-1 ring-line"}`}
+              style={mode === m ? angle(m === "before" ? 105 : 205) : undefined}
+              className={`min-h-12 rounded-pill px-6 text-[15px] font-medium ${mode === m ? "bg-rec-gradient rec-3d text-white [text-shadow:0_1px_2px_rgba(15,37,64,0.3)]" : "bg-white text-sub ring-1 ring-line"}`}
             >
               {m === "before" ? "묶기 전" : "묶기 후"}
             </button>

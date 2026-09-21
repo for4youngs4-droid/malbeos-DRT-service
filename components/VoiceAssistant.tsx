@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { CalendarCheck, CalendarClock, MapPin, Mic, Repeat, Send, Users } from "lucide-react";
 import { Badge, Button, Card, InfoRow } from "@/components/ui";
+import { angle } from "@/components/ui/gradientAngle";
 import { avgStayMin, placeById } from "@/lib/data";
 import { isNo, isYes, parseDate, parsePlace, parseTime } from "@/lib/intent";
 import { groupOfMine } from "@/lib/pooling";
@@ -281,13 +282,14 @@ export default function VoiceAssistant({ intro = true, routineOffers = false }: 
     <div className="space-y-4">
       <div className="flex flex-col items-center text-center">
         <div className="relative flex h-72 w-72 items-center justify-center">
-          <span className={`absolute inset-0 rounded-full bg-rec-gradient opacity-15 ${status === "listening" ? "breathe" : ""}`} />
-          <span className={`absolute inset-9 rounded-full bg-rec-gradient opacity-25 ${status === "listening" ? "breathe" : ""}`} />
+          <span style={angle(315)} className={`absolute inset-0 rounded-full bg-rec-gradient opacity-15 ${status === "listening" ? "breathe" : ""}`} />
+          <span style={angle(200)} className={`absolute inset-9 rounded-full bg-rec-gradient opacity-25 ${status === "listening" ? "breathe" : ""}`} />
           <button
             type="button"
             onClick={onMic}
             aria-label="말하기"
-            className={`relative flex h-40 w-40 items-center justify-center rounded-full bg-rec-gradient text-white shadow-[0_12px_32px_rgba(86,181,197,0.45)] ${
+            style={angle(145)}
+            className={`relative flex h-40 w-40 items-center justify-center rounded-full bg-rec-gradient text-white shadow-[inset_0_3px_4px_rgba(255,255,255,0.5),inset_0_-8px_14px_rgba(32,127,186,0.35),0_12px_32px_rgba(86,181,197,0.45)] ${
               status === "listening" ? "breathe" : ""
             }`}
           >
@@ -388,7 +390,8 @@ export default function VoiceAssistant({ intro = true, routineOffers = false }: 
             <button
               type="submit"
               aria-label="보내기"
-              className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-rec-gradient text-white shadow-[0_6px_14px_rgba(86,181,197,0.35)]"
+              style={angle(50)}
+              className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-rec-gradient rec-3d text-white"
             >
               <Send size={20} />
             </button>
