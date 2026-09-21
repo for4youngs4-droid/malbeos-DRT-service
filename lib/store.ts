@@ -62,7 +62,7 @@ export const useStore = create<State>((set) => ({
   reservations: [],
   routines: findRoutines(PAST_TRIPS),
   notifications: [],
-  voiceOn: true,
+  voiceOn: false, // 기본은 꺼짐 (더보기에서 켠다)
   voiceName: null,
 
   // 시각이 바뀌면 새 루틴 알림이 생겼는지 확인한다

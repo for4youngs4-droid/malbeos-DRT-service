@@ -24,8 +24,7 @@ export default function MorePage() {
 
   const pick = (name: string) => {
     setVoiceName(name);
-    // 고르면 바로 들려준다 (아직 저장 전이라 직접 읽힌 목소리로 시험)
-    setTimeout(() => speak("안녕하세요, 김영은님. 어디로 가실까요?"), 0);
+    void speak("안녕하세요, 김영은님. 어디로 가실까요?", true); // 고르면 바로 들려준다
   };
 
   return (

@@ -56,10 +56,11 @@ function pickVoice() {
 }
 
 // 한국어로 읽어주기. 읽기가 끝나면 Promise가 끝난다. 설정에서 끄면 바로 끝난다
-export function speak(text: string): Promise<void> {
+// force: 음성 안내가 꺼져 있어도 읽는다 (목소리 미리 듣기용)
+export function speak(text: string, force = false): Promise<void> {
   return new Promise((resolve) => {
     if (typeof window === "undefined" || !("speechSynthesis" in window)) return resolve();
-    if (!useStore.getState().voiceOn) return resolve();
+    if (!force && !useStore.getState().voiceOn) return resolve();
     const synth = window.speechSynthesis;
     synth.cancel();
     const u = new SpeechSynthesisUtterance(text);
