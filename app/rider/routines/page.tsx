@@ -62,7 +62,7 @@ export default function RoutinesPage() {
                   desc={weekly ? `${p.name} (${p.kind})` : `${p.name} 검진`}
                   right={<Toggle checked={r.alertOn} onChange={(on) => setAlert(r.id, on)} label={`${p.name} 알림`} />}
                 />
-                <div className="flex items-center gap-3 pl-[72px]">
+                <div className="flex items-center gap-3 pl-[60px]">
                   <span className="text-lg text-sub">{weekly ? "(매주)" : "(매월)"}</span>
                   {r.learning && <Badge>루틴 학습 중</Badge>}
                 </div>

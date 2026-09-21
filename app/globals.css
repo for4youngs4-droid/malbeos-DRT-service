@@ -27,10 +27,6 @@
   animation: breathe 2.4s ease-in-out infinite;
 }
 
-html {
-  font-size: 20px; /* 본문 최소 20px 기준 */
-}
-
 body {
   min-height: 100vh;
   color: var(--color-ink);
