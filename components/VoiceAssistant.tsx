@@ -91,7 +91,6 @@ export default function VoiceAssistant({ intro = true, routineOffers = false }: 
   const gen = useRef(0); // 새 입력이 들어오면 옛 대화 흐름을 멈추기 위한 번호
 
   const [prompt, setPrompt] = useState(FIRST_PROMPT);
-  const [first, setFirst] = useState(true);
   const [heard, setHeard] = useState("");
   const [status, setStatus] = useState<Status>("idle");
   const [hint, setHint] = useState("");
@@ -127,7 +126,6 @@ export default function VoiceAssistant({ intro = true, routineOffers = false }: 
     setConfirm(null);
     setChoices([]);
     setDoneId(res.id);
-    setFirst(false);
     const end = roundHalfHour(addMinutes(time, 30 + stay)); // 이동 30분 + 평균 체류
     return `가는 차는 ${spokenTime(time)}에 집 앞으로 가요. 오시는 차는 ${
       p.kind === "병원" ? "진료" : "볼일"
@@ -153,7 +151,6 @@ export default function VoiceAssistant({ intro = true, routineOffers = false }: 
       if (isNo(text)) {
         s.step = "rest";
         setPrompt(FIRST_PROMPT);
-        setFirst(true);
         return "알겠어요. 필요하시면 말씀해 주세요.";
       }
     }
@@ -165,7 +162,6 @@ export default function VoiceAssistant({ intro = true, routineOffers = false }: 
         s.fails = 0;
         setConfirm(null);
         setPrompt(FIRST_PROMPT);
-        setFirst(true);
         return `다시 말씀해 주세요. ${QUESTION.place}`;
       }
       if (isYes(text)) return book(s.date!, s.time!, s.place!, avgStayMin(s.place!));
@@ -196,7 +192,6 @@ export default function VoiceAssistant({ intro = true, routineOffers = false }: 
     }
 
     const missing = !s.place ? "place" : !s.date ? "date" : !s.time ? "time" : null;
-    setFirst(false);
     if (!missing) {
       s.step = "confirm";
       setConfirm({ date: s.date!, time: s.time!, placeId: s.place!, fromRoutine });
@@ -249,7 +244,6 @@ export default function VoiceAssistant({ intro = true, routineOffers = false }: 
     setConfirm(null);
     setChoices([]);
     setPrompt(FIRST_PROMPT);
-    setFirst(true);
     setHeard("");
   }
 
@@ -328,7 +322,6 @@ export default function VoiceAssistant({ intro = true, routineOffers = false }: 
         )}
         <h1 className="mt-2 whitespace-pre-line text-[22px] font-semibold leading-snug tracking-tight text-navy">{shownPrompt}</h1>
         {/* 안내 문구는 제목 하나로 (반복 삭제) */}
-        {first && !offering && !heard && <p className="mt-2 text-lg text-sub">예) 내일 아침에 읍내 병원 가야 돼</p>}
         {heard && <p className="mt-2 text-2xl font-medium">{heard}</p>}
         {hint ? (
           <p className="mt-3 text-lg font-medium text-navy">{hint}</p>
@@ -414,7 +407,7 @@ export default function VoiceAssistant({ intro = true, routineOffers = false }: 
             <input
               value={typed}
               onChange={(e) => setTyped(e.target.value)}
-              placeholder="예) 내일 병원 가고 싶어요"
+              placeholder="내일 병원 가고 싶어요"
               className="min-h-14 min-w-0 flex-1 rounded-pill border border-line bg-white px-5 text-xl outline-none focus:border-brand"
             />
             <button
