@@ -149,8 +149,7 @@ body {
   .modal-backdrop, .modal-sheet { animation: none; }
 }
 
-/* 마이크 바깥 원의 일렁임: 모양이 물처럼 눈에 띄게 출렁이고, 천천히 커졌다 작아지며 돈다.
-   그 위에 마이크에서 물결이 퍼져나가는 파문(ripple-wave)이 겹친다 */
+/* 마이크 바깥 원의 일렁임: 모양이 물처럼 눈에 띄게 출렁이고, 천천히 커졌다 작아지며 돈다 */
 @keyframes ripple-blob {
   0%, 100% { border-radius: 50% 50% 50% 50% / 50% 50% 50% 50%; }
   25% { border-radius: 58% 42% 46% 54% / 46% 58% 42% 54%; }
@@ -161,19 +160,10 @@ body {
   0%, 100% { transform: scale(1) rotate(0deg); }
   50% { transform: scale(var(--ripple-amp, 1.07)) rotate(10deg); }
 }
-@keyframes ripple-wave {
-  0% { transform: scale(1); opacity: 0.55; }
-  100% { transform: scale(1.8); opacity: 0; }
-}
 .ripple-a { animation: ripple-blob 6s ease-in-out infinite, ripple-drift 4.5s ease-in-out infinite; }
 .ripple-b { animation: ripple-blob 5s ease-in-out infinite reverse, ripple-drift 3.6s ease-in-out infinite -1.4s; }
-.ripple-wave { animation: ripple-wave 3.6s ease-out infinite; }
-.ripple-wave.second { animation-delay: 1.8s; }
 /* 듣는 중에는 더 크고 빠르게 */
 .ripple-a.live, .ripple-b.live { --ripple-amp: 1.16; animation-duration: 3.4s, 1.9s; }
-.ripple-wave.live { animation-duration: 1.8s; }
-.ripple-wave.live.second { animation-delay: 0.9s; }
 @media (prefers-reduced-motion: reduce) {
-  .ripple-a, .ripple-b, .ripple-wave { animation: none; }
-  .ripple-wave { opacity: 0; }
+  .ripple-a, .ripple-b { animation: none; }
 }

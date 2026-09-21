@@ -288,12 +288,6 @@ export default function VoiceAssistant({ intro = true, routineOffers = false }: 
         <div className="relative mb-3 flex h-72 w-72 items-center justify-center">
           <span style={fancy ? angle(315) : undefined} className={`absolute inset-0 rounded-full ${fancy ? "bg-rec-gradient opacity-25" : "bg-brand/10"} ${ring("a")}`} />
           <span style={fancy ? angle(200) : undefined} className={`absolute inset-9 rounded-full ${fancy ? "bg-rec-gradient opacity-40" : "bg-brand/15"} ${ring("b")}`} />
-          {fancy && (
-            <>
-              <span aria-hidden className={`ripple-wave absolute inset-[64px] rounded-full border-2 border-[#56b5c5] ${status === "listening" ? "live" : ""}`} />
-              <span aria-hidden className={`ripple-wave second absolute inset-[64px] rounded-full border-2 border-[#56b5c5] ${status === "listening" ? "live" : ""}`} />
-            </>
-          )}
           <button
             type="button"
             onClick={onMic}
