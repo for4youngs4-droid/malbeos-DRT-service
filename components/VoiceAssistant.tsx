@@ -97,7 +97,6 @@ export default function VoiceAssistant({ intro = true, routineOffers = false }: 
   const [choices, setChoices] = useState<Choice[]>([]);
   const [confirm, setConfirm] = useState<{ date: string; time: string; placeId: string; fromRoutine: boolean } | null>(null);
   const [doneId, setDoneId] = useState<string | null>(null);
-  const [textMode, setTextMode] = useState(false);
   const [typed, setTyped] = useState("");
 
   const offering = !!(alert && alertRoutine) && !doneId && !confirm; // 루틴 알림 질문 중
@@ -223,7 +222,6 @@ export default function VoiceAssistant({ intro = true, routineOffers = false }: 
     setStatus("idle");
 
     if (text === null) {
-      setTextMode(true);
       setHint("음성 인식을 쓸 수 없어요, 글자로 입력해 주세요");
       return;
     }
@@ -392,12 +390,7 @@ export default function VoiceAssistant({ intro = true, routineOffers = false }: 
           </Card>
         )}
 
-        {!textMode ? (
-          <button type="button" onClick={() => setTextMode(true)} className="mx-auto block min-h-12 text-lg text-sub underline">
-            글자로 입력하기
-          </button>
-        ) : (
-          <form
+        <form
             className="flex gap-2"
             onSubmit={(e) => {
               e.preventDefault();
@@ -408,17 +401,16 @@ export default function VoiceAssistant({ intro = true, routineOffers = false }: 
               value={typed}
               onChange={(e) => setTyped(e.target.value)}
               placeholder="내일 병원 가고 싶어요"
-              className="min-h-14 min-w-0 flex-1 rounded-pill border border-line bg-white px-5 text-xl outline-none focus:border-brand"
+              className="h-11 min-w-0 flex-1 rounded-pill border border-line bg-white px-4 text-xl outline-none focus:border-brand"
             />
             <button
               type="submit"
               aria-label="보내기"
-              className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-navy text-white"
+              className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-navy text-white"
             >
-              <Send size={22} />
+              <Send size={20} />
             </button>
           </form>
-        )}
       </div>
     </div>
   );
