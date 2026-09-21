@@ -3,9 +3,9 @@
 import { useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Bell, Bus, CalendarClock, ChevronRight, Users } from "lucide-react";
+import { Bell, Bus, CalendarClock, ChevronRight, Users, Volume2, VolumeX } from "lucide-react";
 import VoiceAssistant from "@/components/VoiceAssistant";
-import { Button, Card, InfoRow, PhoneFrame, SectionTitle } from "@/components/ui";
+import { Button, Card, InfoRow, PhoneFrame, SectionTitle, Toggle } from "@/components/ui";
 import { HERO, placeById } from "@/lib/data";
 import { groupOfMine } from "@/lib/pooling";
 import { offerText } from "@/lib/routine";
@@ -21,6 +21,15 @@ export default function RiderHome() {
   const alert = useStore((s) => s.notifications.find((n) => !n.read));
   const alertRoutine = useStore((s) => (alert ? s.routines.find((r) => r.id === alert.routineId) : undefined));
   const setTime = useStore((s) => s.setTime);
+  const voiceOn = useStore((s) => s.voiceOn);
+  const setVoiceOn = useStore((s) => s.setVoiceOn);
+
+  // 음성 안내 스위치: 켜면 확인 음성이 나오고, 끄면 말하던 것도 바로 멈춘다
+  const changeVoice = (on: boolean) => {
+    setVoiceOn(on);
+    if (on) void speak("음성 안내를 켰어요");
+    else stopSpeaking();
+  };
 
   // 루틴 알림이 있으면 그 질문을, 없으면 인사를 읽어준다
   const spoken = alert && alertRoutine ? offerText(alert, alertRoutine) : `안녕하세요, ${HERO.name}님. 어디로 가실까요? 마이크를 누르고 말씀해 주세요.`;
@@ -44,10 +53,16 @@ export default function RiderHome() {
             <h1 className="text-[22px] font-semibold tracking-tight">{HERO.name}님</h1>
             <p className="mt-0.5 text-[13px] text-sub">{koNow(now)}</p>
           </div>
-          <span aria-label={alert ? "새 알림이 있어요" : "알림"} className="relative flex h-12 w-12 items-center justify-center text-ink">
-            <Bell size={26} />
-            {alert && <span className="absolute right-2.5 top-2.5 h-3.5 w-3.5 rounded-full bg-alert ring-2 ring-white" />}
-          </span>
+          <div className="flex items-center gap-1">
+            <div className="flex items-center gap-2">
+              {voiceOn ? <Volume2 size={22} className="text-brand" /> : <VolumeX size={22} className="text-sub" />}
+              <Toggle checked={voiceOn} onChange={changeVoice} label="음성 안내" />
+            </div>
+            <span aria-label={alert ? "새 알림이 있어요" : "알림"} className="relative flex h-12 w-12 items-center justify-center text-ink">
+              <Bell size={26} />
+              {alert && <span className="absolute right-2.5 top-2.5 h-3.5 w-3.5 rounded-full bg-alert ring-2 ring-white" />}
+            </span>
+          </div>
         </header>
 
         <VoiceAssistant intro={false} routineOffers />
