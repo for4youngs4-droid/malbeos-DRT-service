@@ -29,6 +29,7 @@ const SLIDES = [
 
 export default function OnboardingPage() {
   const router = useRouter();
+  const [showIntro, setShowIntro] = useState(true);
   const [index, setIndex] = useState(0);
   const touchX = useRef<number | null>(null);
 
@@ -38,6 +39,23 @@ export default function OnboardingPage() {
     if (index === SLIDES.length - 1) router.push("/rider");
     else go(index + 1);
   };
+
+  if (showIntro) {
+    return (
+      <PhoneFrame>
+        <div className="flex min-h-full flex-col items-center justify-center gap-9 bg-brand-light px-6 text-center">
+          <div className="relative flex h-40 w-40 items-center justify-center">
+            <span aria-hidden className="breathe absolute inset-0 rounded-full bg-white/15" />
+            <Illustration name="brand-symbol" className="splash-in relative h-24 w-full" />
+          </div>
+          <Illustration name="brand-wordmark" className="splash-in h-12 w-40 [animation-delay:150ms]" />
+          <Button variant="outline" flat onClick={() => setShowIntro(false)} className="splash-in mt-2 [animation-delay:300ms]">
+            시작하기
+          </Button>
+        </div>
+      </PhoneFrame>
+    );
+  }
 
   return (
     <PhoneFrame>
