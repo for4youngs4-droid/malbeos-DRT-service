@@ -7,7 +7,7 @@ import { Button, Illustration, PhoneFrame } from "@/components/ui";
 const SLIDES = [
   {
     title: "당신의 이동을\n먼저 생각하는 DRT",
-    desc: "말로 부르면 오는 버스, 온다가 가장 편한 방법으로 알려드려요",
+    desc: "말로 부르면 오는 버스, 말벗이 가장 편한 방법으로 알려드려요",
     button: "시작하기",
   },
   {

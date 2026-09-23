@@ -8,7 +8,7 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-  title: "온다 DRT",
+  title: "말벗 DRT",
   description: "당신의 이동을 먼저 생각하는 DRT",
 };
 
