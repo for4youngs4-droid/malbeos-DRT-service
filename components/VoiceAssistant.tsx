@@ -63,7 +63,15 @@ function spokenDay(date: string, now: number) {
 
 // 음성 예약 대화 전체 (홈 화면과 /rider/voice 에서 같이 쓴다)
 // routineOffers: 루틴 알림이 있으면 그 질문에 마이크로 바로 답하게 한다 (홈에서 켠다)
-export default function VoiceAssistant({ intro = true, routineOffers = false }: { intro?: boolean; routineOffers?: boolean }) {
+export default function VoiceAssistant({
+  intro = true,
+  routineOffers = false,
+  tourTarget,
+}: {
+  intro?: boolean;
+  routineOffers?: boolean;
+  tourTarget?: string; // 도움말 가이드가 마이크 부분만 가리킬 때 쓰는 표시
+}) {
   const router = useRouter();
   const fancy = routineOffers; // 그라데이션 효과는 홈 화면에서만
   const addReservation = useStore((s) => s.addReservation);
@@ -285,7 +293,7 @@ export default function VoiceAssistant({ intro = true, routineOffers = false }: 
   return (
     <div className="space-y-4">
       <div className="flex flex-col items-center text-center">
-        <div className="relative mb-3 flex h-72 w-72 items-center justify-center">
+        <div data-tour-target={tourTarget} className="relative mb-3 flex h-72 w-72 items-center justify-center">
           <span style={fancy ? angle(315) : undefined} className={`absolute inset-0 rounded-full ${fancy ? "bg-rec-gradient opacity-25" : "bg-brand/10"} ${ring("a")}`} />
           <span style={fancy ? angle(200) : undefined} className={`absolute inset-9 rounded-full ${fancy ? "bg-rec-gradient opacity-40" : "bg-brand/15"} ${ring("b")}`} />
           <button
