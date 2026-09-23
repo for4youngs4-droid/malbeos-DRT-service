@@ -3,7 +3,7 @@
 import { useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Bell, Bus, CalendarClock, ChevronRight, Users, Volume2, VolumeX } from "lucide-react";
+import { Bus, CalendarClock, ChevronRight, CircleHelp, Users, Volume2, VolumeX } from "lucide-react";
 import VoiceAssistant from "@/components/VoiceAssistant";
 import { Button, Card, InfoRow, PhoneFrame, SectionTitle, Toggle } from "@/components/ui";
 import { placeById } from "@/lib/data";
@@ -23,6 +23,7 @@ export default function RiderHome() {
   const setTime = useStore((s) => s.setTime);
   const voiceOn = useStore((s) => s.voiceOn);
   const setVoiceOn = useStore((s) => s.setVoiceOn);
+  const startTour = useStore((s) => s.startTour);
 
   // 음성 안내 스위치: 켜면 확인 음성이 나오고, 끄면 말하던 것도 바로 멈춘다
   const changeVoice = (on: boolean) => {
@@ -49,21 +50,19 @@ export default function RiderHome() {
   return (
     <PhoneFrame tabs>
       <div className="space-y-5 px-5 pt-6">
-        <header className="flex items-start justify-end">
-          <div className="flex items-center gap-1">
-            <div className="flex items-center gap-2">
-              {voiceOn ? <Volume2 size={22} className="text-brand" /> : <VolumeX size={22} className="text-sub" />}
-              <Toggle checked={voiceOn} onChange={changeVoice} label="음성 안내" />
-            </div>
-            <span
-              data-tour-target="home-alert"
-              aria-label={alert ? "새 알림이 있어요" : "알림"}
-              className="relative flex h-12 w-12 items-center justify-center rounded-2xl text-ink"
-            >
-              <Bell size={26} />
-              {alert && <span className="absolute right-2.5 top-2.5 h-3.5 w-3.5 rounded-full bg-alert ring-2 ring-white" />}
-            </span>
+        <header className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            {voiceOn ? <Volume2 size={22} className="text-brand" /> : <VolumeX size={22} className="text-sub" />}
+            <Toggle checked={voiceOn} onChange={changeVoice} label="음성 안내" />
           </div>
+          <button
+            type="button"
+            aria-label="도움말"
+            onClick={startTour}
+            className="flex h-12 w-12 items-center justify-center rounded-2xl text-ink"
+          >
+            <CircleHelp size={26} />
+          </button>
         </header>
 
         <VoiceAssistant intro={false} routineOffers tourTarget="home-mic" />

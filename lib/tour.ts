@@ -1,4 +1,4 @@
-import { Bell, CalendarCheck, CalendarClock, Clock, Mic, Users } from "lucide-react";
+import { CalendarCheck, CalendarClock, Clock, Mic, Users } from "lucide-react";
 
 // 서비스 흐름을 그대로 따라가며 실제 화면 안의 진짜 부분을 하나씩 짚어준다.
 // 화면(section) 하나가 끝나면 다음 화면으로 실제로 이동해서 이어간다.
@@ -20,14 +20,6 @@ export const TOUR_STEPS = [
     icon: CalendarClock,
     title: "예약한 이동을 한눈에",
     desc: "예약하시면 다음 이동이 바로 여기에 나타나요. 눌러서 자세히 볼 수 있어요.",
-  },
-  {
-    section: "홈",
-    href: "/rider",
-    target: "home-alert",
-    icon: Bell,
-    title: "루틴은 미리 알려드려요",
-    desc: "자주 다니시는 길이 있으면, 하루 전 저녁에 여기 알림으로 먼저 여쭤봐요.",
   },
   {
     section: "내 이동",
