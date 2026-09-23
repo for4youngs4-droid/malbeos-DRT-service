@@ -46,6 +46,7 @@ type State = {
   voiceOn: boolean;
   voiceName: string | null; // 고른 목소리 이름 (없으면 자동으로 가장 자연스러운 목소리)
   greeted: boolean; // 홈 첫 인사를 이미 들려줬는지 (처음 들어왔을 때 한 번만)
+  tourStep: number | null; // 도움말 가이드: null이면 꺼짐, 0부터 단계
   setTime: (ts: number) => void;
   addReservation: (r: Reservation) => void;
   updateReservation: (id: string, patch: Partial<Reservation>) => void;
@@ -56,8 +57,13 @@ type State = {
   setVoiceOn: (v: boolean) => void;
   setVoiceName: (name: string | null) => void;
   markGreeted: () => void;
+  startTour: () => void;
+  nextTourStep: () => void;
+  endTour: () => void;
   reset: () => void;
 };
+
+const TOUR_STEPS = 3; // 도움말 가이드 단계 수 (핵심 기능 3가지)
 
 export const useStore = create<State>((set) => ({
   now: DEFAULT_NOW,
@@ -67,6 +73,7 @@ export const useStore = create<State>((set) => ({
   voiceOn: true, // 기본은 켜짐 (홈·설정에서 끌 수 있다)
   voiceName: null,
   greeted: false,
+  tourStep: null,
 
   // 시각이 바뀌면 새 루틴 알림이 생겼는지 확인한다
   setTime: (ts) =>
@@ -118,6 +125,11 @@ export const useStore = create<State>((set) => ({
   setVoiceOn: (voiceOn) => set({ voiceOn }),
   setVoiceName: (voiceName) => set({ voiceName }),
   markGreeted: () => set({ greeted: true }),
+
+  // 도움말 가이드: 시작 / 다음 단계(끝이면 꺼짐) / 바로 끄기
+  startTour: () => set({ tourStep: 0 }),
+  nextTourStep: () => set((s) => ({ tourStep: s.tourStep === null || s.tourStep + 1 >= TOUR_STEPS ? null : s.tourStep + 1 })),
+  endTour: () => set({ tourStep: null }),
 
   // 처음 상태로 (음성 안내 설정은 유지). 첫 인사도 다시 나온다
   reset: () =>

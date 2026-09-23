@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { usePathname } from "next/navigation";
+import HelpTour from "@/components/HelpTour";
 import { PhoneChrome, ShellProvider } from "@/components/ui/PhoneFrame";
 
 // 하단 탭 순서. 함께 타기는 내 이동 안에서 열린다
@@ -40,6 +41,7 @@ export default function RiderLayout({ children }: { children: ReactNode }) {
           </div>
         </div>
       </ShellProvider>
+      <HelpTour />
     </PhoneChrome>
   );
 }

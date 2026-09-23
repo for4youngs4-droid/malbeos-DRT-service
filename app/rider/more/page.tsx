@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Check, ChevronDown, CircleHelp, History, Phone, Volume2 } from "lucide-react";
+import { Check, ChevronDown, ChevronRight, CircleHelp, History, Phone, Volume2 } from "lucide-react";
 import { Badge, ListGroup, ListRow, PhoneFrame, SectionTitle, Toggle, TopBar } from "@/components/ui";
 import { HERO } from "@/lib/data";
 import { speak, useKoVoices } from "@/lib/speech";
@@ -11,13 +11,13 @@ const VISIBLE_VOICES = 3; // 목소리는 3개까지만 바로 보이고, 나머
 
 const SOON = [
   { icon: History, title: "이동 기록" },
-  { icon: CircleHelp, title: "도움말" },
   { icon: Phone, title: "고객센터" },
 ];
 
 export default function MorePage() {
   const voiceOn = useStore((s) => s.voiceOn);
   const setVoiceOn = useStore((s) => s.setVoiceOn);
+  const startTour = useStore((s) => s.startTour);
   const voiceName = useStore((s) => s.voiceName);
   const setVoiceName = useStore((s) => s.setVoiceName);
   const voices = useKoVoices();
@@ -87,6 +87,14 @@ export default function MorePage() {
 
         <SectionTitle>기타</SectionTitle>
         <ListGroup>
+          <button type="button" onClick={startTour} className="block w-full text-left">
+            <ListRow
+              icon={CircleHelp}
+              title="도움말"
+              desc="주요 기능을 하나씩 안내해드려요"
+              right={<ChevronRight size={22} className="text-sub" />}
+            />
+          </button>
           {SOON.map(({ icon, title }) => (
             <ListRow key={title} icon={icon} title={title} right={<Badge tone="warn">준비 중</Badge>} />
           ))}
