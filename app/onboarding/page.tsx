@@ -4,6 +4,7 @@ import { useRef, useState, useSyncExternalStore } from "react";
 import { createPortal } from "react-dom";
 import { useRouter } from "next/navigation";
 import { Button, Illustration, PhoneFrame } from "@/components/ui";
+import { angle } from "@/components/ui/gradientAngle";
 
 const subscribe = () => () => {};
 
@@ -15,15 +16,22 @@ function IntroSplash({ onStart }: { onStart: () => void }) {
   if (!host) return null;
 
   return createPortal(
-    <div className="pointer-events-auto absolute inset-0 z-50 flex flex-col items-center justify-center gap-9 bg-brand-light px-6 text-center">
-      <div className="relative flex h-40 w-40 items-center justify-center">
-        <span aria-hidden className="breathe absolute inset-0 rounded-full bg-white/15" />
-        <Illustration name="brand-symbol" className="splash-in relative h-24 w-full" />
+    <div
+      className="pointer-events-auto absolute inset-0 z-50 flex flex-col items-center bg-rec-gradient px-6 text-center"
+      style={angle(160)}
+    >
+      <div className="flex flex-1 flex-col items-center justify-center gap-9">
+        <div className="relative flex h-40 w-40 items-center justify-center">
+          <span aria-hidden className="breathe absolute inset-0 rounded-full bg-white/15" />
+          <Illustration name="brand-symbol" className="splash-in relative h-24 w-full" />
+        </div>
+        <Illustration name="brand-wordmark" className="splash-in h-12 w-40 [animation-delay:150ms]" />
       </div>
-      <Illustration name="brand-wordmark" className="splash-in h-12 w-40 [animation-delay:150ms]" />
-      <Button variant="outline" flat onClick={onStart} className="splash-in mt-2 [animation-delay:300ms]">
-        시작하기
-      </Button>
+      <div className="w-full pb-[max(env(safe-area-inset-bottom),1.5rem)] pt-4">
+        <Button variant="outline" flat onClick={onStart} className="splash-in [animation-delay:300ms]">
+          시작하기
+        </Button>
+      </div>
     </div>,
     host,
   );
