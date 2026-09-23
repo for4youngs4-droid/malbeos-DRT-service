@@ -63,8 +63,6 @@ type State = {
   reset: () => void;
 };
 
-const TOUR_STEPS = 3; // 도움말 가이드 단계 수 (핵심 기능 3가지)
-
 export const useStore = create<State>((set) => ({
   now: DEFAULT_NOW,
   reservations: [],
@@ -126,9 +124,10 @@ export const useStore = create<State>((set) => ({
   setVoiceName: (voiceName) => set({ voiceName }),
   markGreeted: () => set({ greeted: true }),
 
-  // 도움말 가이드: 시작 / 다음 단계(끝이면 꺼짐) / 바로 끄기
+  // 도움말 가이드: 시작 / 다음 단계 / 바로 끄기
+  // 단계 개수(끝인지 아닌지)는 이 파일이 아니라 HelpTour 쪽 TOUR_STEPS가 판단한다
   startTour: () => set({ tourStep: 0 }),
-  nextTourStep: () => set((s) => ({ tourStep: s.tourStep === null || s.tourStep + 1 >= TOUR_STEPS ? null : s.tourStep + 1 })),
+  nextTourStep: () => set((s) => ({ tourStep: s.tourStep === null ? null : s.tourStep + 1 })),
   endTour: () => set({ tourStep: null }),
 
   // 처음 상태로 (음성 안내 설정은 유지). 첫 인사도 다시 나온다

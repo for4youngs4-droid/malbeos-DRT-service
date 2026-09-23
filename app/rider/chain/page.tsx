@@ -152,23 +152,25 @@ export default function TripPage() {
           </div>
         </Card>
 
-        <SectionTitle>함께 타기</SectionTitle>
-        <Link href="/rider/together" className="block">
-          <Card flat>
-            <InfoRow
-              icon={Users}
-              title={others > 0 ? `이웃 ${others}분과 함께 타요` : "이번에는 혼자 타요"}
-              desc={
-                group
-                  ? others > 0
-                    ? `${group.vehicle} · 집 앞 ${koTime(myPickup(group, r))} · 차 ${others + 1}대가 1대로`
-                    : "같은 방향 분이 있으면 묶어 드려요"
-                  : ""
-              }
-              right={<ChevronRight size={22} className="text-sub" />}
-            />
-          </Card>
-        </Link>
+        <div data-tour-target="chain-together" className="space-y-5">
+          <SectionTitle>함께 타기</SectionTitle>
+          <Link href="/rider/together" className="block">
+            <Card flat>
+              <InfoRow
+                icon={Users}
+                title={others > 0 ? `이웃 ${others}분과 함께 타요` : "이번에는 혼자 타요"}
+                desc={
+                  group
+                    ? others > 0
+                      ? `${group.vehicle} · 집 앞 ${koTime(myPickup(group, r))} · 차 ${others + 1}대가 1대로`
+                      : "같은 방향 분이 있으면 묶어 드려요"
+                    : ""
+                }
+                right={<ChevronRight size={22} className="text-sub" />}
+              />
+            </Card>
+          </Link>
+        </div>
 
         {phase === "before" && (
           <Button

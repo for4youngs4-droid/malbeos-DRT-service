@@ -44,39 +44,41 @@ export default function RoutinesPage() {
     <PhoneFrame tabs>
       <TopBar title="내 루틴" />
       <div className="space-y-3 px-5 pt-3">
-        <SectionTitle>다음 예정</SectionTitle>
-        <ListGroup>
-          {upcoming.length === 0 && <ListRow title="아직 찾은 루틴이 없어요" desc="이동 기록을 보고 배워요" />}
-          {upcoming.map(({ r, date, reserved }) => {
-            const p = placeById(r.placeId)!;
-            return (
-              <ListRow
-                key={r.id}
-                icon={ICONS[p.kind] ?? Package}
-                title={`${dayWord(date)} ${koTime(r.time)}`}
-                desc={`${p.name} · ${koDate(date).replace(/ \(.\)$/, "")}`} // 요일은 제목에 있으므로 날짜만
-                right={
-                  reserved ? (
-                    <Link href="/rider/chain">
-                      <Badge tone="ok">예약됨</Badge>
-                    </Link>
-                  ) : (
-                    <Button
-                      size="sm"
-                      full={false}
-                      onClick={() => {
-                        addReservation(newReservation(date, r.time, r.placeId, r.avgStayMin));
-                        speak("예약했어요. 내 이동에서 확인할 수 있어요.");
-                      }}
-                    >
-                      예약하기
-                    </Button>
-                  )
-                }
-              />
-            );
-          })}
-        </ListGroup>
+        <div data-tour-target="routine-upcoming" className="space-y-3">
+          <SectionTitle>다음 예정</SectionTitle>
+          <ListGroup>
+            {upcoming.length === 0 && <ListRow title="아직 찾은 루틴이 없어요" desc="이동 기록을 보고 배워요" />}
+            {upcoming.map(({ r, date, reserved }) => {
+              const p = placeById(r.placeId)!;
+              return (
+                <ListRow
+                  key={r.id}
+                  icon={ICONS[p.kind] ?? Package}
+                  title={`${dayWord(date)} ${koTime(r.time)}`}
+                  desc={`${p.name} · ${koDate(date).replace(/ \(.\)$/, "")}`} // 요일은 제목에 있으므로 날짜만
+                  right={
+                    reserved ? (
+                      <Link href="/rider/chain">
+                        <Badge tone="ok">예약됨</Badge>
+                      </Link>
+                    ) : (
+                      <Button
+                        size="sm"
+                        full={false}
+                        onClick={() => {
+                          addReservation(newReservation(date, r.time, r.placeId, r.avgStayMin));
+                          speak("예약했어요. 내 이동에서 확인할 수 있어요.");
+                        }}
+                      >
+                        예약하기
+                      </Button>
+                    )
+                  }
+                />
+              );
+            })}
+          </ListGroup>
+        </div>
 
         <div data-tour-target="routine" className="space-y-3">
           <SectionTitle>알림 받는 루틴</SectionTitle>
