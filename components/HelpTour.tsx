@@ -9,15 +9,14 @@ import { useStore } from "@/lib/store";
 
 const subscribe = () => () => {};
 
-// 핵심 기능 3가지를 실제 화면으로 직접 들어가서 하나씩 안내한다
-// (CLAUDE.md 핵심 기능 순서: Routine → Chain → Community)
+// 핵심 기능 3가지를 실제 화면으로 직접 들어가서 하나씩 안내한다 (홈 → 내 이동 → 내 루틴 순서)
 export const TOUR_STEPS = [
   {
-    href: "/rider/routines",
-    target: "routine", // data-tour-target="routine" (내 루틴 화면 안)
-    icon: Clock,
-    title: "반복되는 이동, 먼저 알려드려요",
-    desc: "자주 다니시는 길을 스스로 찾아내고, 시간이 되면 미리 여쭤봐요. 여기서 알림을 켜고 끌 수 있어요.",
+    href: "/rider",
+    target: "community", // data-tour-target="community" (홈 화면 안)
+    icon: Users,
+    title: "같은 방향이면 함께 타요",
+    desc: "여기 마이크로 말씀하시면, 같은 방향으로 가는 분이 있을 때 차 한 대로 함께 모셔다드려요.",
   },
   {
     href: "/rider/chain",
@@ -27,11 +26,11 @@ export const TOUR_STEPS = [
     desc: "예약하시면 가는 편과 오는 편을 하루 계획으로 모아서 여기에 보여드려요.",
   },
   {
-    href: "/rider",
-    target: "community", // data-tour-target="community" (홈 화면 안)
-    icon: Users,
-    title: "같은 방향이면 함께 타요",
-    desc: "여기 마이크로 말씀하시면, 같은 방향으로 가는 분이 있을 때 차 한 대로 함께 모셔다드려요.",
+    href: "/rider/routines",
+    target: "routine", // data-tour-target="routine" (내 루틴 화면 안)
+    icon: Clock,
+    title: "반복되는 이동, 먼저 알려드려요",
+    desc: "자주 다니시는 길을 스스로 찾아내고, 시간이 되면 미리 여쭤봐요. 여기서 알림을 켜고 끌 수 있어요.",
   },
 ];
 
@@ -102,18 +101,19 @@ export default function HelpTour() {
   if (!host) return null;
 
   const PAD = 8;
-  const hole = rect && { top: rect.top - PAD, left: rect.left - PAD, width: rect.width + PAD * 2, height: rect.height + PAD * 2 };
+  const hole = rect && { top: rect.top - PAD, left: rect.left - PAD, width: Math.max(rect.width + PAD * 2, 0), height: Math.max(rect.height + PAD * 2, 0) };
   const Icon = current.icon;
   const isLast = step === TOUR_STEPS.length - 1;
+  const DIM = "rgba(15, 23, 42, 0.72)"; // 어둡게 가리는 색 (투명도 유틸 클래스 대신 직접 지정해 어느 기기에서도 확실히 보이게 한다)
 
   return createPortal(
     <div className="pointer-events-none absolute inset-0 z-[60]">
       {hole ? (
         <>
-          <div className="pointer-events-auto absolute inset-x-0 top-0 bg-ink/60" style={{ height: hole.top }} />
-          <div className="pointer-events-auto absolute inset-x-0 bottom-0 bg-ink/60" style={{ top: hole.top + hole.height }} />
-          <div className="pointer-events-auto absolute bg-ink/60" style={{ top: hole.top, height: hole.height, left: 0, width: hole.left }} />
-          <div className="pointer-events-auto absolute bg-ink/60" style={{ top: hole.top, height: hole.height, left: hole.left + hole.width, right: 0 }} />
+          <div className="pointer-events-auto absolute inset-x-0 top-0" style={{ height: hole.top, backgroundColor: DIM }} />
+          <div className="pointer-events-auto absolute inset-x-0 bottom-0" style={{ top: hole.top + hole.height, backgroundColor: DIM }} />
+          <div className="pointer-events-auto absolute" style={{ top: hole.top, height: hole.height, left: 0, width: hole.left, backgroundColor: DIM }} />
+          <div className="pointer-events-auto absolute" style={{ top: hole.top, height: hole.height, left: hole.left + hole.width, right: 0, backgroundColor: DIM }} />
           <div
             aria-hidden
             className="breathe pointer-events-none absolute rounded-2xl ring-2 ring-white"
@@ -121,7 +121,7 @@ export default function HelpTour() {
           />
         </>
       ) : (
-        <div className="pointer-events-auto absolute inset-0 bg-ink/60" />
+        <div className="pointer-events-auto absolute inset-0" style={{ backgroundColor: DIM }} />
       )}
 
       <div
