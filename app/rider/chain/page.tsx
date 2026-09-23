@@ -70,7 +70,7 @@ export default function TripPage() {
     return (
       <PhoneFrame tabs>
         <TopBar title="내 이동" />
-        <div className="space-y-4 px-5 pt-3">
+        <div data-tour-target="chain" className="space-y-4 px-5 pt-3">
           <Stepper current={STEPS.length} />
           <Card flat>
             <InfoRow icon={Navigation} title="집에 도착했어요" desc="오늘도 수고하셨어요" />
@@ -85,7 +85,13 @@ export default function TripPage() {
     return (
       <PhoneFrame tabs>
         <TopBar title="내 이동" />
-        <EmptyState title="예정된 이동이 없어요" desc="홈에서 말로 예약해 보세요" actionLabel="홈으로" onAction={() => router.push("/rider")} />
+        <EmptyState
+          title="예정된 이동이 없어요"
+          desc="홈에서 말로 예약해 보세요"
+          actionLabel="홈으로"
+          onAction={() => router.push("/rider")}
+          tourTarget="chain"
+        />
       </PhoneFrame>
     );
   }
@@ -109,21 +115,23 @@ export default function TripPage() {
 
         <TripStage r={r} onFinished={() => setFinished(true)} />
 
-        <SectionTitle>왕복 계획</SectionTitle>
-        <Card flat className="pb-0">
-          <Timeline
-            items={[
-              { icon: House, title: "집", desc: `${koTime(t.depart)} 출발` },
-              { icon: Hospital, title: place.name, desc: `${koTime(t.arrive)} - ${koTime(t.leave)}` },
-              {
-                icon: House,
-                title: "집",
-                desc: r.returnOn ? `${koTime(t.home)} 도착 예정` : "오시는 길은 따로 이동해요",
-                dim: !r.returnOn,
-              },
-            ]}
-          />
-        </Card>
+        <div data-tour-target="chain" className="space-y-5">
+          <SectionTitle>왕복 계획</SectionTitle>
+          <Card flat className="pb-0">
+            <Timeline
+              items={[
+                { icon: House, title: "집", desc: `${koTime(t.depart)} 출발` },
+                { icon: Hospital, title: place.name, desc: `${koTime(t.arrive)} - ${koTime(t.leave)}` },
+                {
+                  icon: House,
+                  title: "집",
+                  desc: r.returnOn ? `${koTime(t.home)} 도착 예정` : "오시는 길은 따로 이동해요",
+                  dim: !r.returnOn,
+                },
+              ]}
+            />
+          </Card>
+        </div>
         <Card flat>
           <div className="flex items-center justify-between gap-3">
             <div>

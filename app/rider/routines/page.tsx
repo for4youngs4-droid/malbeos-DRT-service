@@ -78,23 +78,25 @@ export default function RoutinesPage() {
           })}
         </ListGroup>
 
-        <SectionTitle>알림 받는 루틴</SectionTitle>
-        <ListGroup>
-          {routines.map((r) => {
-            const p = placeById(r.placeId)!;
-            const weekly = r.frequency === "weekly";
-            return (
-              <ListRow
-                key={r.id}
-                icon={ICONS[p.kind] ?? Package}
-                title={weekly ? `${dayLabel(r.weekday)}요일 ${koTime(r.time)}` : "월 1회"}
-                desc={weekly ? `${p.name} · 매주` : `${p.name} 검진 · 매월 · 학습 중`}
-                right={<Toggle checked={r.alertOn} onChange={(on) => setAlert(r.id, on)} label={`${p.name} 알림`} />}
-              />
-            );
-          })}
-        </ListGroup>
-        <p className="px-1 text-lg text-sub">알림을 켜 두면 루틴 전날 저녁에 홈에서 먼저 알려드려요</p>
+        <div data-tour-target="routine" className="space-y-3">
+          <SectionTitle>알림 받는 루틴</SectionTitle>
+          <ListGroup>
+            {routines.map((r) => {
+              const p = placeById(r.placeId)!;
+              const weekly = r.frequency === "weekly";
+              return (
+                <ListRow
+                  key={r.id}
+                  icon={ICONS[p.kind] ?? Package}
+                  title={weekly ? `${dayLabel(r.weekday)}요일 ${koTime(r.time)}` : "월 1회"}
+                  desc={weekly ? `${p.name} · 매주` : `${p.name} 검진 · 매월 · 학습 중`}
+                  right={<Toggle checked={r.alertOn} onChange={(on) => setAlert(r.id, on)} label={`${p.name} 알림`} />}
+                />
+              );
+            })}
+          </ListGroup>
+          <p className="px-1 text-lg text-sub">알림을 켜 두면 루틴 전날 저녁에 홈에서 먼저 알려드려요</p>
+        </div>
       </div>
 
       <FloatingButton label="루틴 추가" onClick={() => setAdding(true)}>

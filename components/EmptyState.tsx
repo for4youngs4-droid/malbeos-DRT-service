@@ -11,14 +11,16 @@ export default function EmptyState({
   desc,
   actionLabel,
   onAction,
+  tourTarget,
 }: {
   title: string;
   desc: string;
   actionLabel: string;
   onAction: () => void;
+  tourTarget?: string; // 도움말 가이드가 이 화면을 가리킬 때 쓰는 표시
 }) {
   return (
-    <div className="-mb-10 flex flex-auto flex-col px-5 pb-3 text-center">
+    <div data-tour-target={tourTarget} className="-mb-10 flex flex-auto flex-col px-5 pb-3 text-center">
       <div className="flex flex-1 flex-col items-center justify-center pt-8">
         <Illustration name="empty-state" className="h-44 w-64" />
         <h2 className="mt-5 text-[22px] font-semibold leading-snug tracking-tight">{title}</h2>

@@ -73,7 +73,9 @@ export default function RiderHome() {
           </div>
         </header>
 
-        <VoiceAssistant intro={false} routineOffers />
+        <div data-tour-target="community">
+          <VoiceAssistant intro={false} routineOffers />
+        </div>
 
         <SectionTitle>{moving ? "지금 이동 중이에요" : "예정된 이동"}</SectionTitle>
         {next && nextPlace ? (
