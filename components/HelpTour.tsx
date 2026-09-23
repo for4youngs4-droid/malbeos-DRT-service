@@ -107,9 +107,12 @@ export default function HelpTour() {
 
   if (!mounted || !display) return null;
   const current = TOUR_STEPS[display.stepIdx];
-  const rect = display.rect;
   const host = document.getElementById("phone-overlay");
   if (!host) return null;
+
+  // 지금 보여주고 있는 단계의 화면에서 이미 다른 화면으로 넘어간 상태라면(전환 중),
+  // 예전 자리는 더 이상 맞지 않으므로 구멍 없이 전체를 어둡게만 가려서 어색하게 겹쳐 보이지 않게 한다
+  const rect = pathname === current.href ? display.rect : null;
 
   const PAD = 8;
   // 화면 안쪽으로 clamp: 계산이 살짝 어긋나도 구멍이 화면 밖으로 나가 한쪽이 안 가려지는 일을 막는다
