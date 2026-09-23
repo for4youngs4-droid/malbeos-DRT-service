@@ -25,6 +25,7 @@ export default function HelpTour() {
   const mounted = useSyncExternalStore(subscribe, () => true, () => false);
   const [rect, setRect] = useState<Rect | null>(null);
   const tries = useRef(0);
+  const scrolled = useRef(false);
 
   const current = step !== null && step < TOUR_STEPS.length ? TOUR_STEPS[step] : null;
 
@@ -41,6 +42,7 @@ export default function HelpTour() {
   useEffect(() => {
     setRect(null);
     tries.current = 0;
+    scrolled.current = false;
     if (!current) return;
     let timer: ReturnType<typeof setTimeout>;
     let last: Rect | null = null;
@@ -48,6 +50,13 @@ export default function HelpTour() {
       const host = document.getElementById("phone-overlay");
       const target = document.querySelector(`[data-tour-target="${current.target}"]`);
       if (host && target) {
+        // 가리킬 부분이 화면 밖(스크롤 아래)에 있으면 보이는 자리로 직접 스크롤한다
+        if (!scrolled.current) {
+          scrolled.current = true;
+          target.scrollIntoView({ behavior: "smooth", block: "center" });
+          timer = setTimeout(attempt, 120); // 스크롤이 끝날 때까지 기다렸다가 다시 잰다
+          return;
+        }
         const h = host.getBoundingClientRect();
         const t = target.getBoundingClientRect();
         const measured: Rect = { top: t.top - h.top, left: t.left - h.left, width: t.width, height: t.height, hostH: h.height };
