@@ -3,75 +3,12 @@
 import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { createPortal } from "react-dom";
 import { usePathname, useRouter } from "next/navigation";
-import { Bell, CalendarCheck, CalendarClock, Clock, Mic, Users, X } from "lucide-react";
+import { X } from "lucide-react";
 import { Button } from "./ui";
 import { useStore } from "@/lib/store";
+import { TOUR_STEPS } from "@/lib/tour";
 
 const subscribe = () => () => {};
-
-// 서비스 흐름을 그대로 따라가며 실제 화면 안의 진짜 부분을 하나씩 짚어준다.
-// 화면(section) 하나가 끝나면 다음 화면으로 실제로 이동해서 이어간다.
-// optional: 지금 데이터로는 없을 수 있는 부분(예: 예약이 아직 없을 때의 "함께 타기")이라,
-//           화면에 없으면 조용히 건너뛴다.
-export const TOUR_STEPS = [
-  {
-    section: "홈",
-    href: "/rider",
-    target: "home-mic",
-    icon: Mic,
-    title: "말로 편하게 예약해요",
-    desc: "마이크를 누르고 “내일 병원 가고 싶어요”처럼 편하게 말씀해보세요. 예약이 그 자리에서 끝나요.",
-  },
-  {
-    section: "홈",
-    href: "/rider",
-    target: "home-next",
-    icon: CalendarClock,
-    title: "예약한 이동을 한눈에",
-    desc: "예약하시면 다음 이동이 바로 여기에 나타나요. 눌러서 자세히 볼 수 있어요.",
-  },
-  {
-    section: "홈",
-    href: "/rider",
-    target: "home-alert",
-    icon: Bell,
-    title: "루틴은 미리 알려드려요",
-    desc: "자주 다니시는 길이 있으면, 하루 전 저녁에 여기 알림으로 먼저 여쭤봐요.",
-  },
-  {
-    section: "내 이동",
-    href: "/rider/chain",
-    target: "chain",
-    icon: CalendarCheck,
-    title: "가는 길과 오는 길을 한 번에",
-    desc: "예약하시면 가는 편과 오는 편을 하루 계획으로 모아서 여기에 보여드려요.",
-  },
-  {
-    section: "내 이동",
-    href: "/rider/chain",
-    target: "chain-together",
-    icon: Users,
-    title: "같은 방향이면 자동으로 함께",
-    desc: "비슷한 시간, 같은 방향으로 가는 분이 있으면 차 한 대로 묶어서 알려드려요.",
-    optional: true, // 예약이 없으면 이 카드가 없어서 조용히 건너뛴다
-  },
-  {
-    section: "내 루틴",
-    href: "/rider/routines",
-    target: "routine-upcoming",
-    icon: CalendarClock,
-    title: "곧 있을 루틴도 바로 예약",
-    desc: "루틴으로 찾은 다음 이동을 여기서 바로 예약할 수 있어요.",
-  },
-  {
-    section: "내 루틴",
-    href: "/rider/routines",
-    target: "routine",
-    icon: Clock,
-    title: "알림, 직접 켜고 끌 수 있어요",
-    desc: "필요 없는 루틴은 알림을 꺼 두시면 다시 여쭤보지 않아요.",
-  },
-];
 
 type Rect = { top: number; left: number; width: number; height: number; hostH: number };
 
@@ -151,7 +88,7 @@ export default function HelpTour() {
   const isLast = step === TOUR_STEPS.length - 1;
   const progress = ((step! + 1) / TOUR_STEPS.length) * 100;
   const DIM = "rgba(15, 23, 42, 0.62)"; // 어둡게 가리는 색. 뒤 화면이 알아볼 수 있게 은은히 비치는 정도
-  const RADIUS = 44; // 실제 카드 모서리(--radius-card)와 맞춘 값. 원처럼 작은 대상은 CSS가 알아서 둥글게 클램프한다
+  const RADIUS = 0; // 모서리를 둥글게 깎지 않는다 (모서리 값이 실제 대상과 안 맞을 때 튀어나와 보이는 것을 막는다)
 
   // 가리키는 부분을 설명 글이 덮지 않도록, 아래/위 중 자리가 넉넉한 쪽을 고른다
   // (아래쪽은 하단 탭이 차지하는 자리만큼 미리 빼고 계산한다). 가리키는 부분이 화면

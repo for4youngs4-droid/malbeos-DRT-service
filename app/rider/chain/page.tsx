@@ -12,7 +12,8 @@ import { groupOfMine, myPickup } from "@/lib/pooling";
 import { speak, stopSpeaking } from "@/lib/speech";
 import { useStore } from "@/lib/store";
 import { koDate, koTime, spokenTime, weekdayName } from "@/lib/time";
-import { nextReservation, tripTimes } from "@/lib/trip";
+import { isTourTarget } from "@/lib/tour";
+import { nextReservation, newReservation, tripTimes } from "@/lib/trip";
 
 const STEPS = ["예약", "이동", "도착", "귀가", "완료"];
 
@@ -51,6 +52,8 @@ export default function TripPage() {
   const reservations = useStore((s) => s.reservations);
   const update = useStore((s) => s.updateReservation);
   const remove = useStore((s) => s.removeReservation);
+  const tourStep = useStore((s) => s.tourStep);
+  const touringChain = isTourTarget(tourStep, "chain") || isTourTarget(tourStep, "chain-together");
   const [finished, setFinished] = useState(false); // 집에 돌아옴
 
   const rid = r?.id;
@@ -76,6 +79,49 @@ export default function TripPage() {
             <InfoRow icon={Navigation} title="집에 도착했어요" desc="오늘도 수고하셨어요" />
           </Card>
           <Button flat onClick={() => router.push("/rider")}>홈으로</Button>
+        </div>
+      </PhoneFrame>
+    );
+  }
+
+  // 도움말 가이드 중에는 예약이 없어도 임시 예시로 화면을 채워서 보여준다.
+  // 실제로 저장하지 않으므로 가이드를 끄면 그대로 빈 화면으로 돌아간다
+  if (!r && touringChain) {
+    const demo = newReservation("2026-09-22", "09:00", "hospital", 30);
+    const place = placeById(demo.placeId)!;
+    const t = tripTimes(demo);
+    const group = groupOfMine(demo, [...reservations, demo]);
+    const others = group ? group.members.length - 1 : 0;
+    return (
+      <PhoneFrame tabs>
+        <TopBar title="내 이동" />
+        <div className="space-y-5 px-5 pt-1">
+          <p className="text-lg text-sub">
+            {koDate(demo.date)} {place.name} 방문 (예시)
+          </p>
+          <div data-tour-target="chain" className="space-y-5">
+            <SectionTitle>왕복 계획</SectionTitle>
+            <Card flat className="pb-0">
+              <Timeline
+                items={[
+                  { icon: House, title: "집", desc: `${koTime(t.depart)} 출발` },
+                  { icon: Hospital, title: place.name, desc: `${koTime(t.arrive)} - ${koTime(t.leave)}` },
+                  { icon: House, title: "집", desc: `${koTime(t.home)} 도착 예정` },
+                ]}
+              />
+            </Card>
+          </div>
+          <div data-tour-target="chain-together" className="space-y-5">
+            <SectionTitle>함께 타기</SectionTitle>
+            <Card flat>
+              <InfoRow
+                icon={Users}
+                title={others > 0 ? `이웃 ${others}분과 함께 타요` : "이번에는 혼자 타요"}
+                desc={group && others > 0 ? `${group.vehicle} · 집 앞 ${koTime(myPickup(group, demo))} · 차 ${others + 1}대가 1대로` : ""}
+                right={<ChevronRight size={22} className="text-sub" />}
+              />
+            </Card>
+          </div>
         </div>
       </PhoneFrame>
     );
