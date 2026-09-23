@@ -18,7 +18,7 @@ function IntroSplash({ onStart }: { onStart: () => void }) {
   return createPortal(
     <div
       className="pointer-events-auto absolute inset-0 z-50 flex flex-col items-center bg-rec-gradient px-6 text-center"
-      style={angle(160)}
+      style={angle(135)}
     >
       <div className="flex flex-1 flex-col items-center justify-center gap-9">
         <div className="relative flex h-40 w-40 items-center justify-center">
