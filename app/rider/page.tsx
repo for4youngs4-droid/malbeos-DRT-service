@@ -11,7 +11,7 @@ import { groupOfMine } from "@/lib/pooling";
 import { offerText } from "@/lib/routine";
 import { speak, stopSpeaking } from "@/lib/speech";
 import { useStore } from "@/lib/store";
-import { dateKey, koDate, koNow, koTime } from "@/lib/time";
+import { dateKey, koDate, koTime } from "@/lib/time";
 import { nextReservation } from "@/lib/trip";
 
 export default function RiderHome() {
@@ -49,8 +49,7 @@ export default function RiderHome() {
   return (
     <PhoneFrame tabs>
       <div className="space-y-5 px-5 pt-6">
-        <header className="flex items-start justify-between">
-          <p className="text-[13px] text-sub">{koNow(now)}</p>
+        <header className="flex items-start justify-end">
           <div className="flex items-center gap-1">
             <div className="flex items-center gap-2">
               {voiceOn ? <Volume2 size={22} className="text-brand" /> : <VolumeX size={22} className="text-sub" />}
