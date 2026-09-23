@@ -1,8 +1,33 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useRef, useState, useSyncExternalStore } from "react";
+import { createPortal } from "react-dom";
 import { useRouter } from "next/navigation";
 import { Button, Illustration, PhoneFrame } from "@/components/ui";
+
+const subscribe = () => () => {};
+
+// 로고 시작 화면: 폰 틀 전체(상단 상태바 자리·하단 여백까지)를 덮도록 #phone-overlay에 그린다
+function IntroSplash({ onStart }: { onStart: () => void }) {
+  const mounted = useSyncExternalStore(subscribe, () => true, () => false);
+  if (!mounted) return null;
+  const host = document.getElementById("phone-overlay");
+  if (!host) return null;
+
+  return createPortal(
+    <div className="pointer-events-auto absolute inset-0 z-50 flex flex-col items-center justify-center gap-9 bg-brand-light px-6 text-center">
+      <div className="relative flex h-40 w-40 items-center justify-center">
+        <span aria-hidden className="breathe absolute inset-0 rounded-full bg-white/15" />
+        <Illustration name="brand-symbol" className="splash-in relative h-24 w-full" />
+      </div>
+      <Illustration name="brand-wordmark" className="splash-in h-12 w-40 [animation-delay:150ms]" />
+      <Button variant="outline" flat onClick={onStart} className="splash-in mt-2 [animation-delay:300ms]">
+        시작하기
+      </Button>
+    </div>,
+    host,
+  );
+}
 
 const SLIDES = [
   {
@@ -40,25 +65,9 @@ export default function OnboardingPage() {
     else go(index + 1);
   };
 
-  if (showIntro) {
-    return (
-      <PhoneFrame>
-        <div className="flex min-h-full flex-col items-center justify-center gap-9 bg-brand-light px-6 text-center">
-          <div className="relative flex h-40 w-40 items-center justify-center">
-            <span aria-hidden className="breathe absolute inset-0 rounded-full bg-white/15" />
-            <Illustration name="brand-symbol" className="splash-in relative h-24 w-full" />
-          </div>
-          <Illustration name="brand-wordmark" className="splash-in h-12 w-40 [animation-delay:150ms]" />
-          <Button variant="outline" flat onClick={() => setShowIntro(false)} className="splash-in mt-2 [animation-delay:300ms]">
-            시작하기
-          </Button>
-        </div>
-      </PhoneFrame>
-    );
-  }
-
   return (
     <PhoneFrame>
+      {showIntro && <IntroSplash onStart={() => setShowIntro(false)} />}
       <div
         className="flex min-h-full flex-col"
         onTouchStart={(e) => (touchX.current = e.touches[0].clientX)}
