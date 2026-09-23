@@ -31,18 +31,12 @@ export default function RiderHome() {
     else stopSpeaking();
   };
 
-  // 루틴 알림이 있으면 그 질문을 알림이 뜰 때마다 읽어주고,
-  // 첫 인사는 앱에 처음 들어왔을 때 딱 한 번만 읽는다 (다른 탭에 갔다 와도 다시 읽지 않는다)
+  // 루틴 알림이 있으면 그 질문을 알림이 뜰 때마다 읽어준다
   const offer = alert && alertRoutine ? offerText(alert, alertRoutine) : null;
   useEffect(() => {
     if (offer) {
       speak(offer);
       return stopSpeaking;
-    }
-    const st = useStore.getState();
-    if (!st.greeted) {
-      st.markGreeted();
-      speak(`안녕하세요, ${HERO.name}님. 마이크를 누르고 말씀해주세요.`);
     }
   }, [offer]);
 
