@@ -35,19 +35,29 @@ export default function HelpTour() {
   }, [step]);
 
   // 그 부분이 화면에 나타날 때까지 잠깐씩 다시 재본다 (페이지 전환 애니메이션 시간만큼).
+  // 화면이 밀려 들어오는 애니메이션(320ms)이 끝나기 전에 재면 자리가 살짝 어긋난 채로 굳어버리므로,
+  // 값이 두 번 연속 똑같이 나올 때까지는 확정하지 않는다.
   // 있어도 되고 없어도 되는 부분(optional)이면, 못 찾아도 조용히 다음으로 넘어간다.
   useEffect(() => {
     setRect(null);
     tries.current = 0;
     if (!current) return;
     let timer: ReturnType<typeof setTimeout>;
+    let last: Rect | null = null;
     const attempt = () => {
       const host = document.getElementById("phone-overlay");
       const target = document.querySelector(`[data-tour-target="${current.target}"]`);
       if (host && target) {
         const h = host.getBoundingClientRect();
         const t = target.getBoundingClientRect();
-        setRect({ top: t.top - h.top, left: t.left - h.left, width: t.width, height: t.height, hostH: h.height });
+        const measured: Rect = { top: t.top - h.top, left: t.left - h.left, width: t.width, height: t.height, hostH: h.height };
+        const same = last && last.top === measured.top && last.left === measured.left && last.width === measured.width && last.height === measured.height;
+        last = measured;
+        if (same) {
+          setRect(measured);
+          return;
+        }
+        timer = setTimeout(attempt, 90); // 애니메이션이 아직 진행 중일 수 있으니 다시 한번 확인한다
         return;
       }
       tries.current += 1;
@@ -83,7 +93,13 @@ export default function HelpTour() {
   if (!host) return null;
 
   const PAD = 8;
-  const hole = rect && { top: rect.top - PAD, left: rect.left - PAD, width: Math.max(rect.width + PAD * 2, 0), height: Math.max(rect.height + PAD * 2, 0) };
+  // 화면 안쪽으로 clamp: 계산이 살짝 어긋나도 구멍이 화면 밖으로 나가 한쪽이 안 가려지는 일을 막는다
+  const hole = rect && {
+    top: Math.max(rect.top - PAD, 0),
+    left: Math.max(rect.left - PAD, 0),
+    width: Math.min(rect.width + PAD * 2, host.getBoundingClientRect().width - Math.max(rect.left - PAD, 0)),
+    height: Math.max(rect.height + PAD * 2, 0),
+  };
   const Icon = current.icon;
   const isLast = step === TOUR_STEPS.length - 1;
   const progress = ((step! + 1) / TOUR_STEPS.length) * 100;
