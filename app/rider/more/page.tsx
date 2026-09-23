@@ -3,14 +3,13 @@
 import { useState } from "react";
 import { Check, ChevronDown, ChevronRight, CircleHelp, History, Phone, Volume2 } from "lucide-react";
 import { Badge, ListGroup, ListRow, PhoneFrame, SectionTitle, Toggle, TopBar } from "@/components/ui";
-import { HERO } from "@/lib/data";
+import { HELP_NUMBER, HERO } from "@/lib/data";
 import { speak, useKoVoices } from "@/lib/speech";
 import { useStore } from "@/lib/store";
 
 const VISIBLE_VOICES = 3; // 목소리는 3개까지만 바로 보이고, 나머지는 "더보기"로 접는다
 
 const SOON = [{ icon: History, title: "이동 기록" }];
-const HELP_NUMBER = "0000-0000";
 
 export default function MorePage() {
   const voiceOn = useStore((s) => s.voiceOn);

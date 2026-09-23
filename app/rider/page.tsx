@@ -3,10 +3,10 @@
 import { useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Bus, CalendarClock, ChevronRight, CircleHelp, Users, Volume2, VolumeX } from "lucide-react";
+import { Bus, CalendarClock, ChevronRight, CircleHelp, Phone, Users, Volume2, VolumeX } from "lucide-react";
 import VoiceAssistant from "@/components/VoiceAssistant";
 import { Button, Card, InfoRow, PhoneFrame, SectionTitle, Toggle } from "@/components/ui";
-import { placeById } from "@/lib/data";
+import { HELP_NUMBER, placeById } from "@/lib/data";
 import { groupOfMine } from "@/lib/pooling";
 import { offerText } from "@/lib/routine";
 import { speak, stopSpeaking } from "@/lib/speech";
@@ -55,14 +55,19 @@ export default function RiderHome() {
             {voiceOn ? <Volume2 size={22} className="text-brand" /> : <VolumeX size={22} className="text-sub" />}
             <Toggle checked={voiceOn} onChange={changeVoice} label="음성 안내" />
           </div>
-          <button
-            type="button"
-            aria-label="도움말"
-            onClick={startTour}
-            className="flex h-12 w-12 items-center justify-center rounded-2xl text-ink"
-          >
-            <CircleHelp size={26} />
-          </button>
+          <div className="flex items-center">
+            <a href={`tel:${HELP_NUMBER}`} aria-label="고객센터" className="flex h-12 w-12 items-center justify-center rounded-2xl text-ink">
+              <Phone size={24} />
+            </a>
+            <button
+              type="button"
+              aria-label="도움말"
+              onClick={startTour}
+              className="flex h-12 w-12 items-center justify-center rounded-2xl text-ink"
+            >
+              <CircleHelp size={26} />
+            </button>
+          </div>
         </header>
 
         <VoiceAssistant intro={false} routineOffers tourTarget="home-mic" />
