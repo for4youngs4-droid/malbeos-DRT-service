@@ -20,11 +20,15 @@ export default function EmptyState({
   tourTarget?: string; // 도움말 가이드가 이 화면을 가리킬 때 쓰는 표시
 }) {
   return (
-    <div data-tour-target={tourTarget} className="-mb-10 flex flex-auto flex-col px-5 pb-3 text-center">
+    <div className="-mb-10 flex flex-auto flex-col px-5 pb-3 text-center">
       <div className="flex flex-1 flex-col items-center justify-center pt-8">
-        <Illustration name="empty-state" className="h-44 w-64" />
-        <h2 className="mt-5 text-[22px] font-semibold leading-snug tracking-tight">{title}</h2>
-        <p className="mt-1 text-lg text-sub">{desc}</p>
+        {/* 도움말 가이드는 화면 전체가 아니라 이 안쪽 내용(그림+글)만 가리킨다.
+            바깥 flex-1 칸을 통째로 가리키면 화면을 거의 다 차지해서 설명 글이 놓일 자리가 없어진다 */}
+        <div data-tour-target={tourTarget}>
+          <Illustration name="empty-state" className="h-44 w-64" />
+          <h2 className="mt-5 text-[22px] font-semibold leading-snug tracking-tight">{title}</h2>
+          <p className="mt-1 text-lg text-sub">{desc}</p>
+        </div>
       </div>
       <Button flat onClick={onAction}>{actionLabel}</Button>
     </div>

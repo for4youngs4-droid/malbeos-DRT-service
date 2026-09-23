@@ -73,10 +73,12 @@ export const TOUR_STEPS = [
   },
 ];
 
-type Rect = { top: number; left: number; width: number; height: number };
+type Rect = { top: number; left: number; width: number; height: number; hostH: number };
 
 // 설정에서 도움말을 켜면 서비스 흐름을 따라 실제 화면으로 이동하며,
-// 그 안의 핵심 부분만 남기고 나머지는 어둡게 가린다
+// 그 부분만 밝게 남기고 나머지는 어둡게 가린다. 설명 글은 뜬 카드가 아니라
+// 어둡게 가려진 자리 위에 바로 놓이고, 가리키는 부분을 안 가리도록 위/아래 중 자리가
+// 넉넉한 쪽에 나타난다.
 export default function HelpTour() {
   const step = useStore((s) => s.tourStep);
   const nextTourStep = useStore((s) => s.nextTourStep);
@@ -108,7 +110,7 @@ export default function HelpTour() {
       if (host && target) {
         const h = host.getBoundingClientRect();
         const t = target.getBoundingClientRect();
-        setRect({ top: t.top - h.top, left: t.left - h.left, width: t.width, height: t.height });
+        setRect({ top: t.top - h.top, left: t.left - h.left, width: t.width, height: t.height, hostH: h.height });
         return;
       }
       tries.current += 1;
@@ -132,7 +134,7 @@ export default function HelpTour() {
       if (!host || !target) return;
       const h = host.getBoundingClientRect();
       const t = target.getBoundingClientRect();
-      setRect({ top: t.top - h.top, left: t.left - h.left, width: t.width, height: t.height });
+      setRect({ top: t.top - h.top, left: t.left - h.left, width: t.width, height: t.height, hostH: h.height });
     };
     window.addEventListener("resize", update);
     return () => window.removeEventListener("resize", update);
@@ -148,52 +150,71 @@ export default function HelpTour() {
   const Icon = current.icon;
   const isLast = step === TOUR_STEPS.length - 1;
   const progress = ((step! + 1) / TOUR_STEPS.length) * 100;
-  const DIM = "rgba(15, 23, 42, 0.72)"; // 어둡게 가리는 색 (투명도 유틸 클래스 대신 직접 지정해 어느 기기에서도 확실히 보이게 한다)
+  const DIM = "rgba(15, 23, 42, 0.62)"; // 어둡게 가리는 색. 뒤 화면이 알아볼 수 있게 은은히 비치는 정도
+  const RADIUS = 44; // 실제 카드 모서리(--radius-card)와 맞춘 값. 원처럼 작은 대상은 CSS가 알아서 둥글게 클램프한다
+
+  // 가리키는 부분을 설명 글이 덮지 않도록, 아래/위 중 자리가 넉넉한 쪽을 고른다
+  // (아래쪽은 하단 탭이 차지하는 자리만큼 미리 빼고 계산한다). 가리키는 부분이 화면
+  // 대부분을 차지해서 위아래 어디에도 자리가 없으면, 하단에 고정해서라도 보이게 한다
+  const MIN_SPACE = 150;
+  const BOTTOM_RESERVE = 92;
+  const spaceBelow = rect ? rect.hostH - BOTTOM_RESERVE - (hole!.top + hole!.height) : 0;
+  const spaceAbove = rect ? hole!.top - 16 : 0;
+  const captionStyle = !hole
+    ? { top: "50%", transform: "translateY(-50%)" }
+    : spaceBelow >= MIN_SPACE
+      ? { top: hole.top + hole.height + 20 }
+      : spaceAbove >= MIN_SPACE
+        ? { bottom: rect!.hostH - hole.top + 20 }
+        : { bottom: "calc(96px + env(safe-area-inset-bottom, 0px))" };
 
   return createPortal(
     <div className="pointer-events-none absolute inset-0 z-[60]">
       {hole ? (
         <>
-          <div className="pointer-events-auto absolute inset-x-0 top-0" style={{ height: hole.top, backgroundColor: DIM }} />
-          <div className="pointer-events-auto absolute inset-x-0 bottom-0" style={{ top: hole.top + hole.height, backgroundColor: DIM }} />
-          <div className="pointer-events-auto absolute" style={{ top: hole.top, height: hole.height, left: 0, width: hole.left, backgroundColor: DIM }} />
-          <div className="pointer-events-auto absolute" style={{ top: hole.top, height: hole.height, left: hole.left + hole.width, right: 0, backgroundColor: DIM }} />
+          {/* 어둡게 가리기: 네 조각으로 나눠서 가운데(가리킬 부분)만 비운다.
+              각 조각이 구멍 쪽 모서리만 둥글게 깎여서, 뚫린 자리가 실제 카드처럼 둥글어 보인다 */}
+          <div className="pointer-events-none absolute inset-x-0 top-0" style={{ height: hole.top, backgroundColor: DIM }} />
+          <div
+            className="pointer-events-none absolute inset-x-0 bottom-0"
+            style={{ top: hole.top + hole.height, backgroundColor: DIM }}
+          />
+          <div
+            className="pointer-events-none absolute"
+            style={{ top: hole.top, height: hole.height, left: 0, width: hole.left, backgroundColor: DIM, borderTopRightRadius: RADIUS, borderBottomRightRadius: RADIUS }}
+          />
+          <div
+            className="pointer-events-none absolute"
+            style={{ top: hole.top, height: hole.height, left: hole.left + hole.width, right: 0, backgroundColor: DIM, borderTopLeftRadius: RADIUS, borderBottomLeftRadius: RADIUS }}
+          />
           <div
             aria-hidden
-            className="breathe pointer-events-none absolute rounded-2xl ring-2 ring-white"
-            style={{ top: hole.top, left: hole.left, width: hole.width, height: hole.height }}
+            className="ring-pulse pointer-events-none absolute ring-2 ring-white/85"
+            style={{ top: hole.top, left: hole.left, width: hole.width, height: hole.height, borderRadius: RADIUS }}
           />
         </>
       ) : (
-        <div className="pointer-events-auto absolute inset-0" style={{ backgroundColor: DIM }} />
+        <div className="pointer-events-none absolute inset-0" style={{ backgroundColor: DIM }} />
       )}
 
-      <div
-        key={step}
-        className="page-in-up pointer-events-auto absolute inset-x-5 rounded-[28px] bg-white p-5 shadow-[0_20px_50px_rgba(15,37,64,0.35)]"
-        style={{ bottom: "calc(96px + env(safe-area-inset-bottom, 0px))" }}
-      >
-        <div className="mb-3 flex items-center justify-between">
-          <span className="rounded-pill bg-brand-soft px-3 py-1 text-[13px] font-semibold text-brand">{current.section}</span>
-          <button type="button" aria-label="도움말 닫기" onClick={endTour} className="-mr-1.5 flex h-9 w-9 items-center justify-center text-sub">
+      <div key={step} className="page-in-up pointer-events-auto absolute inset-x-6" style={captionStyle}>
+        <div className="flex items-center justify-between">
+          <span className="flex items-center gap-2 rounded-pill bg-white/15 py-1 pl-1.5 pr-3 text-[13px] font-semibold text-white backdrop-blur-sm">
+            <span className="flex h-6 w-6 items-center justify-center rounded-full bg-white/20">
+              <Icon size={14} />
+            </span>
+            {current.section} · {step! + 1}/{TOUR_STEPS.length}
+          </span>
+          <button type="button" aria-label="도움말 닫기" onClick={endTour} className="flex h-9 w-9 items-center justify-center text-white/90">
             <X size={20} />
           </button>
         </div>
-        <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-brand-soft text-brand">
-          <Icon size={24} />
+        <h2 className="mt-3 text-xl font-semibold text-white [text-shadow:0_1px_8px_rgba(0,0,0,0.4)]">{current.title}</h2>
+        <p className="mt-1.5 text-lg text-white/90 [text-shadow:0_1px_8px_rgba(0,0,0,0.4)]">{current.desc}</p>
+        <div className="mt-3 h-1.5 w-full overflow-hidden rounded-full bg-white/25">
+          <div className="h-full rounded-full bg-white transition-all duration-300" style={{ width: `${progress}%` }} />
         </div>
-        <h2 className="text-xl font-semibold tracking-tight">{current.title}</h2>
-        <p className="mt-1.5 text-lg text-sub">{current.desc}</p>
-
-        <div className="mt-4 flex items-center gap-3">
-          <div className="h-1.5 flex-1 overflow-hidden rounded-full bg-line" aria-label={`${step! + 1} / ${TOUR_STEPS.length}`}>
-            <div className="h-full rounded-full bg-brand transition-all duration-300" style={{ width: `${progress}%` }} />
-          </div>
-          <span className="text-[13px] text-sub">
-            {step! + 1} / {TOUR_STEPS.length}
-          </span>
-        </div>
-        <Button size="sm" className="mt-3" onClick={() => (isLast ? endTour() : nextTourStep())}>
+        <Button size="sm" variant="outline" flat className="mt-3" onClick={() => (isLast ? endTour() : nextTourStep())}>
           {isLast ? "확인했어요" : "다음 →"}
         </Button>
       </div>
