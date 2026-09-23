@@ -9,10 +9,8 @@ import { useStore } from "@/lib/store";
 
 const VISIBLE_VOICES = 3; // 목소리는 3개까지만 바로 보이고, 나머지는 "더보기"로 접는다
 
-const SOON = [
-  { icon: History, title: "이동 기록" },
-  { icon: Phone, title: "고객센터" },
-];
+const SOON = [{ icon: History, title: "이동 기록" }];
+const HELP_NUMBER = "0000-0000";
 
 export default function MorePage() {
   const voiceOn = useStore((s) => s.voiceOn);
@@ -95,6 +93,9 @@ export default function MorePage() {
               right={<ChevronRight size={22} className="text-sub" />}
             />
           </button>
+          <a href={`tel:${HELP_NUMBER}`} className="block w-full text-left">
+            <ListRow icon={Phone} title="고객센터" desc={`${HELP_NUMBER} · 눌러서 바로 전화해요`} right={<ChevronRight size={22} className="text-sub" />} />
+          </a>
           {SOON.map(({ icon, title }) => (
             <ListRow key={title} icon={icon} title={title} right={<Badge tone="warn">준비 중</Badge>} />
           ))}
