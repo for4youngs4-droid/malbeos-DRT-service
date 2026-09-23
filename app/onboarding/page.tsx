@@ -27,7 +27,7 @@ function IntroSplash({ onStart }: { onStart: () => void }) {
           <span aria-hidden className="wave-ring absolute h-40 w-40 rounded-full border border-white/40" style={{ animationDelay: "1.8s" }} />
           <Illustration name="brand-symbol" className="splash-in relative h-24 w-40" />
         </div>
-        <Illustration name="brand-wordmark" className="splash-in h-12 w-40 [animation-delay:150ms]" />
+        <Illustration name="brand-wordmark" className="wordmark-reveal h-12 w-40 [animation-delay:400ms]" />
       </div>
       <div className="w-full pb-[max(env(safe-area-inset-bottom),1.5rem)] pt-4">
         <Button variant="outline" flat onClick={onStart} className="splash-in [animation-delay:300ms]">
