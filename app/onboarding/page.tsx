@@ -8,6 +8,22 @@ import { angle } from "@/components/ui/gradientAngle";
 
 const subscribe = () => () => {};
 
+// 로고 둘레에 떠다니는 작은 입자 (원 둘레에 고르게 배치, 크기·시작 시점만 조금씩 다르게)
+const BOX = 224; // 물결·입자가 퍼질 자리 (px)
+const CENTER = BOX / 2;
+const PARTICLES = Array.from({ length: 9 }, (_, i) => {
+  const a = (i / 9) * Math.PI * 2;
+  const r = 76 + (i % 3) * 9;
+  const size = 4 + (i % 3) * 2;
+  return {
+    left: CENTER + Math.cos(a) * r - size / 2,
+    top: CENTER + Math.sin(a) * r - size / 2,
+    size,
+    delay: (i * 0.4) % 4,
+    duration: 3.4 + (i % 4) * 0.4,
+  };
+});
+
 // 로고 시작 화면: 폰 틀 전체(상단 상태바 자리·하단 여백까지)를 덮도록 #phone-overlay에 그린다
 function IntroSplash({ onStart }: { onStart: () => void }) {
   const mounted = useSyncExternalStore(subscribe, () => true, () => false);
@@ -21,9 +37,20 @@ function IntroSplash({ onStart }: { onStart: () => void }) {
       style={angle(135)}
     >
       <div className="flex flex-1 flex-col items-center justify-center gap-9">
-        <div className="relative flex h-40 w-40 items-center justify-center">
-          <span aria-hidden className="breathe absolute inset-0 rounded-full bg-white/15" />
-          <Illustration name="brand-symbol" className="splash-in relative h-24 w-full" />
+        <div className="relative flex items-center justify-center" style={{ height: BOX, width: BOX }}>
+          <span aria-hidden className="breathe absolute h-40 w-40 rounded-full bg-white/15" />
+          <span aria-hidden className="wave-ring absolute h-40 w-40 rounded-full border-2 border-white/55" style={{ animationDelay: "0s" }} />
+          <span aria-hidden className="wave-ring absolute h-40 w-40 rounded-full border-2 border-white/55" style={{ animationDelay: "1.05s" }} />
+          <span aria-hidden className="wave-ring absolute h-40 w-40 rounded-full border-2 border-white/55" style={{ animationDelay: "2.1s" }} />
+          {PARTICLES.map((p, i) => (
+            <span
+              key={i}
+              aria-hidden
+              className="particle-float absolute rounded-full bg-white/70"
+              style={{ left: p.left, top: p.top, width: p.size, height: p.size, animationDelay: `${p.delay}s`, animationDuration: `${p.duration}s` }}
+            />
+          ))}
+          <Illustration name="brand-symbol" className="splash-in relative h-24 w-40" />
         </div>
         <Illustration name="brand-wordmark" className="splash-in h-12 w-40 [animation-delay:150ms]" />
       </div>
