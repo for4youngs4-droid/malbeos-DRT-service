@@ -142,33 +142,35 @@ export default function HelpTour() {
 
   return createPortal(
     <div className="pointer-events-none absolute inset-0 z-[60]">
-      {hole ? (
-        <>
-          {/* 어둡게 가리기: 네 조각으로 나눠서 가운데(가리킬 부분)만 비운다 */}
-          <div className="pointer-events-none absolute inset-x-0 top-0" style={{ height: hole.top, backgroundColor: DIM }} />
-          <div
-            className="pointer-events-none absolute inset-x-0 bottom-0"
-            style={{ top: hole.top + hole.height, backgroundColor: DIM }}
-          />
-          <div
-            className="pointer-events-none absolute"
-            style={{ top: hole.top, height: hole.height, left: 0, width: hole.left, backgroundColor: DIM, borderTopRightRadius: RADIUS, borderBottomRightRadius: RADIUS }}
-          />
-          <div
-            className="pointer-events-none absolute"
-            style={{ top: hole.top, height: hole.height, left: hole.left + hole.width, right: 0, backgroundColor: DIM, borderTopLeftRadius: RADIUS, borderBottomLeftRadius: RADIUS }}
-          />
-          <div
-            aria-hidden
-            className="ring-pulse pointer-events-none absolute ring-2 ring-white/85"
-            style={{ top: hole.top, left: hole.left, width: hole.width, height: hole.height, borderRadius: RADIUS }}
-          />
-        </>
-      ) : (
-        <div className="pointer-events-none absolute inset-0" style={{ backgroundColor: DIM }} />
-      )}
+      <div key={display.stepIdx} className="tour-fade-in pointer-events-none absolute inset-0">
+        {hole ? (
+          <>
+            {/* 어둡게 가리기: 네 조각으로 나눠서 가운데(가리킬 부분)만 비운다 */}
+            <div className="pointer-events-none absolute inset-x-0 top-0" style={{ height: hole.top, backgroundColor: DIM }} />
+            <div
+              className="pointer-events-none absolute inset-x-0 bottom-0"
+              style={{ top: hole.top + hole.height, backgroundColor: DIM }}
+            />
+            <div
+              className="pointer-events-none absolute"
+              style={{ top: hole.top, height: hole.height, left: 0, width: hole.left, backgroundColor: DIM, borderTopRightRadius: RADIUS, borderBottomRightRadius: RADIUS }}
+            />
+            <div
+              className="pointer-events-none absolute"
+              style={{ top: hole.top, height: hole.height, left: hole.left + hole.width, right: 0, backgroundColor: DIM, borderTopLeftRadius: RADIUS, borderBottomLeftRadius: RADIUS }}
+            />
+            <div
+              aria-hidden
+              className="ring-pulse pointer-events-none absolute ring-2 ring-white/85"
+              style={{ top: hole.top, left: hole.left, width: hole.width, height: hole.height, borderRadius: RADIUS }}
+            />
+          </>
+        ) : (
+          <div className="pointer-events-none absolute inset-0" style={{ backgroundColor: DIM }} />
+        )}
+      </div>
 
-      <div key={display.stepIdx} className="page-in-up pointer-events-auto absolute inset-x-6" style={captionStyle}>
+      <div key={`caption-${display.stepIdx}`} className="page-in-up pointer-events-auto absolute inset-x-6" style={captionStyle}>
         <div className="flex items-center justify-between">
           <span className="flex items-center gap-2 rounded-pill bg-white/15 py-1 pl-1.5 pr-3 text-[13px] font-semibold text-white backdrop-blur-sm">
             <span className="flex h-6 w-6 items-center justify-center rounded-full bg-white/20">

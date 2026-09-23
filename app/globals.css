@@ -109,6 +109,18 @@
   .ring-pulse { animation: none; }
 }
 
+/* 도움말 가이드: 딤·하이라이트가 뚝 끊기지 않고 서서히 나타난다 */
+@keyframes tour-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+.tour-fade-in {
+  animation: tour-fade-in 380ms ease-out both;
+}
+@media (prefers-reduced-motion: reduce) {
+  .tour-fade-in { animation: none; }
+}
+
 /* 온보딩 시작 화면 로고: 떠오르듯 살짝 커지며 나타난다 */
 @keyframes splash-in {
   from { opacity: 0; transform: scale(0.85) translateY(10px); }
